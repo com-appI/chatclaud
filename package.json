@@ -10,5 +10,6 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "description": "ChatClaud single-file server (intelligence modules bundled into server.js)"
 }

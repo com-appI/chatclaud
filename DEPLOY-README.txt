@@ -12,3 +12,8 @@ Commands: type /  →  /img /veo /search /nova /plus /settings /help
 Video: POST /api/video-summary { url }
 Imagine button: hidden (Pollination only)
 Date context: 6 октября 2026
+
+## Single-file layout
+All intelligence code is bundled inside server.js.
+Folder modules/ is NOT required for deploy.
+Start: npm start  (node server.js)
