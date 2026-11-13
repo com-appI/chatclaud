@@ -1,19 +1,21 @@
-ChatClaud — WORKING build (GitHub Pages + Render)
+ChatClaud v1.1.1 — deployment notes
 
-Frontend: GitHub Pages (index.html + icons + manifest + sw.js)
-Backend:  https://chatclaud.onrender.com  (server.js on Render)
+Backend (Render)
+- Root directory: folder containing package.json and server.js (chatclaud-main in this archive when kept inside a parent repository).
+- Build command: npm install
+- Start command: npm start
+- Runtime: Node.js 18+
+- Set provider/API secrets in Render → Environment. Do not commit secrets.
 
-ENV on Render: GROQ_KEY, GROQ_MODEL=openai/gpt-oss-120b,
-MISTRAL_API_KEY, MISTRAL_MODEL=mistral-medium-latest,
-HF_KEY, NOVA_URL, NOVA_AIP_TOKEN
+Frontend (GitHub Pages)
+- Publish the contents of chatclaud-main as the site root.
+- Keep index.html, manifest.json, sw.js, icon PNGs, and the Google verification file together.
+- Frontend API default: https://chatclaud.onrender.com
+- Override from the browser using the CC_API_BASE local-storage setting if a different backend is used.
 
-Images: Pollination FLUX 1280x1920 + enhance
-Commands: type /  →  /img /veo /search /nova /plus /settings /help
-Video: POST /api/video-summary { url }
-Imagine button: hidden (Pollination only)
-Date context: 6 октября 2026
+Validation
+- npm run check
+- npm test
+- Backend health endpoint: /api/health
 
-## Single-file layout
-All intelligence code is bundled inside server.js.
-Folder modules/ is NOT required for deploy.
-Start: npm start  (node server.js)
+See REPAIR-NOTES.md for details of the local fixes. This archive has not been deployed to any production account.

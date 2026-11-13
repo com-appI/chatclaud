@@ -583,6 +583,13 @@ const PUBLIC_STATIC_ALLOW = new Set([
   'service-worker.js',
   'favicon.ico',
   'robots.txt',
+  // Public PWA / brand assets referenced by index.html and manifest.json.
+  'icon-192.png',
+  'icon-512.png',
+  'apple-touch-icon.png',
+  'chatclaud-avatar-transparent.png',
+  // Google Search Console verification file (intentionally public).
+  'google9da876d4cf2a261c.html',
 ]);
 const PUBLIC_STATIC_PREFIXES = ['assets/', 'static/', 'icons/', 'img/', 'images/', 'css/', 'js/', 'fonts/', 'public/'];
 const PUBLIC_STATIC_DENY_NAMES = new Set([

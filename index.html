@@ -6934,7 +6934,7 @@ body {
     
     <div id="heroScreen" class="screen hidden">
         <div class="hero-wrap">
-            <div class="hero-logo"><img src="/icon-512.png" alt="ChatClaud" onerror="this.style.display='none'"></div>
+            <div class="hero-logo"><img src="icon-512.png" alt="ChatClaud" onerror="this.style.display='none'"></div>
             <div class="hero-title brand-shine">ChatClaud</div>
             <div class="hero-sub">Твой ИИ для работы, учёбы и творчества</div>
             <div class="hero-about">
@@ -13004,7 +13004,7 @@ function buildImageUrl(userPrompt, opts) {
             };
         })();
 
-        if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
 
         // ===== PWA INSTALL (iOS-style sheet) =====
         (function pwaInstall() {
