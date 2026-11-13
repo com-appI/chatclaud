@@ -7262,7 +7262,7 @@ body {
 
                 <button class="btn-black" id="themeToggleBtn2" style="margin-bottom:0.8rem;">Light тема</button>
                 <label style="font-size:0.8rem;color:#888;">Провайдер</label>
-                <select id="expertProviderSelect" class="field"><option value="chatclaud" selected>ChatClaud Smart</option><option value="groq">ChatClaud Reasoning</option><option value="mistral">ChatClaud Balanced</option><option value="hf">ChatClaud Vision</option></select>
+                <select id="expertProviderSelect" class="field"><option value="groq" selected>ChatClaud GPT-OSS 120B</option></select>
                 <select id="expertModelSelect" class="field"></select>
                 <select id="expertPromptVersion" class="field"><option value="v1">Строгий</option><option value="v2">Креативный</option></select>
                 <label style="font-size:0.8rem;color:#888;">Язык интерфейса</label>
@@ -7507,9 +7507,6 @@ if (typeof window.ccApiUrl !== 'function') {
         // если нет ключей в браузере — основной путь через сервер
         const __ccUseServer = true;
 
-        const MISTRAL_KEY = '';
-        const MISTRAL_KEY_OLD = '';
-        const MISTRAL_PLUS_KEY = '';
         const GEMINI_KEY_VISION = '';
         const GEMINI_KEY_COMPOSE = '';
         const GEMINI_KEY = GEMINI_KEY_COMPOSE;
@@ -7703,7 +7700,7 @@ if (typeof window.ccApiUrl !== 'function') {
 
         function ccPublicError(err) {
             const s = String(err && err.message || err || '');
-            if (/NO_PROVIDER|рабочий канал|no (groq|mistral|openai|hf)|не задан|не подключён|не настроен/i.test(s)) {
+            if (/NO_PROVIDER|рабочий канал|no groq|не задан|не подключён|не настроен/i.test(s)) {
                 return 'Сервер не видит рабочий AI-канал. Проверь Environment на Render и перезапусти именно Web Service.';
             }
             if (/401|403|auth|unauthor|invalid.*key|ключ/i.test(s)) {
@@ -7724,18 +7721,9 @@ if (typeof window.ccApiUrl !== 'function') {
             return 'Сервер не вернул ответ. Проверь соединение и настройки модели.';
         }
         const NETLIFY_TOKEN = '';
-        const GROQ_KEYS = [];
-        let currentGroqKeyIndex = 0;
-        
-        const GROQ_MODELS = ['groq/compound-mini', 'groq/compound', 'groq/compound-mini', 'qwen/qwen3.6-27b', 'groq/compound'];
+        // Provider keys are stored only on the server (Render Environment).
+        const GROQ_MODELS = ['openai/gpt-oss-120b', 'qwen/qwen3.8-27b', 'openai/gpt-oss-20b'];
         window.GROQ_MODELS = GROQ_MODELS;
-        window.GROQ_MODELS = GROQ_MODELS;
-
-        function getNextGroqKey() {
-            const key = GROQ_KEYS[currentGroqKeyIndex];
-            currentGroqKeyIndex = (currentGroqKeyIndex + 1) % GROQ_KEYS.length;
-            return key;
-        }
         const ADMIN_SECRET = ''; // секрет хранится только на сервере в Render Environment
         // также срабатывает, если вставить ASCII-баннер (WELCOME BACK SUPERUSER)
         async function ccIsAdminUnlock(text) {
@@ -7931,10 +7919,10 @@ Do not invent election percentages or exact death tolls; use ranges or say to ch
 
 
         let globalSettings = JSON.parse(localStorage.getItem('chatclaud_settings') || '{}');
-        if (!globalSettings.flashProvider) globalSettings.flashProvider = 'mistral';
-        if (!globalSettings.expertProvider) globalSettings.expertProvider = 'claude';
+        globalSettings.flashProvider = 'groq';
+        globalSettings.expertProvider = 'groq';
         if (!globalSettings.promptVersion) globalSettings.promptVersion = 'v1';
-        if (!globalSettings.expertModel) globalSettings.expertModel = 'groq/compound-mini';
+        if (!GROQ_MODELS.includes(globalSettings.expertModel)) globalSettings.expertModel = 'openai/gpt-oss-120b';
         if (!globalSettings.flashPersona) globalSettings.flashPersona = 'default';
         if (!globalSettings.flashCustomPersona) globalSettings.flashCustomPersona = '';
         if (!globalSettings.lang) globalSettings.lang = 'ru';
@@ -9309,19 +9297,9 @@ function setAppLang(lang) {
 
         const providerModels = {
             groq: [
-                { value: 'groq/compound-mini', label: 'ChatClaud Fast' },
-                { value: 'groq/compound', label: 'ChatClaud Max' },
-                { value: 'qwen/qwen3.6-27b', label: 'ChatClaud Qwen' },
-                { value: 'groq/compound-mini', label: 'ChatClaud Mini' }
-            ],
-            openrouter: [
-                { value: 'meta-llama/llama-3.1-8b-instruct', label: 'Llama 3.1 8B' },
-                { value: 'google/gemini-flash-1.5', label: 'Gemini Flash' },
-                { value: 'mistralai/mistral-7b-instruct', label: 'Mistral 7B' }
-            ],
-            openai: [
-                { value: 'gpt-4o', label: 'GPT-4o' },
-                { value: 'gpt-4o-mini', label: 'GPT-4o Mini' }
+                { value: 'openai/gpt-oss-120b', label: 'GPT-OSS 120B · основной' },
+                { value: 'qwen/qwen3.8-27b', label: 'Qwen 3.8 27B · изображения' },
+                { value: 'openai/gpt-oss-20b', label: 'GPT-OSS 20B · быстрый резерв' }
             ]
         };
         function populateModelSelect(selectEl, provider) { const models = providerModels[provider] || providerModels['groq']; selectEl.innerHTML = ''; models.forEach(m => { const opt = document.createElement('option'); opt.value = m.value; opt.textContent = m.label; selectEl.appendChild(opt); }); }
@@ -9368,36 +9346,16 @@ function setAppLang(lang) {
                 local = en + ', accurate scene matching: ' + subject + ', highly detailed, photorealistic, no random girl portrait unless user asked for a person';
             }
 
-            // Optional Groq polish — but REJECT if it drifts to girl/portrait
-            const keys = (typeof GROQ_KEYS !== 'undefined' && GROQ_KEYS.length) ? GROQ_KEYS : [];
-            for (let ki = 0; ki < Math.min(keys.length, 2); ki++) {
-                try {
-                    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + keys[ki] },
-                        body: JSON.stringify({
-                            model: 'groq/compound-mini',
-                            messages: [
-                                { role: 'system', content: 'Expand image prompt. Output ONLY English prompt 30-70 words. FIRST words must be the subject. NEVER output a girl/woman portrait unless user asked for a person. Animal requests must stay animals. Start with: ' + en },
-                                { role: 'user', content: subject }
-                            ],
-                            temperature: 0.2,
-                            max_tokens: 120,
-                            stream: false
-                        })
-                    });
-                    if (!res.ok) continue;
-                    const data = await res.json();
-                    const msg = (data.choices && data.choices[0] && data.choices[0].message) || {};
-                    let t = (msg.content || '').trim().replace(/^["']|["']$/g, '');
-                    if (typeof stripThinkTags === 'function') t = stripThinkTags(t);
-                    const drifted = !isPerson && /(beautiful girl|young woman|portrait of a (girl|woman)|anime girl|sexy)/i.test(t);
-                    const lostSubject = t && t.toLowerCase().indexOf(String(en).split(' ')[0].toLowerCase()) < 0;
-                    if (t.length > 20 && !drifted && !lostSubject) {
-                        return (en + ', ' + t).slice(0, 450);
-                    }
-                } catch (e) {}
-            }
+            // Optional server-side Groq polish. API keys never enter the browser.
+            try {
+                const polished = await ccApiChat(
+                    [{ role: 'user', content: subject }],
+                    'Expand this image prompt in English to 30-70 words. Preserve the exact subject and start with: ' + en + '. Do not add a person unless requested. Keep animals as animals and objects as objects. Return only the prompt.'
+                );
+                const drifted = !isPerson && /(beautiful girl|young woman|portrait of a (girl|woman)|anime girl|sexy)/i.test(polished);
+                const lostSubject = polished && polished.toLowerCase().indexOf(String(en).split(' ')[0].toLowerCase()) < 0;
+                if (polished && polished.length > 20 && !drifted && !lostSubject) return (en + ', ' + polished).slice(0, 450);
+            } catch (e) {}
             return local;
         }
 
@@ -9426,52 +9384,14 @@ function setAppLang(lang) {
         }
         async function aiEnhanceImagePrompt(raw) {
             const base = (raw || '').trim() || 'abstract art';
-            const system = 'You are ClaudVision prompt engineer. Rewrite for ultra high-end text-to-image (Flux-class). Rules: KEEP the exact subject (сова=owl not person). Output ONE English line only. Target 8K quality: ultra detailed, sharp, professional lighting, coherent anatomy, no text/watermark. Include camera/lens when relevant. No quotes, no markdown.';
-            // Prefer Mistral for prompts
+            const system = 'Rewrite this as a detailed English image-generation prompt. Preserve the exact subject. Never turn animals or objects into people. Return one line only, no quotes or Markdown.';
             try {
-                const r = await fetch('https://api.mistral.ai/v1/chat/completions', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
-                    body: JSON.stringify({
-                        model: 'mistral-small-latest',
-                        temperature: 0.35,
-                        max_tokens: 220,
-                        messages: [
-                            { role: 'system', content: system },
-                            { role: 'user', content: base }
-                        ]
-                    })
-                });
-                if (r.ok) {
-                    const d = await r.json();
-                    const out = (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content || '').trim().replace(/^["']|["']$/g, '');
-                    if (out.length > 10) return out;
-                }
-            } catch (e) {}
-            // Fallback Groq
-            try {
-                const r2 = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getNextGroqKey() },
-                    body: JSON.stringify({
-                        model: 'groq/compound-mini',
-                        temperature: 0.35,
-                        max_tokens: 220,
-                        messages: [
-                            { role: 'system', content: system },
-                            { role: 'user', content: base }
-                        ]
-                    })
-                });
-                if (r2.ok) {
-                    const d2 = await r2.json();
-                    const out2 = (d2.choices && d2.choices[0] && d2.choices[0].message && d2.choices[0].message.content || '').trim().replace(/^["']|["']$/g, '');
-                    if (out2.length > 10) return out2;
-                }
+                const out = await ccApiChat([{ role: 'user', content: base }], system);
+                if (out && out.length > 10) return out.slice(0, 900);
             } catch (e) {}
             return enhanceImagePrompt(base);
         }
-        
+
         function ccFinishGenCard(card, imgEl) {
             try { clearInterval(card._ccBlob); } catch (e) {}
             try { clearInterval(card._ccStatus); } catch (e) {}
@@ -9810,7 +9730,7 @@ function buildImageUrl(userPrompt, opts) {
                 try {
                     // dual-think indicator
                     if (typeof showToast === 'function') { /* noop */ }
-                } catch(e) {} try { document.body.classList.add('is-generating'); } catch(e) {}; try { const improved = await this.fetchTextCompletion(`Улучши этот текст для нейросети, сделав его более конкретным и понятным. Верни только исправленный текст без пояснений: "${text}"`, 'groq', 'groq/compound-mini'); this.input.value = improved || text; } catch (e) { this.input.value = text; } finally { this.isGenerating = false; try { document.body.classList.remove('is-generating'); } catch(e) {}; } }
+                } catch(e) {} try { document.body.classList.add('is-generating'); } catch(e) {}; try { const improved = await this.fetchTextCompletion(`Улучши этот текст для нейросети, сделав его более конкретным и понятным. Верни только исправленный текст без пояснений: "${text}"`, 'groq', 'openai/gpt-oss-120b'); this.input.value = improved || text; } catch (e) { this.input.value = text; } finally { this.isGenerating = false; try { document.body.classList.remove('is-generating'); } catch(e) {}; } }
             async fetchTextCompletion(prompt, providerOverride, modelOverride) {
                 const mode = providerOverride === 'deepseek' ? 'think' : 'fast';
                 const text = await ccApiChat([{ role: 'user', content: String(prompt || '') }], 'Ты ChatClaud. Улучши текст. Верни только исправленный текст без пояснений.');
@@ -10303,30 +10223,14 @@ function buildImageUrl(userPrompt, opts) {
                         const role = roles[i];
                         stepsEl.innerHTML += (stepsEl.innerHTML ? '<br>' : '') + '• ' + role.name + '…';
                         this.scrollToBottom();
-                        const key = getNextGroqKey();
-                        const body = {
-                            model: 'groq/compound-mini',
-                            messages: [
-                                { role: 'system', content: role.system },
-                                { role: 'user', content: context }
-                            ],
-                            temperature: 0.6,
-                            max_tokens: i === 3 ? 4096 : 1024,
-                            stream: false
-                        };
-                        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
-                            body: JSON.stringify(body)
-                        });
-                        if (!res.ok) {
-                            const err = await res.text();
+                        let text = '';
+                        try {
+                            text = await ccApiChat([{ role: 'user', content: context }], role.system);
+                        } catch (err) {
                             stepsEl.innerHTML += ' ошибка';
                             console.warn(role.name, err);
                             continue;
                         }
-                        const data = await res.json();
-                        const text = data.choices?.[0]?.message?.content || '';
                         stepsEl.innerHTML = stepsEl.innerHTML.replace('…', ' ✓');
                         if (i < 3) {
                             context = 'Исходный запрос: ' + prompt + '\n\n' + role.name + ':\n' + text + '\n\nПродолжи как следующая роль.';
@@ -11926,92 +11830,6 @@ function buildImageUrl(userPrompt, opts) {
             return t.trim();
         }
         window.callGemini = callGemini;
-
-        async function tryGroqThenMistral(messages, temperature, max_tokens, signal) {
-            const groqModels = ['groq/compound-mini', 'groq/compound', 'groq/compound-mini', 'groq/compound'];
-            let lastErr = '';
-            try {
-                if (messages && messages[0] && messages[0].role === 'system' && typeof messages[0].content === 'string' && messages[0].content.length > 14000) {
-                    messages = messages.slice();
-                    messages[0] = Object.assign({}, messages[0], { content: messages[0].content.slice(0, 14000) });
-                }
-            } catch (e) {}
-
-            for (let attempt = 0; attempt < 3; attempt++) {
-                for (let mi = 0; mi < groqModels.length; mi++) {
-                    for (let ki = 0; ki < (GROQ_KEYS && GROQ_KEYS.length ? GROQ_KEYS.length : 1); ki++) {
-                        const key = getNextGroqKey();
-                        const model = groqModels[mi];
-                        if (attempt) await sleep(500 * attempt);
-                        // non-stream first (compound models reliable)
-                        try {
-                            const res2 = await fetchWithTimeout('https://api.groq.com/openai/v1/chat/completions', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
-                                body: JSON.stringify({
-                                    model: model,
-                                    messages: messages,
-                                    temperature: temperature == null ? 0.6 : temperature,
-                                    max_tokens: Math.max(max_tokens || 2048, 512),
-                                    stream: false
-                                }),
-                                signal: signal
-                            }, 30000);
-                            if (res2.ok) {
-                                const data = await res2.json();
-                                let text = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
-                                if (!text && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.reasoning) {
-                                    text = data.choices[0].message.reasoning;
-                                }
-                                if (text && typeof stripThinkTags === 'function') text = stripThinkTags(text);
-                                if (text) return { res: fakeStreamResponse(text), provider: 'groq', model: model, mini: false };
-                                lastErr = 'empty content from ' + model;
-                            } else {
-                                lastErr = await res2.text();
-                            }
-                        } catch (e) {
-                            lastErr = (e && e.message) || String(e);
-                        }
-                        // stream fallback
-                        try {
-                            const res = await fetchWithTimeout('https://api.groq.com/openai/v1/chat/completions', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
-                                body: JSON.stringify({
-                                    model: model,
-                                    messages: messages,
-                                    temperature: temperature == null ? 0.6 : temperature,
-                                    max_tokens: Math.max(max_tokens || 2048, 512),
-                                    stream: true
-                                }),
-                                signal: signal
-                            }, 25000);
-                            if (res.ok) return { res: res, provider: 'groq', model: model, mini: false };
-                            lastErr = await res.text();
-                        } catch (e) {
-                            lastErr = (e && e.name === 'AbortError') ? 'timeout' : ((e && e.message) || String(e));
-                        }
-                    }
-                }
-            }
-
-            let nice = 'ChatClaud сейчас не отвечает. Попробуй через 20 sec.';
-            try {
-                const j = JSON.parse(lastErr);
-                const msg = j.message || (j.error && j.error.message) || '';
-                if (/model_not_found|does not exist|decommissioned/i.test(msg + lastErr)) nice = 'Модель недоступна, пробуем другую…';
-                else if (/invalid.*api.?key|invalid.?key|auth|401|403/i.test(msg + lastErr)) nice = 'Ключ Groq отклонён. Проверь ключ.';
-                else if (/rate|429|limit/i.test(msg + lastErr)) nice = 'Limit Groq. Please wait minу.';
-                else if (/unavailable|503|overloaded/i.test(msg + lastErr)) nice = 'Groq перегружен. Повтори через полminы.';
-                else if (/does not exist|model/i.test(msg)) nice = 'Модель недоступна на этом ключе.';
-                else if (msg) nice = String(msg).slice(0, 160);
-            } catch (e) {
-                if (/timeout|abort/i.test(lastErr)) nice = 'Таймаут сети. Проверь интернет.';
-            }
-            throw new Error(nice);
-        }
-
-
 
 // ==================== ИНИЦИАЛИЗАЦИЯ СЕССИЙ ====================
         const expertModelSelectEl = document.getElementById('expertModelSelect');
@@ -15427,7 +15245,7 @@ body.cc-bg-light #flashMessages .message.user {
 
 <script id="cc-vision-force">
 (function(){
-  // Ensure HF vision is used when user attaches image
+  // Ensure Groq vision is used when user attaches image
   window.CC = window.CC || {};
   var origDescribe = window.describeImageForChat;
   window.describeImageForChat = async function(b64) {
@@ -15441,7 +15259,7 @@ body.cc-bg-light #flashMessages .message.user {
       throw e;
     }
     if (origDescribe) return origDescribe(b64);
-    throw new Error('Vision not available — set HF_KEY on Render');
+    throw new Error('Vision not available — set GROQ_KEY on Render');
   };
 })();
 </script>
