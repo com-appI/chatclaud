@@ -977,6 +977,51 @@ async function novaRequest(p, body, deadlineMs) {
   }
 }
 
+/**
+ * One server-side search adapter for ChatClaud. Browser code never holds search keys;
+ * Nova owns Serper/Tavily credentials and is called with the shared server token.
+ */
+async function runSearchPipeline(query, options) {
+  const q = String(query || '').trim().slice(0, 500);
+  if (!q) return { context: '', sources: [], trace: [], weak: true };
+  const opts = options || {};
+  const type = opts.type || 'search';
+  const timeoutMs = Math.max(5000, Math.min(40000, Number(opts.deadlineMs) || 22000));
+  const data = await novaRequest('/api/search', { q, type }, timeoutMs);
+  const raw = data && (data.organic || data.videos || data.images || data.news || data.all || data.items);
+  const list = Array.isArray(raw) ? raw : [];
+  const sources = list.slice(0, Math.max(1, Math.min(10, Number(opts.maxResults) || 8))).map((item) => ({
+    title: String(item.title || item.name || item.source || 'Источник').slice(0, 220),
+    url: String(item.link || item.url || '').slice(0, 1500),
+    snippet: String(item.snippet || item.description || item.text || '').slice(0, 1200),
+    src: 'NOVA',
+  })).filter((item) => item.url || item.snippet);
+  const lines = [];
+  if (data && data.answer) lines.push(String(data.answer).slice(0, 2400));
+  sources.forEach((item, i) => {
+    lines.push((i + 1) + '. ' + item.title + (item.url ? ' — ' + item.url : '') + (item.snippet ? '\n' + item.snippet : ''));
+  });
+  return {
+    context: lines.join('\n\n').slice(0, 9000),
+    sources,
+    trace: [{ step: 'nova-search', ok: sources.length > 0 || !!(data && data.answer), count: sources.length }],
+    weak: sources.length === 0 && !(data && data.answer),
+    answer: String((data && data.answer) || ''),
+  };
+}
+
+async function webSearch(query, type) {
+  const pipe = await runSearchPipeline(query, { type: type || 'search', maxResults: 8, deadlineMs: 22000 });
+  return {
+    ok: true,
+    text: pipe.context,
+    sources: pipe.sources,
+    answer: pipe.answer,
+    count: pipe.sources.length,
+    weak: pipe.weak,
+  };
+}
+
 /* ========== Video search + Nova link ========== */
 function extractPlainUserText(text) {
   let t = String(text || '');
@@ -1231,6 +1276,7 @@ async function groqChat(messages, system, reasoning = false) {
   let lastErr = 'empty';
   for (const key of keys) for (const model of models) {
     try {
+      const attemptIndex = models.indexOf(model);
       const body = {
         model, messages: msgs,
         max_completion_tokens: reasoning ? 12000 : 8000,
@@ -1242,7 +1288,7 @@ async function groqChat(messages, system, reasoning = false) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + key },
         body: JSON.stringify(body),
-      }, 55000);
+      }, attemptIndex === 0 ? 28000 : 8500);
       const data = await res.json().catch(() => ({}));
       if (!res.ok) { lastErr = (data.error && data.error.message) || ('groq ' + res.status); continue; }
       const text = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;

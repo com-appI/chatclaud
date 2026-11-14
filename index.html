@@ -7495,14 +7495,21 @@ if (typeof window.ccApiUrl !== 'function') {
             return data.text.trim();
         }
         async function ccApiSearch(q) {
-            const res = await fetch(window.ccApiUrl('/api/search'), {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ q: q || '' })
-            });
-            const data = await res.json().catch(function(){ return {}; });
-            if (!res.ok) return { text: '', sources: [] };
-            return data;
+            const controller = new AbortController();
+            const timer = setTimeout(function(){ controller.abort(); }, 14000);
+            try {
+                const res = await fetch(window.ccApiUrl('/api/search'), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ q: q || '' }),
+                    signal: controller.signal
+                });
+                const data = await res.json().catch(function(){ return {}; });
+                if (!res.ok) return { text: '', sources: [], error: data.error || ('HTTP ' + res.status) };
+                return data;
+            } catch (e) {
+                return { text: '', sources: [], error: e && e.name === 'AbortError' ? 'search timeout' : 'search network error' };
+            } finally { clearTimeout(timer); }
         }
         // если нет ключей в браузере — основной путь через сервер
         const __ccUseServer = true;
@@ -7706,7 +7713,7 @@ if (typeof window.ccApiUrl !== 'function') {
             if (/401|403|auth|unauthor|invalid.*key|ключ/i.test(s)) {
                 return 'Render отклонил ключ провайдера. Проверь имя переменной, сам ключ и лимиты аккаунта.';
             }
-            if (/overloaded|NO_PROVIDER|503/i.test(s) || (data && data.code === 'OVERLOADED') || (data && data.code === 'NO_PROVIDER')) {
+            if (/overloaded|NO_PROVIDER|503/i.test(s)) {
               if (typeof showLimitBanner === 'function') showLimitBanner('ChatClaud is overloaded right now. Please try again later.');
               else if (typeof showToast === 'function') showToast('ChatClaud is overloaded. Try later.');
             }
@@ -9983,37 +9990,8 @@ function buildImageUrl(userPrompt, opts) {
                 }
                 let fullPrompt = text || '';
                 if (this.currentFileText) { fullPrompt = `[Файл]:\n${this.currentFileText}\n\n[Запрос пользователя]:\n${text}`; }
-                if (text && (/^\/(search|find|seasch|nova)\b/i.test(String(text)) || /^(найди|поищи|загугли|search|find|look\s*up|google)\b/i.test(String(text).trim()) || (typeof needsWebSearch === 'function' && needsWebSearch(text)))) {
-                    let statusEl = null;
-                    try {
-                        statusEl = this.addMsg('', 'bot', false);
-                        statusEl.classList.add('cc-thinking-msg');
-                        statusEl.innerHTML = '<div class="cc-think"><span class="cc-think-label">Thinking…</span><span class="cc-think-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>';
-                        const setThink = (label) => {
-                            try {
-                                const el = statusEl && statusEl.querySelector('.cc-think-label');
-                                if (el) el.textContent = label || 'They think…';
-                            } catch (e) {}
-                        };
-                        await new Promise(r => setTimeout(r, 200));
-                        setThink('Thinking…');
-                        const searchQ = String(text).replace(/^\/(search|find|seasch|nova)\s*/i, '').replace(/^(найди|поищи|загугли|погугли|search|find|look\s*up|google)\s+/i, '').trim() || text;
-                        const snips = await duckSearch(searchQ);
-                        setThink('Reading sources');
-                        await new Promise(r => setTimeout(r, 200));
-                        try { if (statusEl && statusEl.parentNode) statusEl.remove(); } catch (e) {}
-                        if (snips && String(snips).length > 20) {
-                            fullPrompt = 'User question: ' + text + '\n\nLive web results (use these facts, answer in user language, be concrete, cite domains at end):\n' + snips;
-                        } else {
-                            // поиск пуст — модель отвечает сама, без «ничего не нашлось» из пустого блока
-                            fullPrompt = text;
-                        }
-                    } catch (e) {
-                        try { if (statusEl && statusEl.parentNode) statusEl.remove(); } catch (x) {}
-                        fullPrompt = text;
-                        console.warn('search fail', e);
-                    }
-                }
+                // Search is handled once by the ChatClaud server through Nova; no browser-side search placeholder.
+
                 // Force timeline context for year/knowledge questions
                 if (text && /(2023|2024|2025|2026|знаешь ли ты|твои знания|knowledge|cutoff)/i.test(text)) {
                     fullPrompt = '[Системная справка] Сейчас 2026. У тебя есть контекст 2023-2026 в system prompt. Отвечай по нему. ЗАПРЕЩЕНО писать что данные только на 7 октября 2026.\n\n' + fullPrompt;
@@ -10052,18 +10030,7 @@ function buildImageUrl(userPrompt, opts) {
                 try { this.clearFileState(); } catch (e) {}
                 this.input.value = ''; this.isGenerating = true; this._genStartedAt = Date.now();
                 this.showTypingIndicator();
-                // background search (Groq/Tavily) while primary models think
-                var __searchPromise = null;
-                try {
-                    var _q = (text || '').trim();
-                    var needS = false;
-                    try { needS = typeof needsWebSearch === 'function' ? needsWebSearch(_q) : false; } catch(e) {}
-                    // URL / video / find always search
-                    if (/^\/(search|nova|find)\b/i.test(_q) || /^(найди|поищи)\b/i.test(_q)) needS = true;
-                    if (_q && needS && typeof multiWebSearch === 'function') {
-                        __searchPromise = multiWebSearch(_q).catch(function(){ return ''; });
-                    }
-                } catch(e) { __searchPromise = null; }
+                // Single search path: the /api/chat server enriches search-intent prompts through Nova.
                 let accumulatedText = '';
                 let botEl = null;
                 // Flash режим: буферизуем ответ и показываем только через 2с
@@ -10077,21 +10044,6 @@ function buildImageUrl(userPrompt, opts) {
                     const flashTimer = new Promise(res => { flashResolve = res; setTimeout(() => { flashTimerDone = true; res(); }, 0); });
                 }
                 try {
-                    if (__searchPromise) {
-                        try {
-                            var __searchData = await Promise.race([
-                                __searchPromise,
-                                new Promise(function(res){ setTimeout(function(){ res(''); }, 4500); })
-                            ]);
-                            if (__searchData && String(__searchData).trim()) {
-                                fullPrompt = String(fullPrompt) + '\n\n[Данные поиска]\n' + String(__searchData).slice(0, 3500);
-                        } else if (/ютуб|youtube|видео|найди|сайт/i.test(String(text||''))) {
-                            var yq = encodeURIComponent(String(text||'').slice(0, 80));
-                            fullPrompt = String(fullPrompt) + '\n\n[Данные поиска]\n1. YouTube — https://www.youtube.com/results?search_query=' + yq + '\n2. Google — https://www.google.com/search?q=' + yq;
-                            window.__ccLastSources = [{ title: 'YouTube', url: 'https://www.youtube.com/results?search_query=' + yq, snippet: 'Результаты поиска YouTube' }, { title: 'Google', url: 'https://www.google.com/search?q=' + yq, snippet: 'Результаты поиска Google' }];
-                            }
-                        } catch(e) {}
-                    }
                     const streamPromise = this.fetchWithStream(fullPrompt, (partial, isDone) => {
                         if (isFlash) {
                             // Буферизуем, пока не истечёт 2с
@@ -10574,8 +10526,8 @@ function buildImageUrl(userPrompt, opts) {
                 el.innerHTML = '<div class="cc-status-pill"><div class="cc-status-line">' + orbHtml
                     + '<span class="cc-think-label cc-status-text">' + label + '</span></div>'
                     + '<div class="cc-think-bar" aria-hidden="true"><i></i></div></div>';
-                var box = this.container || document.getElementById('flashMessages');
-                if (box) { box.appendChild(el); try { box.scrollTop = box.scrollHeight; } catch(e) {} }
+                // Render a single fixed status pill. The former implementation also added
+                // an inline message row, showing two identical "Thinking…" indicators.
                 var fixed = document.getElementById('ccThinkFixed');
                 if (!fixed) {
                     fixed = document.createElement('div');
