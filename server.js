@@ -926,7 +926,7 @@ async function fetchUrlContent(cleanUrl, maxLength) {
   }
   const r = await fetch(cleanUrl, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; ChatClaudBot/1.0; +https://chatclaud.onrender.com)',
+      'User-Agent': 'Mozilla/5.0 (compatible; ChatClaudBot/1.0; +https://servierte.onrender.com)',
       'Accept': 'text/html,application/xhtml+xml',
       'Accept-Language': 'ru,en;q=0.9'
     },

@@ -46,6 +46,6 @@ Never add real API keys to `.env.example`, `index.html`, `server.js`, Git, or th
 
 ## GitHub Pages frontend
 
-Publish the contents of `chatclaud-main` as the Pages site root, not the ZIP file itself. Keep all static assets together. The frontend defaults to `https://chatclaud.onrender.com` for its API; update `CC_API_BASE` if your actual Render hostname differs.
+Publish the contents of `chatclaud-main` as the Pages site root, not the ZIP file itself. Keep all static assets together. The frontend defaults to `https://servierte.onrender.com` for its API; update `CC_API_BASE` if your actual Render hostname differs.
 
 The archive is a deployment-ready code package, not a completed live deployment. You still need to configure the external service credentials and redeploy it.

@@ -3730,7 +3730,7 @@ setTimeout(function() {
 <script>
 /* MUST load first — GitHub Pages → backend URL */
 (function () {
-  var def = 'https://chatclaud.onrender.com';
+  var def = 'https://servierte.onrender.com';
   try {
     var s = localStorage.getItem('CC_API_BASE');
     if (s && String(s).trim()) def = String(s).trim();
@@ -7432,7 +7432,7 @@ body {
         }
         
 if (typeof window.ccApiUrl !== 'function') {
-  window.CC_API_BASE = (window.CC_API_BASE || 'https://chatclaud.onrender.com').replace(/\/+$/,'');
+  window.CC_API_BASE = (window.CC_API_BASE || 'https://servierte.onrender.com').replace(/\/+$/,'');
   window.ccApiUrl = function(path){ path=String(path||''); if(path.charAt(0)!=='/') path='/'+path; return (window.CC_API_BASE||'')+path; };
 }
 
@@ -13825,7 +13825,7 @@ window.CC.Sources = {
 window.CC.Vision = {
   describe: async function(dataUrl) {
     if (!dataUrl || dataUrl.length < 30) throw new Error('no image');
-    var url = (window.ccApiUrl && window.ccApiUrl('/api/vision')) || 'https://chatclaud.onrender.com/api/vision';
+    var url = (window.ccApiUrl && window.ccApiUrl('/api/vision')) || 'https://servierte.onrender.com/api/vision';
     var res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -14568,7 +14568,7 @@ body.cc-bg-blue #flashChat .chat-layout {
   window.CC.Vision.describe = async function(dataUrl) {
     if (!dataUrl || dataUrl.length < 40) throw new Error('No image');
     var small = await compressDataUrl(dataUrl, 1280, 0.8);
-    var url = (window.ccApiUrl && window.ccApiUrl('/api/vision')) || 'https://chatclaud.onrender.com/api/vision';
+    var url = (window.ccApiUrl && window.ccApiUrl('/api/vision')) || 'https://servierte.onrender.com/api/vision';
     var res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

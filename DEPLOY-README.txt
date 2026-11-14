@@ -32,7 +32,7 @@ Provider architecture
 Frontend (GitHub Pages)
 - Publish the contents of chatclaud-main as the site root.
 - Keep index.html, manifest.json, sw.js, icon PNGs, and the Google verification file together.
-- Frontend API default: https://chatclaud.onrender.com
+- Frontend API default: https://servierte.onrender.com
 - Override the backend URL using the CC_API_BASE local-storage setting if the Render service has another hostname.
 
 Validation
