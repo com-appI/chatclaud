@@ -90,3 +90,13 @@ NOT claimed:
 - Tools: search, fetch_url (SSRF+no auto-redirect follow), kb_search, verify_claims
 - Hard limits: steps, tool calls, timeouts, sequential only
 - No DeepAgents/Mastra, no browser sidecar, no new memory/skills
+
+
+## Stage D — cognitive agent runtime (2026-11-14)
+- Added dynamic graph-style orchestration: plan → act → observe → decide → synthesize/review → done.
+- Added model-directed action/observation loop with strict allowlist and bounded step/tool/time budgets.
+- Added execution receipts, working-state evidence context, and a second-pass consistency reviewer.
+- Added safe arithmetic parser tool; no eval, Function, shell, or arbitrary code execution.
+- Wired agent mode into /api/chat for explicit agent/research/reason requests and selected complex tasks.
+- Normal short chat still uses the existing single-call path; no new npm dependencies or secrets required.
+- Patterns studied: LangGraph state transitions, smolagents action/observation memory, DeerFlow task/context/report contracts. No upstream runtime code vendored.

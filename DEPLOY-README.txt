@@ -1,4 +1,4 @@
-ChatClaud v1.2.0 — Groq-only deployment notes
+ChatClaud v1.3.0 — Groq-only deployment notes
 
 Backend (Render)
 - Root directory: folder containing package.json and server.js (chatclaud-main in this archive when kept inside a parent repository).
@@ -41,3 +41,11 @@ Validation
 - Backend health endpoint: /api/health
 
 See REPAIR-NOTES.md for details. This archive has not been deployed to any production account.
+
+
+Cognitive agent upgrade (v1.3.0)
+- The backend now routes explicit agent/research/deep-research/reasoning requests and selected complex tasks through a bounded cognitive agent loop.
+- It uses the existing Groq and Nova configuration; no new Render environment variables or npm packages are required.
+- Read-only agent tools: search, fetch_url, kb_search, verify_claims, calculator. No shell or arbitrary code execution is exposed.
+- Agent execution uses additional Groq calls on complex tasks and may take longer than a normal chat response. Simple chat remains on the previous single-call path.
+- Backend changes require a Render deploy. index.html and GitHub Pages do not need to be changed for this upgrade.
