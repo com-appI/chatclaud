@@ -1,0 +1,12 @@
+Backend patch summary v1.5.2
+
+Changed:
+- server.js (agent budget, early stop, synthesize rules, search weak-rewrite/conflict, logging)
+- package.json version
+- RELEASE-v1.5.2.txt, DEPLOY-v1.5.2.md
+- test/search-intelligence.test.js, test/rank-unit.test.js
+
+Unchanged:
+- index.html (Pages)
+- Plus, ALE, vision, transcribe, imagine paths (behavior preserved)
+- Nova as primary search provider

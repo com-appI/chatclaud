@@ -1,3 +1,5 @@
+## v1.5.0 (see AGENT-UPGRADE-v1.5.0.md and RELEASE-v1.5.0.txt)
+
 # ChatClaud Cognitive Upgrade — v1.4.0
 
 This release extends the existing native Node.js cognitive agent. It keeps the existing Groq-only model path, Nova Browser search service, GitHub Pages frontend, and Render backend. No new npm dependency or environment variable is required.

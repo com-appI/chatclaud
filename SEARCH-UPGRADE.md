@@ -1,3 +1,7 @@
+## v1.5.1 Search Intelligence
+
+See RELEASE-v1.5.1.txt.
+
 # ChatClaud Search Upgrade — v1.4.0
 
 ## What was wrong
