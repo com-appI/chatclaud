@@ -1,6 +1,6 @@
 {
   "name": "chatclaud",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "private": true,
   "main": "server.js",
   "scripts": {
@@ -11,5 +11,5 @@
   "engines": {
     "node": ">=18"
   },
-  "description": "ChatClaud single-file server (intelligence modules bundled into server.js)"
+  "description": "ChatClaud single-file Node.js backend with bounded cognitive agent orchestration and adaptive Nova research search"
 }

@@ -1,38 +1,31 @@
-# ChatClaud Intelligence Upgrade — v1.3.0
+# ChatClaud Cognitive Upgrade — v1.4.0
 
-This upgrade adds an opt-in/intent-routed cognitive agent runtime to the existing Node.js backend. It does not replace the current Groq, Nova, ALE, GitHub Pages, or Render architecture.
+This release extends the existing native Node.js cognitive agent. It keeps the existing Groq-only model path, Nova Browser search service, GitHub Pages frontend, and Render backend. No new npm dependency or environment variable is required.
 
-## Capabilities added
+## Cognitive agent changes
 
-- **Stateful graph-style orchestration:** explicit `plan → act → observe → decide → synthesize/review → done` transitions with a bounded step budget and a run trace.
-- **Dynamic action/observation loop:** the model chooses the next allowed tool based on the task and actual results, rather than always following a fixed deterministic template.
-- **Specialist second-pass reviewer:** a separate reviewer prompt checks task coverage, unsupported claims, and inconsistencies. It may revise the draft once. This is a same-model consistency review, not independent fact verification.
-- **Execution receipts:** each tool call gets a receipt ID, tool name, status, and bounded result summary. The final workflow can distinguish performed work from claims about work.
-- **Safe arithmetic tool:** basic arithmetic is evaluated by a small parser. JavaScript `eval`, `Function`, shell commands, and arbitrary code execution are not available.
-- **Tool allowlist and budgets:** only `search`, `fetch_url`, `kb_search`, `verify_claims`, and `calculator` are allowed in agent mode. Tool calls, step count, input size, and run duration are capped.
-- **Context and evidence handling:** existing Nova results can enter the agent's working state; retrieved page contents are explicitly treated as untrusted data.
+- **Adaptive bounded orchestration:** the model still controls the next step from real observations, with a maximum of 8 action steps and 5 agent tool calls per task.
+- **Delegated research workers:** a new `delegate_research` tool lets the controller split a complex research request into 2–3 distinct roles/queries. Workers run independent, read-only Nova searches and return isolated evidence packages that are merged for the controller.
+- **Multi-query tool use:** `search` accepts up to 3 focused queries in one action and merges their evidence.
+- **Evidence-first workflow:** fetched page text, published dates, source URLs, and execution receipts are passed to synthesis and review. Retrieved page contents remain untrusted data.
+- **Safer page fetching:** agent URL fetching does not follow redirects, reducing the risk of a public URL redirecting a server-side request into a private network.
+- **Budget control:** all tools remain allowlisted; delegated work has explicit worker limits and a bounded timeout. No shell, arbitrary code execution, account actions, or deployment actions are exposed.
 
-## Patterns studied in the supplied repositories
+## Upstream patterns studied
 
-- LangGraph: explicit state transitions, bounded graph execution, and traceable node progression.
-- smolagents: action → observation cycles and retaining a compact execution trajectory.
-- DeerFlow: task decomposition, bounded working context, specialist review, evidence/receipt-oriented reporting, and honest reporting of incomplete work.
+- [LangGraph](https://github.com/langchain-ai/langgraph): explicit state transitions, bounded graph execution, and traceable steps.
+- [smolagents](https://github.com/huggingface/smolagents): action/observation loops and compact execution trajectories.
+- [DeerFlow](https://github.com/bytedance/deer-flow): task decomposition, research workflow, evidence aggregation, and reviewer pass.
+- [Deep Agents JS](https://github.com/langchain-ai/deepagentsjs): planning, scoped subtask delegation, isolated worker context, and context management.
 
-Upstream projects reviewed: [LangGraph](https://github.com/langchain-ai/langgraph) (MIT), [smolagents](https://github.com/huggingface/smolagents) (Apache-2.0), and [DeerFlow](https://github.com/bytedance/deer-flow) (MIT). Only architectural patterns are adapted here; their source files are not copied into ChatClaud.
+Only architecture patterns are adapted; upstream source files are not copied into ChatClaud. The full `deepagents` package is not installed because it pulls in the LangChain/LangGraph runtime stack and ChatClaud can use the relevant bounded orchestration patterns without introducing that dependency weight.
 
-This implementation is a native JavaScript adaptation of those architectural patterns. The Python repositories and their full frameworks are not vendored or installed because the current ChatClaud service is a single Node.js backend and does not need their unrelated runtime dependencies.
+## Limits and honest claims
 
-## When it runs
-
-The agent is activated for explicit `agent`, `research`, or `deep-research` modes, `body.agent=true`, `body.deepResearch=true`, `body.reason=true`, and selected clearly complex natural-language requests (for example, compare, analyze, investigate, or make a detailed plan). Ordinary short chat continues to use the existing one-call path to avoid unnecessary model requests.
-
-## Safety and limitations
-
-- Agent tools are read-only except for local arithmetic; no shell, code execution, filesystem writes, account actions, or deployment tools are exposed.
-- Search and claim verification quality still depends on Nova results and the current source-verification path. A keyword-overlap check is heuristic, not proof.
-- The reviewer uses the configured Groq model as a second pass; it must not be described as an independent external verifier.
-- Persistent long-term user memory and parallel worker agents are not added in this stage. The run keeps its working state and receipts during a single task.
-- More agent steps may require additional Groq requests and add latency. The default maximum is three tool calls.
+- Research workers currently perform role-scoped retrieval and evidence packaging; they are not separate model instances running autonomous reasoning loops.
+- The Reviewer is a second pass using the same configured Groq model. It is a consistency check, not independent fact verification.
+- Persistent cross-chat memory, filesystem workspaces, and full MCP client/server connectivity are not introduced in this release.
+- More search calls and agent steps can increase response latency and Groq/Nova usage. Defaults are bounded; normal short chat continues to use the ordinary chat path.
 
 ## Validation
 
@@ -42,5 +35,3 @@ Run:
 npm run check
 npm test
 ```
-
-No new npm dependency or environment variable is required. The feature runs on the existing Render backend and uses the existing `GROQ_KEY` and Nova configuration.

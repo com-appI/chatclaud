@@ -93,3 +93,25 @@ test('agent tool budget is enforced even if the controller keeps requesting tool
   assert.ok(result.state.errors.includes('agent_execution_budget_reached'));
   assert.equal(decisions, 1);
 });
+
+
+test('agent registry supports safe multi-query search and bounded delegated research', () => {
+  const search = intel.validateToolInput('search', {
+    query: 'primary query', queries: ['primary query', 'second focused angle', 'third angle', 'ignored fourth'], maxResults: 6,
+  });
+  assert.equal(search.ok, true);
+  assert.deepEqual(search.input.queries, ['primary query', 'second focused angle', 'third angle']);
+  const delegated = intel.validateToolInput('delegate_research', {
+    tasks: [
+      { role: 'official', query: 'official documentation and design' },
+      { role: 'countercheck', query: 'independent limitations and critiques' },
+      { role: 'extra', query: 'additional implementation examples' },
+      { role: 'ignored', query: 'this fourth worker must be ignored' },
+    ],
+  });
+  assert.equal(delegated.ok, true);
+  assert.equal(delegated.input.tasks.length, 3);
+  assert.equal(intel.normalizeAgentAction({ type: 'tool', name: 'delegate_research', input: { tasks: [] } }).name, 'delegate_research');
+  assert.ok(intel.listTools().some((x) => x.name === 'delegate_research'));
+  assert.equal(intel.validateToolInput('delegate_research', { tasks: [{ query: 'only one worker' }] }).ok, false);
+});

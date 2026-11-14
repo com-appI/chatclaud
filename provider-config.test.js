@@ -22,3 +22,11 @@ test('browser contains no Groq provider secret or direct provider API request', 
   assert.doesNotMatch(html, /api\.groq\.com|GROQ_KEYS|MISTRAL_KEY/i);
   assert.match(html, /GROQ_MODELS = \['openai\/gpt-oss-120b'/);
 });
+
+
+test('optional Firecrawl credential is backend-only and never embedded in the browser', () => {
+  assert.match(server, /process\.env\.FIRECRAWL_API_KEY/);
+  assert.match(server, /api\.firecrawl\.dev\/v2\/search/);
+  assert.doesNotMatch(html, /FIRECRAWL_API_KEY|api\.firecrawl\.dev/i);
+  assert.match(fs.readFileSync(path.join(root, '.env.example'), 'utf8'), /FIRECRAWL_API_KEY=/);
+});
