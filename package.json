@@ -1,15 +1,16 @@
 {
   "name": "chatclaud",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "private": true,
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "check": "node --check server.js && node --check sw.js && node scripts/check-inline.js",
-    "test": "node --test"
+    "test": "node --test",
+    "eval": "node scripts/run-evals.js"
   },
   "engines": {
     "node": ">=18"
   },
-  "description": "ChatClaud single-file Node.js backend with bounded cognitive agent orchestration and adaptive Nova research search"
+  "description": "ChatClaud 1.6.0 single-file Node.js backend with bounded agent runtime, intent routing, permissioned tools and truthful Agent Trace"
 }

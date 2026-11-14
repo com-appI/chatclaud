@@ -1,0 +1,33 @@
+ChatClaud v1.5.2 — Deploy-Ready Cognitive Search
+
+Focus: smarter agent budgets, grounded answers, stronger search recovery, safer failures.
+
+1) Adaptive Budget + Early Stop
+- estimateAgentBudget(task): simple | standard | research | deep
+- simple Q → max 1 tool / 3 steps
+- research/deep → fuller budget
+- notesAreSufficient → early_stop when evidence is enough
+
+2) Citations + Anti-Hallucination
+- synthesize must cite only URLs from SOURCES / note.urls
+- explicit uncertainty when evidence is thin
+- conflict note when top sources disagree
+
+3) Search resilience
+- weak-rank recovery: one LLM rewrite query + re-search
+- conflict signal in context for the model
+- intent/authority/freshness ranking retained from 1.5.1
+
+4) Reliability
+- agent failure falls back to direct Groq answer (no hard 500 from agent alone)
+- structured logs: phase, toolCalls, duration, profile (no secrets)
+- existing Nova weak/empty messaging kept
+
+5) Tests
+- test/search-intelligence.test.js
+- test/rank-unit.test.js
+
+Providers: Groq only for LLM. Nova remains primary search. Optional Firecrawl unchanged.
+Frontend: unchanged (GitHub Pages). Backend: Render.
+
+Version markers: agent-runtime v1.5.2, package 1.5.2

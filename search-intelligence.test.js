@@ -27,10 +27,10 @@ describe('search intelligence helpers present', () => {
   });
 });
 
-describe('agent runtime v1.5.2 markers', () => {
+describe('agent runtime v1.6.0 markers', () => {
   it('has early stop and set_notes support', () => {
     assert.match(serverSrc, /notes_sufficient/);
     assert.match(serverSrc, /set_notes/);
-    assert.match(serverSrc, /agent-runtime v1\.5\.2/);
+    assert.match(serverSrc, /agent-runtime v1\.6\.0/);
   });
 });

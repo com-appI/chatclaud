@@ -19,7 +19,7 @@ test('calculator is an allowlisted, validated agent tool', async () => {
   const registry = intel.createToolRegistry({
     calculator: async ({ expression }) => server.evaluateSafeExpression(expression),
   });
-  const result = await registry.call('calculator', { expression: '10 / 2 + 7' });
+  const result = await registry.call('calculator', { expression: '10 / 2 + 7' }, { permissions: ['compute'] });
   assert.equal(result.ok, true);
   assert.equal(result.result.value, 12);
   assert.equal((await registry.call('shell', {})).error, 'unknown_tool');
@@ -114,4 +114,71 @@ test('agent registry supports safe multi-query search and bounded delegated rese
   assert.equal(intel.normalizeAgentAction({ type: 'tool', name: 'delegate_research', input: { tasks: [] } }).name, 'delegate_research');
   assert.ok(intel.listTools().some((x) => x.name === 'delegate_research'));
   assert.equal(intel.validateToolInput('delegate_research', { tasks: [{ query: 'only one worker' }] }).ok, false);
+});
+
+
+test('tool registry requires explicit permissions and validates handler output', async () => {
+  const registry = intel.createToolRegistry({ calculator: async () => ({ value: 'not-a-number' }) });
+  const denied = await registry.call('calculator', { expression: '1+1' });
+  assert.equal(denied.errorCode, 'TOOL_PERMISSION_DENIED');
+  const invalid = await registry.call('calculator', { expression: '1+1' }, { permissions: ['compute'] });
+  assert.equal(invalid.errorCode, 'INVALID_TOOL_OUTPUT');
+});
+
+test('tool registry enforces timeout and clears its timer', async () => {
+  const registry = intel.createToolRegistry({ calculator: async () => new Promise(() => {}) });
+  const result = await registry.call('calculator', { expression: '1+1' }, { permissions: ['compute'], stepTimeoutMs: 100 });
+  assert.equal(result.errorCode, 'TOOL_TIMEOUT');
+  assert.equal(registry.getCallCounts().calculator, 1);
+});
+
+test('agent task record carries stable task id, plan steps and completion state', async () => {
+  const result = await intel.runAgentGraph('track this task', {
+    nextAction: async (_state, initial) => initial
+      ? { plan: ['Collect evidence', 'Write answer'], next_action: { type: 'final', answer: 'Done.' } }
+      : { next_action: { type: 'final', answer: 'Done.' } },
+    review: async () => ({ verdict: 'pass' }),
+  }, { requestId: 'req-test-123', intent: { intent: 'question', complexity: 'MEDIUM' } });
+  assert.equal(result.state.taskRecord.taskId, 'req-test-123');
+  assert.equal(result.state.taskRecord.status, 'completed');
+  assert.ok(Array.isArray(result.state.taskRecord.steps));
+  assert.ok(result.state.taskRecord.updatedAt);
+});
+
+test('v1.6.0 intent router distinguishes continuation and multi-step tasks', () => {
+  assert.equal(intel.classifyIntent('Продолжай с прошлого этапа', { hasContext: true }).intent, 'continuation');
+  assert.equal(intel.classifyIntent('Продолжай с прошлого этапа', { hasContext: false }).intent, 'question');
+  const route = intel.classifyIntent('Сначала проведи аудит, затем исправь код и протестируй сборку');
+  assert.equal(route.intent, 'multi_step');
+  assert.equal(route.complexity, 'MULTI_STEP');
+});
+
+test('v1.6.0 task record captures plan, tool outcome and review state', async () => {
+  const result = await intel.runAgentGraph('check a bounded task', {
+    nextAction: async (_state, initial) => initial
+      ? { plan: ['Collect one result'], next_action: { type: 'tool', name: 'calculator', input: { expression: '4*5' } } }
+      : { next_action: { type: 'final', answer: 'The result is 20.' } },
+    executeTool: async () => ({ ok: true, result: { value: 20 } }),
+    review: async () => ({ verdict: 'pass' }),
+  }, { maxSteps: 4, maxToolCalls: 2, intent: { intent: 'question', complexity: 'MEDIUM' }, requestId: 'test-req-160' });
+  assert.equal(result.ok, true);
+  assert.equal(result.state.taskRecord.taskId, 'test-req-160');
+  assert.equal(result.state.taskRecord.status, 'completed');
+  assert.equal(result.state.taskRecord.finalAnswerProduced, true);
+  assert.ok(result.state.taskRecord.steps.some((step) => step.tool === 'calculator' && step.status === 'completed'));
+  assert.equal(result.state.review.status, 'passed');
+});
+
+test('tool registry fails closed when a caller lacks required permissions', async () => {
+  const registry = intel.createToolRegistry({ calculator: async () => ({ value: 2 }) });
+  const result = await registry.call('calculator', { expression: '1+1' }, { permissions: ['read'] });
+  assert.equal(result.ok, false);
+  assert.equal(result.errorCode, 'TOOL_PERMISSION_DENIED');
+});
+
+test('tool registry aborts timed-out handlers and reports a stable timeout code', async () => {
+  const registry = intel.createToolRegistry({ calculator: async () => new Promise((resolve) => setTimeout(() => resolve({ value: 2 }), 300)) });
+  const result = await registry.call('calculator', { expression: '1+1' }, { stepTimeoutMs: 100, permissions: ['compute'] });
+  assert.equal(result.ok, false);
+  assert.equal(result.errorCode, 'TOOL_TIMEOUT');
 });

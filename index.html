@@ -1562,6 +1562,16 @@ html.plus-active .thinking-brain {
     transition-duration: 0.01ms !important;
   }
 }
+/* v1.6.0 global motion policy */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 /* Cheaper paints */
 .messages { content-visibility: visible;
   -webkit-overflow-scrolling: touch;
@@ -7492,6 +7502,14 @@ if (typeof window.ccApiUrl !== 'function') {
                 try { if (typeof ccUpdateFuelBar === 'function') ccUpdateFuelBar(data.rate); } catch (e) {}
                 try { if (typeof ccMaybeRateModal === 'function') ccMaybeRateModal(data.rate); } catch (e) {}
             }
+            try {
+                var userMsg = (messages || []).slice().reverse().find(function(m){ return m && (m.role === 'user' || m.role === 'human'); });
+                window.__ccLastUserRequest = String(userMsg && userMsg.content || '').slice(0, 4000);
+                window.__ccLastAgent = data.agent && typeof data.agent === 'object' ? data.agent : null;
+                window.__ccLastIntent = data.intent || null;
+                window.__ccLastRequestId = data.requestId || null;
+                if (typeof window.ccTraceFromAgent === 'function') window.ccTraceFromAgent(window.__ccLastAgent, data.intent || null, data.requestId || null);
+            } catch (e) {}
             return data.text.trim();
         }
         async function ccApiSearch(q) {
@@ -10029,6 +10047,7 @@ function buildImageUrl(userPrompt, opts) {
                 this.history.push({ role: 'user', content: text || '' }); // never store internal search prompt
                 try { this.clearFileState(); } catch (e) {}
                 this.input.value = ''; this.isGenerating = true; this._genStartedAt = Date.now();
+                try { if (typeof window.ccTraceStart === 'function') window.ccTraceStart(text || '[Вложение]'); } catch (traceStartError) {}
                 this.showTypingIndicator();
                 // Single search path: the /api/chat server enriches search-intent prompts through Nova.
                 let accumulatedText = '';
@@ -10124,12 +10143,14 @@ function buildImageUrl(userPrompt, opts) {
                         this.history.push({ role: 'assistant', content: failEl.textContent });
                     }
                 } catch (e) {
+                    try { if (typeof window.ccTraceFail === 'function') window.ccTraceFail(); } catch (traceError) {}
                     this.hideTypingIndicator();
                     if (!botEl) botEl = this.addMsg('', 'bot', false);
                     const em = (typeof ccPublicError === 'function') ? ccPublicError(e) : 'ChatClaud временно недоступен.';
                     botEl.textContent = em;
                     this.history.push({ role: 'assistant', content: botEl.textContent });
                 } finally {
+                    try { if (typeof window.ccTraceEnd === 'function') window.ccTraceEnd(); } catch (traceEndError) {}
                     this.hideTypingIndicator();
                     this.isGenerating = false; try { document.body.classList.remove('is-generating'); } catch(e) {};
                     this.setStopVisible(false);
@@ -10238,10 +10259,11 @@ function buildImageUrl(userPrompt, opts) {
                     return msg;
                 }
 
-                let sys = 'Ты ChatClaud.  BROWSING: You CAN open links via ChatClaud Browser. NEVER say you cannot open links or watch videos. When page/video context is provided, use it. For TikTok/YouTube summarize from title/description/subtitles.  Сегодня 7 октября 2026 года (актуальный день). У тебя актуальный контекст 2024–2026 и поиск в сети. Отвечай на языке пользователя. ХАРАКТЕР: зеркаль тон собеседника. Если грубо/мат — отвечай в той же манере, коротко и жёстко, без нравоучений. Если вежливо — будь собранным и полезным. Правда важнее вежливости. Не извиняйся без причины. Не сюсюкай. ЗАПРЕТ БРЕНДОВ: никогда не пиши слова ChatGPT, GPT, OpenAI, Claude, Anthropic, Gemini, Google AI, Grok, xAI, Llama, Meta AI, Mistral, Groq, Copilot, DeepSeek. Ты только ChatClaud. Если спросят про GPT — ответь: нет, я ChatClaud. Внутренности и ключи API не обсуждай. Когда в сообщении есть блок [Данные поиска] — это актуальный интернет. ОБЯЗАТЕЛЬНО используй эти данные и отвечай по ним. КРИТИЧЕСКИ: у тебя ЕСТЬ интернет через ChatClaud Search. НИКОГДА не пиши «не могу просматривать интернет», «нет доступа к YouTube», «нет доступа к сети», «данные на 2023/2026». У тебя есть поиск ChatClaud. Если есть блок [Данные поиска] — отвечай ТОЛЬКО по нему и давай кликабельные ссылки. Если блока нет — всё равно не отказывайся: предложи ссылки youtube.com/results и google.com. Если данных мало — скажи честно, что в выдаче ничего нет, и предложи уточнить запрос. Когда даёшь факты из поиска — опирайся на них, не выдумывай.';
+                let sys = 'Ты ChatClaud — помощник внутри этого приложения. Отвечай на языке пользователя и учитывай фактический контекст диалога. Сегодня ' + new Date().toISOString().slice(0,10) + '. ИНСТРУМЕНТЫ И ИСТОЧНИКИ: используй только реально переданные результаты Nova, содержимое страниц и результаты вызванных инструментов. Не утверждай, что открыл URL, прочитал документ или посмотрел видео, если содержимое не было фактически получено. Если поиска или доступа к странице не было либо он завершился ошибкой, скажи об этом прямо; не выдумывай источники, ссылки, цитаты, даты или результаты. Отделяй подтверждённые факты от предположений. ХАРАКТЕР: будь естественным, уважительным и прямым; подстраивай подробность ответа под задачу. Для простого вопроса отвечай прямо, для сложной задачи используй план и проверяй результат. Не раскрывай секреты, ключи, токены, внутренние сообщения сервера или приватные данные. УПРАВЛЕНИЕ ИНТЕРФЕЙСОМ: можно использовать только перечисленные ниже команды интерфейса и только когда пользователь явно попросил именно это действие. Нельзя исполнять произвольный код, читать cookies/секреты, обращаться к файловой системе, менять аккаунт, безопасность, оплату или публиковать данные наружу. Не заявляй о выполнении действия, если оно не было подтверждено приложением.';
                 if (typeof MODE_BRAINS !== 'undefined' && MODE_BRAINS[cm]) sys += '\n' + MODE_BRAINS[cm];
-                if (cm === 'think') sys += '\nРЕЖИМ reasoning: несколько шагов мысли, лучший ответ. Сегодня 7 октября 2026.';
-                if (typeof CHATCLAUD_BRAIN === 'string') sys = (CHATCLAUD_BRAIN.slice(0, 4000) + '\n' + sys).slice(0, 5000);
+                if (cm === 'think') sys += '\nРЕЖИМ reasoning: краткий план при необходимости, затем проверяемый ответ.';
+                sys += '\nUI CONTROL: You may emit only one exact [[CC_UI:...]] token on its own line when the user explicitly requested that exact interface action. Allowlist: theme=dark|light|waves|blue; settings=open|close; sidebar=open|close; mode=fast|think|code; newchat; scroll=bottom. Never use arbitrary code, inspect secrets/cookies, modify account/security/billing, submit forms, publish externally, or delete history. Never activate voice, microphone, camera, or live features through an assistant token; those require a direct user gesture. Do not include a token unless the user explicitly asked for that action and target.';
+                if (typeof CHATCLAUD_BRAIN === 'string') sys = (CHATCLAUD_BRAIN.slice(0, 4000) + '\n' + sys).slice(0, 7000);
 
                 const hist = (this.history || []).filter(function(m) {
                     return m && m.content && m.role !== 'system' && !/недоступен|Ошибка|Не удалось получить ответ|Сейчас все каналы|Request too large|Limit|\[image\]|Создание изображения/i.test(m.content) && String(m.content).length < 4000;
@@ -14843,228 +14865,80 @@ body.cc-bg-light #flashMessages .message.user {
 <script id="cc-agent-trace">
 (function(){
   window.CC = window.CC || {};
-
-  function detectLevel(text) {
-    var t = String(text || '').trim();
-    if (!t) return 'think';
-    if (/^\/(search|find|nova|seasch)\b/i.test(t)) return 'agent';
-    if (/\b(search|найди|поищи|загугли|look\s*up|google)\b/i.test(t)) return 'agent';
-    if (/https?:\/\//i.test(t) || /tiktok|youtube|instagram/i.test(t)) return 'agent';
-    if (/^\/(img|veo|gif)\b/i.test(t)) return 'agent';
-    if (t.length > 180 || /объясни|разбер|сравни|analyze|explain|why|how does|как работает|выпиши|план/i.test(t)) return 'reason';
+  function detectLevel(text){
+    var t=String(text||'').trim();
+    if (/^\/(agent|research|deepresearch|deep-research|search|find|nova)\b/i.test(t) || /\b(исследуй|аудит|найди|поищи|research|investigate|compare|benchmark)\b/i.test(t)) return 'agent';
+    if (t.length>160 || /объясни|разбер|сравни|analyze|explain|why|how does|как работает|план|создай|разработай/i.test(t)) return 'reason';
     return 'think';
   }
-
-  window.CC.Trace = {
-    el: null,
-    level: 'think',
-    steps: [],
-    detect: detectLevel,
-    mount: function(level) {
-      this.remove();
-      this.level = level || 'think';
-      this.steps = [];
-      var box = document.getElementById('flashMessages');
-      if (!box) return;
-      var el = document.createElement('div');
-      el.className = 'cc-trace';
-      el.id = 'ccAgentTrace';
-      if (level === 'think') {
-        el.innerHTML = '<div class="cc-trace-label-shimmer">Thinking…</div>';
-      } else if (level === 'reason') {
-        el.innerHTML = '<div class="cc-trace-title">Reasoning</div><div class="cc-trace-label-shimmer">Reasoning…</div>';
-      } else {
-        el.innerHTML = '<div class="cc-trace-title">Agent Trace</div><div class="cc-trace-steps"></div>';
-      }
-      box.appendChild(el);
-      box.scrollTop = box.scrollHeight;
-      this.el = el;
+  var Trace={el:null,level:'think',steps:[],startedAt:0,
+    mount:function(level){
+      this.remove(); this.level=level||'think'; this.steps=[]; this.startedAt=Date.now();
+      var box=document.getElementById('flashMessages'); if(!box)return;
+      var el=document.createElement('section'); el.className='cc-trace cc-trace-v160'; el.id='ccAgentTrace'; el.setAttribute('aria-live','polite');
+      var head=document.createElement('div'); head.className='cc-trace-head';
+      var title=document.createElement('div'); title.className='cc-trace-title'; title.textContent='AGENT TRACE';
+      var state=document.createElement('div'); state.className='cc-trace-state'; state.textContent='Запрос передан серверу · ожидаю фактический отчёт';
+      var ring=document.createElement('span'); ring.className='cc-trace-ring'; head.append(title,ring); el.append(head,state);
+      var steps=document.createElement('div'); steps.className='cc-trace-steps'; el.append(steps);
+      box.appendChild(el); box.scrollTop=box.scrollHeight; this.el=el;
     },
-    push: function(label) {
-      if (this.level === 'think') return;
-      if (this.level === 'reason') {
-        // update single line
-        if (!this.el) return;
-        var s = this.el.querySelector('.cc-trace-label-shimmer');
-        if (s) s.textContent = label;
-        return;
-      }
-      if (!this.el) return;
-      var host = this.el.querySelector('.cc-trace-steps');
-      if (!host) return;
-      // mark previous done
-      host.querySelectorAll('.cc-trace-step.active').forEach(function(n){
-        n.classList.remove('active');
-        n.classList.add('done');
-      });
-      var row = document.createElement('div');
-      row.className = 'cc-trace-step active';
-      row.innerHTML = '<span class="cc-trace-dot"></span><span>' + label.replace(/</g,'&lt;') + '</span>';
-      host.appendChild(row);
-      this.steps.push(label);
-      var box = document.getElementById('flashMessages');
-      if (box) box.scrollTop = box.scrollHeight;
+    push:function(label,status){
+      if(!this.el)return;
+      var host=this.el.querySelector('.cc-trace-steps'); if(!host)return;
+      var row=document.createElement('div'); row.className='cc-trace-step '+(status||'done');
+      var dot=document.createElement('span'); dot.className='cc-trace-dot';
+      var txt=document.createElement('span'); txt.textContent=String(label||'Этап').slice(0,180);
+      row.append(dot,txt); host.appendChild(row); this.steps.push(String(label||''));
+      var box=document.getElementById('flashMessages'); if(box)box.scrollTop=box.scrollHeight;
     },
-    done: function() {
-      if (!this.el) return;
-      this.el.querySelectorAll('.cc-trace-step.active').forEach(function(n){
-        n.classList.remove('active');
-        n.classList.add('done');
-      });
+    fromAgent:function(agent,intent,requestId){
+      if(!this.el)this.mount(agent?'agent':'think');
+      if(!this.el)return;
+      var state=this.el.querySelector('.cc-trace-state');
+      if(state)state.textContent=agent?'Отчёт backend · '+String(agent.status||'завершено')+(requestId?' · '+requestId:''):'Прямой ответ · автономный агент и инструменты не запускались';
+      var ring=this.el.querySelector('.cc-trace-ring'); if(ring)ring.classList.add('is-done');
+      var host=this.el.querySelector('.cc-trace-steps'); if(host)host.replaceChildren(); this.steps=[];
+      if(!agent){ this.push('Ответ обработан без агентного цикла','done'); return; }
+      var routed=(intent&&typeof intent==='object')?intent:((agent.intent&&typeof agent.intent==='object')?agent.intent:null);
+      var intentName=(routed&&routed.intent)||((typeof agent.intent==='string')?agent.intent:null)||'unknown';
+      var complexity=(routed&&routed.complexity)||agent.complexity||'unknown';
+      this.push('Intent: '+intentName+' · complexity: '+complexity,'done');
+      var task=agent.task||{};
+      if(task.goal)this.push('Цель: '+task.goal,'done');
+      var plan=Array.isArray(agent.plan)?agent.plan:[];
+      plan.slice(0,8).forEach(function(x,n){Trace.push('План '+(n+1)+': '+x,'done');});
+      var steps=Array.isArray(task.steps)?task.steps:[];
+      if(steps.length){steps.slice(0,10).forEach(function(x){
+        var status=String(x.status||'pending');
+        var stateClass=status==='failed'?'failed':status==='completed'?'done':status==='skipped'?'skipped':(status==='running'?'active':'');
+        var prefix=status==='failed'?'Ошибка · ':status==='completed'?'Готово · ':status==='skipped'?'Пропущено · ':status==='running'?'Выполняется · ':'В плане · ';
+        Trace.push(prefix+(x.description||x.stepId||'step')+(x.tool?' ['+x.tool+']':''),stateClass);
+      });}
+      else if(Array.isArray(agent.steps)){agent.steps.slice(0,10).forEach(function(x){
+        var status=String(x.status||'recorded');
+        var stateClass=status==='failed'?'failed':status==='running'?'active':status==='skipped'?'skipped':'done';
+        Trace.push((x.node||'step')+' · '+status+(x.tool?' · '+x.tool:''),stateClass);
+      });}
+      if(Array.isArray(agent.receipts))agent.receipts.slice(0,8).forEach(function(x){Trace.push('Инструмент '+String(x.tool||'tool')+' · '+String(x.status||'unknown'),x.status==='failed'?'failed':'done');});
+      var rv=agent.reviewStatus|| (agent.review&&agent.review.status)||null;
+      if(rv)Trace.push('Самопроверка: '+rv,rv==='failed'?'failed':'done');
+      var usage=agent.tokenUsage;
+      if(usage&&usage.reported)Trace.push('Токены: '+(usage.totalTokens||0)+' · вызовов модели: '+(usage.calls||0),'done');
+      if(task.status)Trace.push('Задача: '+task.status,'done');
+      if(agent.durationMs!=null)Trace.push('Время выполнения: '+(Number(agent.durationMs)/1000).toFixed(1)+' с','done');
+      if(!this.steps.length)this.push('Агент завершил задачу без детализированного плана','done');
     },
-    remove: function() {
-      var el = document.getElementById('ccAgentTrace');
-      if (el && el.parentNode) el.parentNode.removeChild(el);
-      this.el = null;
-      this.steps = [];
-    }
+    done:function(){if(!this.el)return;var state=this.el.querySelector('.cc-trace-state');if(state&&state.textContent.indexOf('ожидаю')>=0)state.textContent='Ответ получен · подробный отчёт не предоставлен';var ring=this.el.querySelector('.cc-trace-ring');if(ring)ring.classList.add('is-done');},
+    fail:function(){if(!this.el)return;var state=this.el.querySelector('.cc-trace-state');if(state)state.textContent='Запрос завершился ошибкой';var ring=this.el.querySelector('.cc-trace-ring');if(ring){ring.classList.remove('is-done');ring.classList.add('is-failed');}},
+    remove:function(){var el=document.getElementById('ccAgentTrace');if(el&&el.parentNode)el.parentNode.removeChild(el);this.el=null;this.steps=[];}
   };
-
-  // Hook into send pipeline via wrapping needsWebSearch path and showTyping
-  var _origShowTyping = null;
-
-  function patchSend() {
-    // Intercept by listening to send button - wrap ChatSession prototype if exists
-    // Fallback: monkey-patch when flashSend is clicked - use MutationObserver on messages for cleanup
-  }
-
-  // Global helpers for existing code paths
-  window.ccTraceStart = function(text) {
-    try {
-      var level = detectLevel(text);
-      window.CC.Trace.mount(level);
-      if (level === 'agent') {
-        if (/^\/(img|veo|gif)\b/i.test(text)) window.CC.Trace.push('Preparing image pipeline…');
-        else if (/https?:\/\//i.test(text)) window.CC.Trace.push('Opening link…');
-        else { window.CC.Trace.push('Question → Search'); window.CC.Trace.push('Searching Nova…'); }
-      } else if (level === 'reason') {
-        window.CC.Trace.push('Reasoning…');
-      }
-      return level;
-    } catch (e) { return 'think'; }
-  };
-  window.ccTracePush = function(label) {
-    try { window.CC.Trace.push(label); } catch (e) {}
-  };
-  window.ccTraceEnd = function() {
-    try { window.CC.Trace.done(); window.CC.Trace.remove(); } catch (e) {}
-  };
-
-  // Wrap showTyping if defined later
-  var iv = setInterval(function(){
-    if (typeof window.showTyping === 'function' && !window.showTyping.__ccTrace) {
-      var orig = window.showTyping;
-      window.showTyping = function() {
-        // keep original dots if no trace mounted
-        return orig.apply(this, arguments);
-      };
-      window.showTyping.__ccTrace = true;
-    }
-  }, 1000);
-  setTimeout(function(){ clearInterval(iv); }, 15000);
-
-  // Patch ChatSession.send via prototype search
-  function tryPatchSession() {
-    if (window.__ccSendPatched) return;
-    // find instance on flashSend click
-    var btn = document.getElementById('flashSend');
-    if (!btn) return;
-    // wrap addEventListener style - intercept at capture on form
-    document.addEventListener('click', function(e) {
-      var t = e.target.closest && e.target.closest('#flashSend, .send-icon');
-      if (!t) return;
-      try {
-        var input = document.getElementById('flashInput') || document.querySelector('#flashChat textarea');
-        var text = input ? input.value : '';
-        if (text && text.trim()) window.ccTraceStart(text.trim());
-      } catch (err) {}
-    }, true);
-
-    // Also Enter key
-    document.addEventListener('keydown', function(e) {
-      if (e.key !== 'Enter' || e.shiftKey) return;
-      var input = e.target;
-      if (!input || (input.id !== 'flashInput' && !input.closest('#flashChat'))) return;
-      try {
-        var text = input.value;
-        if (text && text.trim()) window.ccTraceStart(text.trim());
-      } catch (err) {}
-    }, true);
-
-    window.__ccSendPatched = true;
-  }
-  setInterval(tryPatchSession, 800);
-
-  // When bot message appears, end trace
-  function observeMsgs() {
-    var box = document.getElementById('flashMessages');
-    if (!box || box.__ccTraceObs) return;
-    box.__ccTraceObs = true;
-    new MutationObserver(function(muts) {
-      muts.forEach(function(mu) {
-        mu.addedNodes.forEach(function(n) {
-          if (n.nodeType !== 1) return;
-          if (n.id === 'ccAgentTrace') return;
-          if (n.classList && (n.classList.contains('message') || n.classList.contains('msg'))) {
-            // delay slightly so steps visible
-            setTimeout(function(){ window.ccTraceEnd(); }, 1200);
-          }
-        });
-      });
-    }).observe(box, { childList: true });
-  }
-  setTimeout(observeMsgs, 600);
-  setTimeout(observeMsgs, 2500);
-
-  // Instrument fetch to /api/chat for search steps
-  if (!window.__ccFetchTrace) {
-    window.__ccFetchTrace = true;
-    var ofetch = window.fetch;
-    window.fetch = function(url, opts) {
-      try {
-        var u = String(url || '');
-        if (u.indexOf('/api/chat') >= 0) {
-          window.ccTracePush && window.ccTracePush('Writing answer…');
-        }
-        if (u.indexOf('/api/vision') >= 0) {
-          window.ccTracePush && window.ccTracePush('Reading image…');
-        }
-        if (u.indexOf('/api/search') >= 0 || u.indexOf('nova') >= 0) {
-          window.ccTracePush && window.ccTracePush('Searching Nova…');
-        }
-      } catch (e) {}
-      return ofetch.apply(this, arguments).then(function(res) {
-        try {
-          var u = String(url || '');
-          if (u.indexOf('/api/chat') >= 0 && window.CC && window.CC.Trace && window.CC.Trace.level === 'agent') {
-            window.ccTracePush && window.ccTracePush('Analyze → Verify');
-            window.ccTracePush && window.ccTracePush('Comparing sources…');
-          }
-        } catch (e) {}
-        return res;
-      });
-    };
-  }
-
-  // Rate limit banners for tiers from server
-  window.ccHandleRateTier = function(data) {
-    if (!data) return;
-    var tier = data.tier || '';
-    var count = data.count || 0;
-    var left = data.left;
-    if (tier === 'warn60' || (count >= 60 && count < 130)) {
-      if (typeof showLimitBanner === 'function')
-        showLimitBanner('You have used ' + count + ' of 170 free messages. Limit at 170 → 3 hour wait.');
-      else if (typeof showToast === 'function')
-        showToast('Warning: ' + count + '/170 free messages');
-    }
-    if (tier === 'warn130' || (count >= 130 && count < 170)) {
-      if (typeof showLimitBanner === 'function')
-        showLimitBanner('Warning: ' + count + '/170 messages. At 170 the limit locks for 3 hours.');
-      else if (typeof showToast === 'function')
-        showToast('Warning: ' + count + '/170 — approaching limit');
-    }
-  };
+  window.CC.Trace=Trace;
+  window.ccTraceStart=function(text){try{var level=detectLevel(text);Trace.mount(level);Trace.push('Запрос отправлен через /api/chat','active');return level;}catch(e){return 'think';}};
+  window.ccTracePush=function(label){Trace.push(label,'active');};
+  window.ccTraceFromAgent=function(agent,intent,requestId){Trace.fromAgent(agent,intent,requestId);};
+  window.ccTraceEnd=function(){Trace.done();};
+  window.ccTraceFail=function(){Trace.fail();};
 })();
 </script>
 
@@ -15703,5 +15577,161 @@ textarea#flashInput,
 })();
 </script>
 
+
+<style id="cc-v160-agent-trace-style">
+.cc-trace-v160{position:relative;overflow:hidden;gap:10px;padding:13px 15px;margin:10px 0 14px;max-width:min(94%,760px);border:1px solid rgba(150,170,210,.16);background:linear-gradient(135deg,rgba(18,22,31,.94),rgba(8,10,16,.92));box-shadow:0 14px 38px rgba(0,0,0,.28);backdrop-filter:blur(18px);animation:ccTraceEnter .38s cubic-bezier(.2,.75,.25,1) both}
+.cc-trace-v160:before{content:"";position:absolute;inset:0 auto 0 0;width:2px;background:linear-gradient(180deg,#83aaff,#a98cff,#61d6c9);opacity:.9}
+.cc-trace-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.cc-trace-v160 .cc-trace-title{font-size:10px;letter-spacing:.16em;color:#aab7d0;font-weight:750;margin:0}.cc-trace-state{font-size:12px;color:rgba(228,235,249,.68);line-height:1.4}
+.cc-trace-ring{width:13px;height:13px;border-radius:50%;border:1.5px solid rgba(156,185,255,.25);border-top-color:#9bb7ff;animation:ccTraceSpin .8s linear infinite;flex:none}.cc-trace-ring.is-done{animation:none;border-color:#68d8ba;box-shadow:0 0 0 3px rgba(104,216,186,.1)}.cc-trace-ring.is-failed{animation:none;border-color:#ff8e8e;box-shadow:0 0 0 3px rgba(255,142,142,.1)}
+.cc-trace-v160 .cc-trace-steps{display:grid;gap:7px}.cc-trace-v160 .cc-trace-step{display:flex;align-items:flex-start;gap:9px;font-size:12px;line-height:1.42;color:rgba(231,237,249,.8);animation:ccTraceStep .25s ease both}.cc-trace-v160 .cc-trace-dot{width:6px;height:6px;border-radius:50%;margin:5px 0 0 2px;background:#83aaff;box-shadow:0 0 10px rgba(131,170,255,.4);flex:none}.cc-trace-v160 .cc-trace-step.active .cc-trace-dot{animation:ccTracePulse 1s ease-in-out infinite}.cc-trace-v160 .cc-trace-step.failed .cc-trace-dot{background:#ff8e8e;box-shadow:0 0 10px rgba(255,100,100,.32)}.cc-trace-v160 .cc-trace-step.skipped{opacity:.48}
+@keyframes ccTraceSpin{to{transform:rotate(360deg)}}@keyframes ccTracePulse{50%{transform:scale(1.65);opacity:.55}}@keyframes ccTraceEnter{from{opacity:0;transform:translateY(8px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes ccTraceStep{from{opacity:0;transform:translateX(-5px)}to{opacity:1;transform:translateX(0)}}
+@media(prefers-reduced-motion:reduce){.cc-trace-v160,.cc-trace-v160 *{animation:none!important;transition:none!important}}
+</style>
+<script id="cc-v160-interface-control">
+(function(){
+  window.CC=window.CC||{};
+  var UI=window.CC.UI||{};
+  var baseApplyTheme=UI.applyTheme;
+  var allowedThemes=['dark','black','classic','light','white','waves','wave','blue','night'];
+  var allowedModes=['fast','think','code'];
+  function norm(value){return String(value||'').toLowerCase().trim();}
+  function requestText(){return String(window.__ccLastSendText||window.__ccLastUserRequest||'');}
+  function hasAny(text,words){return words.some(function(word){return text.indexOf(word)>=0;});}
+  function asked(kind,target){
+    var t=norm(requestText());
+    if(kind==='theme'){
+      var verb=/(смени|измени|поставь|включи|переключи|сделай|change|set|switch|make)/i.test(t);
+      var noun=/(тему|тем[ауы]|theme|фон|background)/i.test(t);
+      if(!verb||!noun)return false;
+      if(!target)return true;
+      var aliases={dark:['т[её]мн','dark','black','ч[её]рн'],light:['светл','light','white','бел'],waves:['вол', 'wave'],blue:['син','blue','night'],classic:['classic']};
+      var list=aliases[target]||[target];
+      return list.some(function(x){return new RegExp(x,'i').test(t);});
+    }
+    if(kind==='openSettings')return /(открой|покажи|open|show).{0,35}(настройк|settings)/i.test(t);
+    if(kind==='closeSettings')return /(закрой|скрой|close|hide).{0,35}(настройк|settings)/i.test(t);
+    if(kind==='newChat')return /(новый чат|сделай новый чат|создай (?:мне )?чат|начни заново|new chat|start a new chat)/i.test(t);
+    if(kind==='openSidebar')return /(открой|покажи|open|show).{0,40}(боков|сайдбар|sidebar|панел)/i.test(t);
+    if(kind==='closeSidebar')return /(закрой|скрой|close|hide).{0,40}(боков|сайдбар|sidebar|панел)/i.test(t);
+    if(kind==='setMode'){
+      var mode=norm(target);
+      var verb=/(включи|поставь|переключи|установи|set|switch|enable)/i.test(t);
+      var noun=/(режим|mode)/i.test(t);
+      var targetMap={fast:['fast','быстр'],think:['think','thinking','мышлен','рассуж'],code:['code','код']};
+      return verb&&noun&&hasAny(t,targetMap[mode]||[mode]);
+    }
+    if(kind==='scrollBottom')return /(прокрути|прокрутить|перейди|перемести|scroll|go).{0,35}(вниз|конец|последн|bottom|latest)/i.test(t);
+    return false;
+  }
+  function clickFirst(ids){for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&typeof el.click==='function'){el.click();return true;}}return false;}
+  function explicitForAction(action,payload){
+    payload=payload||{};
+    if(action==='setTheme')return asked('theme',norm(payload.theme));
+    if(action==='openSettings'||action==='closeSettings'||action==='newChat'||action==='openSidebar'||action==='closeSidebar'||action==='scrollBottom')return asked(action);
+    if(action==='setMode')return asked('setMode',payload.mode);
+    return false;
+  }
+  UI.snapshot=function(){
+    var sidebar=document.getElementById('flashSidebar');
+    var settings=document.getElementById('settingsScreen');
+    return {
+      theme:document.body.classList.contains('cc-bg-light')?'light':document.body.classList.contains('cc-bg-wave')?'waves':document.body.classList.contains('cc-bg-blue')?'blue':'dark',
+      mode:String(window.chatMode||'fast'),
+      sidebarOpen:!!(sidebar&&sidebar.classList.contains('open')),
+      settingsOpen:!!(settings&&!settings.classList.contains('hidden')),
+      generating:!!document.querySelector('.cc-typing-row,.typing-indicator')
+    };
+  };
+  UI.availableActions=function(){return ['snapshot','setTheme','openSettings','closeSettings','newChat','openSidebar','closeSidebar','setMode','scrollBottom'];};
+  UI.execute=function(action,payload,source){
+    payload=payload||{};source=source||'user';
+    if(action==='snapshot')return {ok:true,state:UI.snapshot()};
+    if(source!=='user'&&source!=='assistant')return {ok:false,error:'invalid_action_source'};
+    if(source==='assistant'&&!explicitForAction(action,payload))return {ok:false,error:'user_authorization_required'};
+    if(action==='setTheme'){
+      var theme=norm(payload.theme);
+      if(allowedThemes.indexOf(theme)<0)return {ok:false,error:'theme_not_allowed'};
+      if(typeof baseApplyTheme==='function')baseApplyTheme.call(UI,theme);
+      else if(window.CC.Theme&&window.CC.Theme.apply)window.CC.Theme.apply(({waves:'wave',night:'blue',black:'classic',white:'light'})[theme]||theme);
+      return {ok:true,state:UI.snapshot()};
+    }
+    if(action==='openSettings'){
+      var settings=document.getElementById('settingsScreen');
+      if(settings)settings.classList.remove('hidden');
+      else if(!clickFirst(['openSettingsBtn','flashSettingsBtn']))return {ok:false,error:'settings_unavailable'};
+      return {ok:true};
+    }
+    if(action==='closeSettings'){
+      var settingsClose=document.getElementById('settingsScreen');
+      if(settingsClose)settingsClose.classList.add('hidden');
+      return {ok:!!settingsClose};
+    }
+    if(action==='newChat')return {ok:clickFirst(['flashNewChat'])};
+    if(action==='openSidebar'||action==='closeSidebar'){
+      var open=action==='openSidebar';
+      if(open&&typeof window.__ccOpenSide==='function'){window.__ccOpenSide();return {ok:true};}
+      if(!open&&typeof window.__ccCloseSide==='function'){window.__ccCloseSide();return {ok:true};}
+      var side=document.getElementById('flashSidebar');
+      var overlay=document.getElementById('flashSidebarOverlay');
+      if(!side)return {ok:false,error:'sidebar_unavailable'};
+      side.classList.toggle('open',open);
+      if(overlay){overlay.classList.toggle('show',open);overlay.classList.toggle('open',open);}
+      return {ok:true};
+    }
+    if(action==='setMode'){
+      var mode=norm(payload.mode);
+      if(allowedModes.indexOf(mode)<0)return {ok:false,error:'mode_not_allowed'};
+      var pop=document.getElementById('flashModePop');
+      var opt=pop&&pop.querySelector('.mode-opt[data-mode="'+mode+'"]');
+      if(!opt)return {ok:false,error:'mode_unavailable'};
+      opt.click();
+      return {ok:true,mode:mode};
+    }
+    if(action==='scrollBottom'){
+      var box=document.getElementById('flashMessages');
+      if(box)box.scrollTo({top:box.scrollHeight,behavior:'smooth'});
+      return {ok:!!box};
+    }
+    return {ok:false,error:'action_not_allowed'};
+  };
+  UI.applyTheme=function(name){return UI.execute('setTheme',{theme:name},'user');};
+  UI.openSettings=function(){return UI.execute('openSettings',{},'user');};
+  UI.newChat=function(){return UI.execute('newChat',{},'user');};
+  UI.parseAndRun=function(text){
+    var value=String(text||'');
+    var token=/\[\[CC_UI:([^\]]+)\]\]/gi;
+    var match;
+    while((match=token.exec(value))){
+      var cmd=norm(match[1]);
+      var m=cmd.match(/^theme=(dark|light|waves|blue)$/);
+      if(m)UI.execute('setTheme',{theme:m[1]},'assistant');
+      else if(cmd==='settings=open')UI.execute('openSettings',{},'assistant');
+      else if(cmd==='settings=close')UI.execute('closeSettings',{},'assistant');
+      else if(cmd==='sidebar=open')UI.execute('openSidebar',{},'assistant');
+      else if(cmd==='sidebar=close')UI.execute('closeSidebar',{},'assistant');
+      else if(cmd==='newchat')UI.execute('newChat',{},'assistant');
+      else if(cmd==='scroll=bottom')UI.execute('scrollBottom',{},'assistant');
+      else {var mm=cmd.match(/^mode=(fast|think|code)$/);if(mm)UI.execute('setMode',{mode:mm[1]},'assistant');}
+    }
+    return value.replace(token,'').replace(/\n{3,}/g,'\n\n').trim();
+  };
+  UI.tryLocalCommand=function(text){
+    var t=norm(text),m;
+    m=t.match(/^(?:смени|измени|поставь|включи|переключи|change|set|switch)\s+(?:тему\s*)?(?:на\s*)?(dark|т[её]мн\w*|light|светл\w*|waves?|волны|blue|син\w*|classic|black|white)$/i);
+    if(m){var theme=m[1];if(/т[её]мн|black/i.test(theme))theme='dark';else if(/светл|white/i.test(theme))theme='light';else if(/волны|wave/i.test(theme))theme='waves';else if(/син|blue/i.test(theme))theme='blue';UI.execute('setTheme',{theme:theme},'user');return true;}
+    if(/^(открой|открыть|open) настройки$/i.test(t)){UI.execute('openSettings',{},'user');return true;}
+    if(/^(закрой|close) настройки$/i.test(t)){UI.execute('closeSettings',{},'user');return true;}
+    if(/^(новый чат|сделай новый чат|создай (?:мне )?чат|начни заново|new chat|start a new chat)$/i.test(t)){UI.execute('newChat',{},'user');return true;}
+    if(/^(открой|покажи|open|show) (боковую панель|сайдбар|sidebar)$/i.test(t)){UI.execute('openSidebar',{},'user');return true;}
+    if(/^(закрой|скрой|close|hide) (боковую панель|сайдбар|sidebar)$/i.test(t)){UI.execute('closeSidebar',{},'user');return true;}
+    m=t.match(/^(?:включи|поставь|переключи|switch|set) (?:режим )?(fast|think|code|быстрый|мышлен|код)$/i);
+    if(m){var mode=m[1];if(/быстр/i.test(mode))mode='fast';else if(/мышлен/i.test(mode))mode='think';else if(/код/i.test(mode))mode='code';UI.execute('setMode',{mode:mode},'user');return true;}
+    if(/^(прокрути вниз|перейди вниз|вниз|scroll to bottom)$/i.test(t)){UI.execute('scrollBottom',{},'user');return true;}
+    return false;
+  };
+  window.CC.UI=UI;
+  UI.security={allowlist:true,arbitraryCode:false,secretAccess:false,requiresExplicitUserIntent:true,hardwareActionsRequireUserGesture:true};
+})();
+</script>
 </body>
 </html>
