@@ -2396,6 +2396,11 @@ async function groqEnhancePrompt(userPrompt, kind) {
 }
 
 async function groqChat(messages, system, reasoning = false, requestOptions = {}) {
+  // memory block may be passed via requestOptions.memoryContext
+  if (requestOptions && requestOptions.memoryContext) {
+    system = [system || '', String(requestOptions.memoryContext).slice(0, 3500)].filter(Boolean).join('\n\n');
+  }
+
   const keys = groqKeys();
   if (!keys.length) throw new Error('GROQ_KEY is not configured');
   const primary = String(process.env.GROQ_MODEL || 'openai/gpt-oss-120b').trim() || 'openai/gpt-oss-120b';
@@ -2688,7 +2693,15 @@ let CCPageReader = null;
 let CCAgentCoreV2 = null;
 let CCLearningPipeline = null;
 let CCChal = null;
+let CCCognitive = null;
+let CCMathEngine = null;
+let CCStudentTutor = null;
+let CCProjectAnalyzer = null;
+let CCCodeIntel = null;
+let CCResearch = null;
 let ccMemory = null;
+let ccMemoryRegistry = null;
+let CCUnifiedMemory = null;
 let ccLearning = null;
 try {
   CCMemoryStore = require('./lib/memory-store');
@@ -2696,11 +2709,61 @@ try {
   CCAgentCoreV2 = require('./lib/agent-core-v2');
   CCLearningPipeline = require('./lib/learning-pipeline');
   CCChal = require('./lib/chal-reasoning');
-  const memPath = path.join(process.env.ALE_DATA_DIR ? path.resolve(String(process.env.ALE_DATA_DIR)) : path.join(__dirname, 'data'), 'memory-v2.json');
-  ccMemory = new CCMemoryStore.MemoryStore(memPath);
-  console.log('[cc] memory-v2 loaded', ccMemory.stats());
+  CCCognitive = require('./lib/cognitive-router');
+  CCMathEngine = require('./lib/math-engine');
+  CCStudentTutor = require('./lib/student-tutor');
+  CCProjectAnalyzer = require('./lib/project-analyzer');
+  CCCodeIntel = require('./lib/code-intelligence');
+  CCResearch = require('./lib/research-planner');
+  CCUnifiedMemory = require('./lib/unified-memory');
+  const memRoot = path.join(process.env.ALE_DATA_DIR ? path.resolve(String(process.env.ALE_DATA_DIR)) : path.join(__dirname, 'data'), 'memory');
+  ccMemoryRegistry = new CCUnifiedMemory.MemoryRegistry(memRoot);
+  // default user memory — adapters still use ccMemory interface
+  ccMemory = ccMemoryRegistry.forUser('default');
+  console.log('[cc] unified-memory loaded', ccMemory.stats());
 } catch (e) {
   console.warn('[cc] lib bootstrap failed', e && e.message);
+}
+
+
+
+/** Memory identity: server-bound session, NOT client-supplied userId */
+function ccMemoryUserId(req, body) {
+  try {
+    const cookies = String(req.headers && req.headers.cookie || '');
+    const m = cookies.match(/(?:^|;\s*)cc_mem_sid=([a-zA-Z0-9_-]{16,80})/);
+    if (m) return 'sid_' + m[1].slice(0, 64);
+  } catch (e) {}
+  // derive stable sid from IP + UA (not forgeable as arbitrary other user's known sid without their cookie)
+  try {
+    const ip = (typeof clientIp === 'function') ? clientIp(req) : '0';
+    const ua = String(req.headers && req.headers['user-agent'] || '').slice(0, 80);
+    const crypto = require('crypto');
+    const h = crypto.createHash('sha256').update(String(ip) + '|' + ua + '|' + String(process.env.MEM_SID_SECRET || 'cc-mem-v1')).digest('hex').slice(0, 32);
+    return 'sid_' + h;
+  } catch (e) {
+    return 'default';
+  }
+}
+function ccSetMemSidCookie(res, req) {
+  try {
+    const cookies = String(req.headers && req.headers.cookie || '');
+    if (/cc_mem_sid=/.test(cookies)) return;
+    const crypto = require('crypto');
+    const sid = crypto.randomBytes(18).toString('hex');
+    res.setHeader('Set-Cookie', 'cc_mem_sid=' + sid + '; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000');
+  } catch (e) {}
+}
+
+function ccMemForReq(req, body) {
+  try {
+    // Ignore client body.userId / x-user-id for security (audit 4.55.0)
+    const uid = ccMemoryUserId(req, body);
+    if (ccMemoryRegistry && CCUnifiedMemory) {
+      return ccMemoryRegistry.forUser(String(uid));
+    }
+  } catch (e) {}
+  return ccMemory;
 }
 
 function ccEnsureLearning(searchFn, readFn) {
@@ -4481,7 +4544,7 @@ const server = http.createServer(async (req, res) => {
           const safeEvent = String(event || 'message').replace(/[^a-z0-9_-]/gi, '').slice(0, 30) || 'message';
           res.write('event: ' + safeEvent + '\n' + 'data: ' + JSON.stringify(data || {}) + '\n\n');
         };
-        res.__ccEmit('status', { state: 'thinking', label: 'Разбираю запрос' });
+        res.__ccEmit('status', { state: 'thinking', label: 'Thinking…' });
       }
       const emitStatus = function(state, label, meta) {
         if (typeof res.__ccEmit === 'function') res.__ccEmit('status', Object.assign({ state, label }, meta || {}));
@@ -4504,7 +4567,7 @@ const server = http.createServer(async (req, res) => {
       const routeIntent = intel.classifyIntent(stripInjectedContext(getLastUserMessage(trimmed)), {
         hasContext: trimmed.filter((m) => m && ['user', 'assistant'].includes(m.role)).length > 2,
       });
-      if (routeIntent && routeIntent.complexity && routeIntent.complexity !== 'SIMPLE') emitStatus('planning', 'Составляю план');
+      if (routeIntent && routeIntent.complexity && routeIntent.complexity !== 'SIMPLE') emitStatus('planning', 'Planning…');
       let webSourcesForClient = [];
       /* ALE: inject local knowledge when available */
       try {
@@ -4530,7 +4593,7 @@ const server = http.createServer(async (req, res) => {
         }
         const urlMatch = lastUser.match(/https?:\/\/[^\s<>"']+/i);
         if (urlMatch && lastIdx >= 0) {
-          emitStatus('reading', 'Читаю указанную страницу');
+          emitStatus('reading', 'Reading page…');
           const page = await fetchPageWithProviders(urlMatch[0], 12000, { timeoutMs: 15000 });
           if (page && page.ok) {
             const context = page.type === 'video'
@@ -4629,6 +4692,47 @@ const server = http.createServer(async (req, res) => {
         // Agent Core v2 for explicit deep research / agent mode
         
         // CHAL for math/logic/analysis when available (bounded)
+        
+        // Unified memory: ingest user turn + retrieve context for model
+        try {
+          const mem = ccMemForReq(req, body);
+          if (mem && typeof mem.ingestUserMessage === 'function') {
+            mem.ingestUserMessage(q3, { requestId: requestId });
+          }
+          if (mem && typeof mem.buildContextBlock === 'function') {
+            const ctx = mem.buildContextBlock(q3, 6);
+            if (ctx && ctx.text) {
+              body.__ccMemoryContext = ctx.text;
+              body.__ccMemoryHits = ctx.hits;
+            }
+          }
+        } catch (e) { console.warn('[memory] ingest failed', e && e.message); }
+
+        
+        // Cognitive engines: math / tutor / analyzer (deterministic, before LLM)
+        if (CCCognitive && typeof CCCognitive.tryDeterministic === 'function') {
+          try {
+            const det = CCCognitive.tryDeterministic(q3, {
+              useSympy: process.env.CC_MATH_SYMPY !== '0',
+              files: body && body.files,
+            });
+            if (det && det.handled && det.text) {
+              res.writeHead(200, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({
+                ok: true,
+                text: det.text,
+                content: det.text,
+                cognitive: det.meta || null,
+                mode: 'cognitive',
+                provider: 'chatclaud',
+              }));
+              return;
+            }
+          } catch (e) {
+            console.warn('[cognitive] fallback', publicProviderError(e));
+          }
+        }
+
         const chalRoute = (CCChal && CCChal.routeTask) ? CCChal.routeTask(q3) : null;
         const wantChal = !!(body && body.useChal) || (chalRoute && ['math','logic','analysis'].includes(chalRoute.type) && q3.length >= 8);
         if (wantChal && CCChal && typeof groqChat === 'function') {
@@ -4641,7 +4745,7 @@ const server = http.createServer(async (req, res) => {
               memoryUpsert: (fact) => { if (ccMemory) try { ccMemory.upsertFact(fact); } catch (e) {} },
               llmComplete: async ({ system, user }) => {
                 try {
-                  const out = await groqChat([{ role: 'user', content: user }], system, true, { maxTokens: 1200, temperature: 0.25 });
+                  const out = await groqChat([{ role: 'user', content: user }], system, true, { memoryContext: body && body.__ccMemoryContext, maxTokens: 1200, temperature: 0.25 });
                   return typeof out === 'string' ? out : (out && (out.content || out.text) || '');
                 } catch (e) { return ''; }
               },
@@ -4678,7 +4782,7 @@ const server = http.createServer(async (req, res) => {
               memoryUpsert: (fact) => { if (ccMemory) try { ccMemory.upsertFact(fact); } catch (e) {} },
               llmComplete: async ({ system, user }) => {
                 try {
-                  const out = await groqChat([{ role: 'user', content: user }], system, true, { maxTokens: 1400 });
+                  const out = await groqChat([{ role: 'user', content: user }], system, true, { memoryContext: body && body.__ccMemoryContext,  maxTokens: 1400  });
                   return typeof out === 'string' ? out : (out && (out.content || out.text) || '');
                 } catch (e) { return ''; }
               },
@@ -4716,8 +4820,8 @@ const server = http.createServer(async (req, res) => {
             const pipe = await runSearchPipeline(q3, {
               maxHops: 3, maxFetch: 3, maxResults: 10, maxSearchCalls: 20, deadlineMs: 12000,
               onStatus: function(state, meta) {
-                if (state === 'searching') emitStatus('searching', 'Ищу информацию', meta);
-                else if (state === 'reading') emitStatus('reading', 'Читаю найденные страницы', meta);
+                if (state === 'searching') emitStatus('searching', 'Searching…', meta);
+                else if (state === 'reading') emitStatus('reading', 'Reading pages…', meta);
               },
             });
             webSourcesForClient = pipe.sources || [];
@@ -4776,13 +4880,13 @@ const server = http.createServer(async (req, res) => {
             budgetProfile: budget.profile,
             requestId,
             onProgress: function(phase, meta) {
-              const map = { brief: ['thinking', 'Уточняю задачу'], plan: ['planning', 'Составляю план'], gather: ['searching', 'Собираю информацию'], compress: ['analyzing', 'Обрабатываю найденное'], verify: ['verifying', 'Проверяю факты'], synthesize: ['analyzing', 'Готовлю ответ'], review: ['testing', 'Проверяю результат'], done: ['completed', 'Готово'] };
+              const map = { brief: ['thinking', 'Thinking…'], plan: ['planning', 'Planning…'], gather: ['searching', 'Searching…'], compress: ['analyzing', 'Analyzing…'], verify: ['verifying', 'Verifying…'], synthesize: ['analyzing', 'Preparing answer…'], review: ['testing', 'Verifying…'], done: ['completed', 'Done'] };
               const value = map[String(phase)] || ['analyzing', 'Обрабатываю задачу'];
               emitStatus(value[0], value[1], meta);
             },
             onStatus: function(state, meta) {
-              if (state === 'searching') emitStatus('searching', 'Ищу информацию', meta);
-              else if (state === 'reading') emitStatus('reading', 'Читаю найденные страницы', meta);
+              if (state === 'searching') emitStatus('searching', 'Searching…', meta);
+              else if (state === 'reading') emitStatus('reading', 'Reading pages…', meta);
             },
           });
           logAgentEvent('agent_complete', {
@@ -4801,13 +4905,14 @@ const server = http.createServer(async (req, res) => {
         }
       }
       if (!result || !result.text) {
-        const providerMessages = [CC_SYSTEM, body.system, CC_PERSONA_LAYER].filter(Boolean).join('\n\n');
+        const _memBlock = (body && body.__ccMemoryContext) ? String(body.__ccMemoryContext).slice(0, 3500) : '';
+        const providerMessages = [CC_SYSTEM, body.system, CC_PERSONA_LAYER, _memBlock ? ('\n\n' + _memBlock) : ''].filter(Boolean).join('\n\n');
         const providers = [['groq', () => groqChat(trimmed, providerMessages, isReasoning)]];
         for (const [name, call] of providers) {
           try {
             if (typeof res.__ccEmit === 'function') {
               const isCodeTask = /\b(code|coding|program|код|программ|скрипт|html|javascript|python)\b/i.test(stripInjectedContext(getLastUserMessage(trimmed)));
-              emitStatus(isCodeTask ? 'coding' : 'analyzing', isCodeTask ? 'Пишу и анализирую код' : 'Формирую ответ');
+              emitStatus(isCodeTask ? 'coding' : 'analyzing', isCodeTask ? 'Writing code…' : 'Preparing answer…');
               let streamed = '';
               let streamCompleted = false;
               try {
@@ -4844,18 +4949,25 @@ const server = http.createServer(async (req, res) => {
           code: 'NO_PROVIDER',
         });
       }
-      emitStatus('verifying', 'Проверяю ответ и источники');
+      emitStatus('verifying', 'Verifying answer and sources…');
       await waitAtLeast(aiStartedAt, pickThinkMs(trimmed));
       result.left = rate.left;
       result.rate = rate;
       result.provider = 'chatclaud';
       result.requestId = requestId;
+      try {
+        const mem = ccMemForReq(req, body);
+        if (mem && result.text && typeof mem.ingestAssistantMessage === 'function') {
+          mem.ingestAssistantMessage(String(result.text).slice(0, 6000), { requestId });
+        }
+      } catch (e) { console.warn('[memory] assistant ingest', e && e.message); }
+
       result.intent = routeIntent;
       const allSources = (Array.isArray(result.sources) ? result.sources : []).concat(webSourcesForClient || []);
       const sourceMap = new Map();
       allSources.forEach((source) => { if (source && source.url && !sourceMap.has(source.url)) sourceMap.set(source.url, source); });
       result.sources = Array.from(sourceMap.values()).slice(0, 12);
-      emitStatus('completed', 'Готово', { sourceCount: result.sources.length });
+      emitStatus('completed', 'Done', { sourceCount: result.sources.length });
       if (typeof res.__ccEmit === 'function' && !result.agent && !result.text.__streamed) {
         // For agent answers the controller is not token-streamed; emit one final content event.
         if (!(result && result.text && result.text.trim() && res.__ccTokenStreamed)) res.__ccEmit('token', { delta: result.text });
@@ -5184,6 +5296,60 @@ const server = http.createServer(async (req, res) => {
   /* --- ALE admin (requires ADMIN_SECRET) --- */
   
   // ---- 3.36.6 Agent Core v2 / Memory / Learning API ----
+  
+  if (pathname === '/api/memory/v2/stats' && req.method === 'GET') {
+    const mem = ccMemForReq(req, {});
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ ok: true, stats: mem && mem.stats ? mem.stats() : null, version: '4.55.0' }));
+    return true;
+  }
+  if (pathname === '/api/memory/v2/search' && req.method === 'POST') {
+    return readJsonBody(req, 50000).then((body) => {
+      const mem = ccMemForReq(req, body);
+      const hits = mem && mem.search ? mem.search(String(body.query || ''), { limit: body.limit || 8, levels: body.levels }) : [];
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: true, hits, stats: mem && mem.stats ? mem.stats() : null }));
+    }).catch((e) => {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: false, error: publicProviderError(e) }));
+    });
+  }
+  if (pathname === '/api/memory/v2/ingest' && req.method === 'POST') {
+    return readJsonBody(req, 100000).then((body) => {
+      const mem = ccMemForReq(req, body);
+      const text = String(body.text || body.message || '');
+      const out = mem && mem.ingestUserMessage ? mem.ingestUserMessage(text, body.meta) : { saved: [] };
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: true, ...out, stats: mem && mem.stats ? mem.stats() : null }));
+    }).catch((e) => {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: false, error: publicProviderError(e) }));
+    });
+  }
+  if (pathname === '/api/memory/v2/delete' && req.method === 'POST') {
+    return readJsonBody(req, 20000).then((body) => {
+      const mem = ccMemForReq(req, body);
+      const ok = mem && mem.deleteMemory ? mem.deleteMemory(String(body.id || '')) : false;
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: !!ok }));
+    }).catch((e) => {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: false, error: String(e.message || e) }));
+    });
+  }
+  if (pathname === '/api/memory/v2/correct' && req.method === 'POST') {
+    return readJsonBody(req, 50000).then((body) => {
+      const mem = ccMemForReq(req, body);
+      const m = mem && mem.correctMemory ? mem.correctMemory(String(body.id || ''), String(body.text || '')) : null;
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: !!m, memory: m }));
+    }).catch((e) => {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: false, error: String(e.message || e) }));
+    });
+  }
+
+
   if (pathname === '/api/memory/search' && req.method === 'POST') {
     return readJsonBody(req, 20000).then((body) => {
       const q = String(body && body.query || '').trim();
@@ -5237,6 +5403,67 @@ const server = http.createServer(async (req, res) => {
     });
   }
   
+  
+  
+  if (pathname === '/api/code/analyze' && req.method === 'POST') {
+    return readJsonBody(req, 2_000_000).then((body) => {
+      const eng = CCCodeIntel || require('./lib/code-intelligence');
+      const out = eng.analyzeCodebase(body.files || {});
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: true, summary: out.summary, issues: out.issues, unresolved: out.unresolved, graph: { nodes: (out.graph&&out.graph.nodes||[]).length, edges: (out.graph&&out.graph.edges||[]).length }, symbols: (out.symbols||[]).slice(0, 50) }));
+    }).catch((e) => {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: false, error: String(e.message || e) }));
+    });
+  }
+  if (pathname === '/api/research/plan' && req.method === 'POST') {
+    return readJsonBody(req, 50000).then((body) => {
+      const eng = CCResearch || require('./lib/research-planner');
+      const plan = eng.buildResearchPlan(String(body.query || body.q || ''));
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: true, plan }));
+    }).catch((e) => {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: false, error: String(e.message || e) }));
+    });
+  }
+
+
+  if (pathname === '/api/math/solve' && req.method === 'POST') {
+    return readJsonBody(req, 50000).then((body) => {
+      const eng = CCMathEngine || require('./lib/math-engine');
+      const out = eng.solveMath(String(body.problem || body.text || body.q || ''), { useSympy: body.sympy !== false });
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: true, ...out }));
+    }).catch((e) => {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: false, error: publicProviderError(e) }));
+    });
+  }
+  if (pathname === '/api/tutor/check' && req.method === 'POST') {
+    return readJsonBody(req, 50000).then((body) => {
+      const tut = CCStudentTutor || require('./lib/student-tutor');
+      const out = tut.checkStudentSolution(String(body.problem || ''), String(body.student || body.solution || ''));
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: true, ...out }));
+    }).catch((e) => {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: false, error: String(e.message || e) }));
+    });
+  }
+  if (pathname === '/api/analyze/project' && req.method === 'POST') {
+    return readJsonBody(req, 2_000_000).then((body) => {
+      const an = CCProjectAnalyzer || require('./lib/project-analyzer');
+      const out = an.analyzeProject(body.files || {});
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: true, ...out }));
+    }).catch((e) => {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: false, error: String(e.message || e) }));
+    });
+  }
+
+
   if (pathname === '/api/chal/run' && req.method === 'POST') {
     return readJsonBody(req, 100000).then(async (body) => {
       if (!CCChal) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="pulse">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -6966,7 +6966,7 @@ body {
                 <div class="hero-feat"><div class="hero-feat-icon">◉</div><div class="hero-feat-text"><strong>Personal workspace</strong><span>Чаты, профиль и сохранённые настройки</span></div></div>
             </div>
             <div class="update-card">
-                <h3>ChatClaud 3.19.0</h3>
+                <h3>ChatClaud 4.57.0</h3>
                 <div class="upd-item"><span class="upd-num">1</span><div><b>Live Agent Status</b>Понятные этапы реальной работы помощника</div></div>
                 <div class="upd-item"><span class="upd-num">2</span><div><b>Adaptive Search</b>Расширение поиска, когда первых результатов недостаточно</div></div>
                 <div class="upd-item"><span class="upd-num">3</span><div><b>Personal Profile</b>Имя пользователя и возрастная группа в настройках</div></div>
@@ -6979,7 +6979,7 @@ body {
                 <button class="hero-try" id="heroTryBtn">Проверить без регистрации (3 сообщения)</button>
                 <button type="button" class="pwa-install-btn" id="pwaInstallBtn">DOWNLOAD CHATCLAUD</button>
             </div>
-            <div class="hero-foot">ChatClaud 3.19.0 · Personal AI workspace</div>
+            <div class="hero-foot">ChatClaud 4.57.0 · Personal AI workspace</div>
         </div>
     </div>
 
@@ -7076,8 +7076,9 @@ body {
             <div class="settings-section">
                 <label style="font-size:0.75rem;color:#888;">Theme</label>
                 <select id="themeModeSelect" class="field">
+                    <option value="pulse">Pulse</option>
                     <option value="dark">Dark</option>
-                    <option value=""></option>
+                    <option value="light">Light</option>
                     <option value="auto">System</option>
                 </select>
             </div>
@@ -8767,10 +8768,10 @@ if (typeof window.ccApiUrl !== 'function') {
             });
         }
         (function initThemeMode() {
-            const mode = localStorage.getItem('themeMode') || localStorage.getItem('theme') || 'dark';
+            const mode = localStorage.getItem('themeMode') || localStorage.getItem('theme') || localStorage.getItem('cc_theme') || 'pulse';
             const sel = document.getElementById('themeModeSelect');
             if (sel) {
-                sel.value = (mode === 'light' || mode === 'dark' || mode === 'auto') ? mode : 'dark';
+                sel.value = (mode === 'light' || mode === 'dark' || mode === 'auto' || mode === 'pulse') ? mode : 'pulse';
                 sel.addEventListener('change', () => applyThemeMode(sel.value));
             }
             applyThemeMode(sel ? sel.value : mode);
@@ -9103,7 +9104,7 @@ function setAppLang(lang) {
         function toggleTheme() { const html = document.documentElement; const current = html.getAttribute('data-theme'); const next = current === 'light' ? 'dark' : 'light'; html.setAttribute('data-theme', next); document.querySelectorAll('#themeToggleBtn, #themeToggleBtn2').forEach(b => b.textContent = next === 'light' ? 'Dark тема' : 'Light тема'); localStorage.setItem('theme', next); }
         document.getElementById('themeToggleBtn').addEventListener('click', toggleTheme);
         document.getElementById('themeToggleBtn2').addEventListener('click', toggleTheme);
-        const savedTheme = localStorage.getItem('theme') || 'dark';
+        const savedTheme = localStorage.getItem('theme') || localStorage.getItem('cc_theme') || localStorage.getItem('themeMode') || 'pulse';
         document.documentElement.setAttribute('data-theme', savedTheme);
 
         const providerModels = {
@@ -10134,7 +10135,7 @@ function buildImageUrl(userPrompt, opts) {
                 statusEl.className = 'gen-status';
                 statusEl.textContent = 'Создание изображения';
                 card.appendChild(statusEl);
-                const statuses = ['Создание изображения', 'Формируем эскиз', 'Уточняем детали', 'Почти готово…'];
+                const statuses = ['Создание изображения', 'Drafting…', 'Уточняем детали', 'Почти готово…'];
                 let stIdx = 0;
                 const stTimer = setInterval(function() {
                     stIdx = (stIdx + 1) % statuses.length;
@@ -10301,16 +10302,15 @@ function buildImageUrl(userPrompt, opts) {
                 try { this.setStopVisible(true); } catch(e) {}
                 this._thinkShownAt = Date.now();
                 this._thinkMinMs = 350;
-                var orbHtml = '<span class="cc-agent-orb" data-state="thinking" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 4.5a3.2 3.2 0 0 0-3 3.2 3.1 3.1 0 0 0 .4 6.1A3.3 3.3 0 0 0 9 19.5h6a3.3 3.3 0 0 0 1.6-5.7A3.1 3.1 0 0 0 17 7.7a3.2 3.2 0 0 0-3-3.2 3.4 3.4 0 0 0-5 0Z"/><path d="M12 4v16M8.5 9.2l1.7 1.7M15.5 9.2l-1.7 1.7"/></svg></span>' +
-                    '<span class="cc-agent-tool" data-state="thinking" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12c2-4 5-6 8-6s6 2 8 6M7 14c1.5-2 3.2-3 5-3s3.5 1 5 3"/></svg></span>';
-                var label = 'Разбираю задачу';
-                var statusMarkup = '<div class="cc-status-line">' + orbHtml + '<span class="cc-think-label cc-status-text">' + label + '</span></div>';
+                var orbHtml = '';
+                var label = 'Thinking…';
+                var statusMarkup = ''; var label = '';
                 var el = document.createElement('div');
                 el.id = 'typingIndicator'; el.className = 'cc-typing-row';
                 el.innerHTML = '<div class="cc-status-pill">' + statusMarkup + '</div>';
                 var fixed = document.getElementById('ccThinkFixed');
                 if (!fixed) { fixed = document.createElement('div'); fixed.id = 'ccThinkFixed'; document.body.appendChild(fixed); }
-                fixed.innerHTML = '<div class="cc-status-pill">' + statusMarkup + '</div>';
+                fixed.innerHTML = '<!-- disabled -->'; if(false) fixed.innerHTML = '<div class="cc-status-pill">' + statusMarkup + '</div>';
                 fixed.style.display = 'flex';
                 try { this.scrollToBottom(); } catch(e) {}
             }
@@ -13229,8 +13229,8 @@ body.cc-bg-wave #ccChatWaveBg, #flashChat.cc-bg-wave #ccChatWaveBg {
   function applyBg(mode){
     mode = String(mode || 'classic').toLowerCase();
     if (mode === 'waves' || mode === 'wave') mode = 'wave';
-    if (mode === 'light') mode = 'classic'; // Light removed in 3.19.0
-    if (!['classic','wave','blue',''].includes(mode)) mode = 'classic';
+    if (mode === 'light') mode = 'light'; // restored in 4.54.8
+    if (!['classic','wave','blue','light','pulse',''].includes(mode)) mode = 'classic';
     try { localStorage.setItem('cc_chat_bg', mode); } catch(e){}
     document.body.classList.remove('cc-bg-wave','cc-bg-blue','cc-bg-','cc-bg-light');
     var chat = document.getElementById('flashChat');
@@ -14438,7 +14438,7 @@ body.cc-bg-blue #flashChat .chat-layout {
     if (m) {
       var name = m[1];
       if (/т[её]мн|black|dark|classic/i.test(name)) name = 'dark';
-      else if (/светл|white|light/i.test(name)) name = 'dark'; // Light removed in 3.19.0 — map to dark
+      else if (/светл|white|light/i.test(name)) name = 'light'; // restored 4.54.8
       else if (/волн|wave/i.test(name)) name = 'waves';
       else if (/син|blue/i.test(name)) name = 'blue';
       else if (/аврор|/i.test(name)) name = '';
@@ -15608,7 +15608,7 @@ textarea#flashInput,
     verifying:'<path d="m14 4 6 6M12.5 5.5l6 6M4 20l8.5-8.5M3 21l4-1 10-10-3-3L4 17z"/>',
     completed:'<circle cx="12" cy="12" r="9"/><path d="m7.5 12.5 3 3 6-7"/>'
   };
-  var labels={thinking:'Разбираю задачу',planning:'Составляю план',searching:'Ищу информацию',reading:'Читаю источники',analyzing:'Анализирую найденное',coding:'Пишу код',testing:'Тестирую результат',verifying:'Проверяю факты',completed:'Готово'};
+  var labels={thinking:'Thinking…',planning:'Planning…',searching:'Searching…',reading:'Reading sources…',analyzing:'Analyzing…',coding:'Writing code…',testing:'Testing…',verifying:'',completed:'Done'};
   var toolIcons={
     thinking:'<path d="M5 7h14M7 12h10M9 17h6"/>',
     planning:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="m8 10 1.5 1.5L12 9M8 15h8"/>',
@@ -15722,7 +15722,127 @@ textarea#flashInput,
 </script>
 
 
-<style id="cc-pulse-theme">
+
+
+<script id="cc-pulse-boot">
+(function(){
+  function normalizeTheme(name){
+    var n = String(name || "pulse").toLowerCase();
+    if (n === "aurora") n = "pulse";
+    if (n === "system") n = "auto";
+    if (n !== "pulse" && n !== "dark" && n !== "light" && n !== "auto") n = "pulse";
+    return n;
+  }
+  function apply(name){
+    var n = normalizeTheme(name);
+    var resolved = n;
+    if (n === "auto") {
+      resolved = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    }
+    document.documentElement.setAttribute("data-theme", resolved);
+    try {
+      localStorage.setItem("themeMode", n === "auto" ? "auto" : resolved);
+      localStorage.setItem("theme", resolved);
+      localStorage.setItem("cc_theme", resolved);
+    } catch (e) {}
+    var sel = document.getElementById("themeModeSelect");
+    if (sel) {
+      var v = n === "auto" ? "auto" : resolved;
+      if ([].some.call(sel.options, function(o){ return o.value === v; })) sel.value = v;
+    }
+  }
+  window.CC = window.CC || {};
+  window.CC.setTheme = apply;
+  try {
+    var saved = localStorage.getItem("themeMode") || localStorage.getItem("theme") || localStorage.getItem("cc_theme") || "pulse";
+    apply(saved);
+  } catch (e) { apply("pulse"); }
+  document.addEventListener("DOMContentLoaded", function(){
+    var sel = document.getElementById("themeModeSelect");
+    if (sel && !sel.__ccPulseBound) {
+      sel.__ccPulseBound = true;
+      sel.addEventListener("change", function(){ apply(sel.value); });
+    }
+  });
+})();
+</script>
+
+
+
+<style id="cc-4.54.8-theme-system">
+/* Theme tokens + surfaces only. Orb geometry restored in cc-orb-original below. */
+html[data-theme="pulse"] {
+  --cc-bg:#070B16; --cc-bg2:#10182A; --cc-panel:#131D32;
+  --cc-accent:#168CFF; --cc-neon:#00E5FF; --cc-accent2:#526BFF;
+  --cc-text:#F4F7FF; --cc-muted:#9AAAC4; --cc-border:rgba(0,229,255,.14);
+  color-scheme:dark;
+}
+html[data-theme="dark"] {
+  --cc-bg:#000; --cc-bg2:#0a0a0a; --cc-panel:#111;
+  --cc-accent:#fff; --cc-text:#f2f2f2; --cc-muted:#888; --cc-border:rgba(255,255,255,.1);
+  color-scheme:dark;
+}
+html[data-theme="light"] {
+  --cc-bg:#f2f2f7; --cc-bg2:#fff; --cc-panel:#fff;
+  --cc-accent:#111; --cc-text:#1a1a1a; --cc-muted:#666; --cc-border:rgba(0,0,0,.1);
+  color-scheme:light;
+}
+html[data-theme="pulse"] body,
+html[data-theme="pulse"] #flashChat,
+html[data-theme="pulse"] body.cc-bg-wave #flashChat,
+html[data-theme="pulse"] body.cc-bg-blue #flashChat,
+html[data-theme="pulse"] #flashChat.cc-bg-wave,
+html[data-theme="pulse"] #flashChat.cc-bg-blue {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(22,140,255,.14), transparent 55%),
+    radial-gradient(900px 500px at 90% 0%, rgba(0,229,255,.08), transparent 50%),
+    linear-gradient(180deg,#070B16,#0a1020) !important;
+  color: var(--cc-text) !important;
+}
+html[data-theme="pulse"] .top-bar,
+html[data-theme="pulse"] .input-row,
+html[data-theme="pulse"] .input-shell,
+html[data-theme="pulse"] .settings-box,
+html[data-theme="pulse"] .landing-box {
+  background: rgba(19,29,50,.78) !important;
+  border-color: var(--cc-border) !important;
+  color: var(--cc-text) !important;
+}
+html[data-theme="pulse"] .message.bot, html[data-theme="pulse"] .msg.bot {
+  background: rgba(16,24,42,.88) !important; color: var(--cc-text) !important;
+  border: 1px solid rgba(22,140,255,.14);
+}
+html[data-theme="pulse"] .message.user, html[data-theme="pulse"] .msg.user {
+  background: linear-gradient(135deg,rgba(22,140,255,.3),rgba(82,107,255,.22)) !important;
+  color: var(--cc-text) !important;
+}
+html[data-theme="pulse"] textarea, html[data-theme="pulse"] input, html[data-theme="pulse"] .field {
+  background: rgba(7,11,22,.55) !important; color: var(--cc-text) !important;
+  border-color: rgba(0,229,255,.16) !important;
+}
+html[data-theme="pulse"] .send-btn, html[data-theme="pulse"] .hero-cta {
+  background: linear-gradient(135deg,#168CFF,#526BFF) !important; color:#fff !important;
+}
+html[data-theme="dark"] body, html[data-theme="dark"] #flashChat {
+  background:#000 !important; color:#f2f2f2 !important;
+}
+html[data-theme="light"] body, html[data-theme="light"] #flashChat {
+  background:#f2f2f7 !important; color:#1a1a1a !important;
+}
+html[data-theme="light"] .top-bar, html[data-theme="light"] .input-row, html[data-theme="light"] .input-shell {
+  background:rgba(255,255,255,.92) !important; color:#1a1a1a !important;
+  border-color:rgba(0,0,0,.08) !important;
+}
+html[data-theme="light"] .message.bot, html[data-theme="light"] .msg.bot {
+  background:#fff !important; color:#1a1a1a !important;
+}
+html[data-theme="light"] .message.user, html[data-theme="light"] .msg.user {
+  background:rgba(0,0,0,.07) !important; color:#111 !important;
+}
+</style>
+
+<style id="cc-pulse-theme-complete">
+/* ========== PULSE THEME (complete) ========== */
 html[data-theme="pulse"] {
   --cc-bg: #070B16;
   --cc-bg2: #10182A;
@@ -15732,141 +15852,935 @@ html[data-theme="pulse"] {
   --cc-accent2: #526BFF;
   --cc-text: #F4F7FF;
   --cc-muted: #9AAAC4;
+  --cc-border: rgba(0, 229, 255, 0.14);
+  --accent: #168CFF;
   color-scheme: dark;
 }
 html[data-theme="pulse"] body,
 html[data-theme="pulse"] #app,
-html[data-theme="pulse"] .app-shell {
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(22,140,255,0.12), transparent 55%),
-    radial-gradient(900px 500px at 90% 0%, rgba(0,229,255,0.08), transparent 50%),
-    linear-gradient(180deg, #070B16 0%, #0a1020 100%) !important;
-  color: var(--cc-text) !important;
+html[data-theme="pulse"] .app-shell,
+html[data-theme="pulse"] #flashChat,
+html[data-theme="pulse"] body.cc-bg-wave #flashChat,
+html[data-theme="pulse"] body.cc-bg-blue #flashChat,
+html[data-theme="pulse"] body.cc-bg-light #flashChat,
+html[data-theme="pulse"] #flashChat.cc-bg-wave,
+html[data-theme="pulse"] #flashChat.cc-bg-blue,
+html[data-theme="pulse"] #flashChat.cc-bg-light {
+  background: #070B16 !important;
+  background-image:
+    radial-gradient(ellipse 90% 55% at 50% -15%, rgba(22,140,255,0.25), transparent 58%),
+    radial-gradient(ellipse 50% 35% at 100% 10%, rgba(0,229,255,0.10), transparent 50%),
+    linear-gradient(180deg, #070B16 0%, #0a1220 100%) !important;
+  color: #F4F7FF !important;
 }
 html[data-theme="pulse"] .top-bar,
 html[data-theme="pulse"] .input-row,
+html[data-theme="pulse"] .input-shell,
 html[data-theme="pulse"] .sidebar,
-html[data-theme="pulse"] .panel,
-html[data-theme="pulse"] .settings-panel {
-  background: rgba(19,29,50,0.72) !important;
-  border-color: rgba(0,229,255,0.12) !important;
-  backdrop-filter: blur(16px);
-  box-shadow: 0 0 0 1px rgba(22,140,255,0.08), 0 12px 40px rgba(0,0,0,0.35);
+html[data-theme="pulse"] aside,
+html[data-theme="pulse"] .settings-box,
+html[data-theme="pulse"] .landing-box,
+html[data-theme="pulse"] .profile-box,
+html[data-theme="pulse"] .modal-box,
+html[data-theme="pulse"] .panel {
+  background: rgba(19, 29, 50, 0.86) !important;
+  border-color: rgba(0, 229, 255, 0.14) !important;
+  color: #F4F7FF !important;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
-html[data-theme="pulse"] .message.bot {
-  background: rgba(16,24,42,0.85) !important;
-  border: 1px solid rgba(22,140,255,0.14);
-  color: var(--cc-text);
+html[data-theme="pulse"] .message.bot,
+html[data-theme="pulse"] .msg.bot,
+html[data-theme="pulse"] .bot-msg {
+  background: rgba(16, 24, 42, 0.92) !important;
+  color: #F4F7FF !important;
+  border: 1px solid rgba(22, 140, 255, 0.16) !important;
 }
-html[data-theme="pulse"] .message.user {
-  background: linear-gradient(135deg, rgba(22,140,255,0.28), rgba(82,107,255,0.22)) !important;
-  border: 1px solid rgba(0,229,255,0.2);
-  color: var(--cc-text);
-}
-html[data-theme="pulse"] .send-btn,
-html[data-theme="pulse"] button.primary {
-  background: linear-gradient(135deg, #168CFF, #526BFF) !important;
-  box-shadow: 0 0 18px rgba(22,140,255,0.35);
-}
-html[data-theme="pulse"] .send-btn:hover {
-  box-shadow: 0 0 28px rgba(0,229,255,0.4);
+html[data-theme="pulse"] .message.user,
+html[data-theme="pulse"] .msg.user,
+html[data-theme="pulse"] .user-msg {
+  background: linear-gradient(135deg, rgba(22,140,255,0.34), rgba(82,107,255,0.24)) !important;
+  color: #F4F7FF !important;
+  border: 1px solid rgba(0,229,255,0.2) !important;
 }
 html[data-theme="pulse"] textarea,
-html[data-theme="pulse"] input {
-  background: rgba(7,11,22,0.55) !important;
-  color: var(--cc-text) !important;
-  border-color: rgba(0,229,255,0.15) !important;
+html[data-theme="pulse"] input,
+html[data-theme="pulse"] .field,
+html[data-theme="pulse"] select {
+  background: rgba(7, 11, 22, 0.65) !important;
+  color: #F4F7FF !important;
+  border-color: rgba(0, 229, 255, 0.18) !important;
 }
+html[data-theme="pulse"] .send-btn,
+html[data-theme="pulse"] button.primary,
+html[data-theme="pulse"] .hero-cta {
+  background: linear-gradient(135deg, #168CFF, #526BFF) !important;
+  color: #fff !important;
+  box-shadow: 0 0 20px rgba(22,140,255,0.4) !important;
+  border: none !important;
+}
+html[data-theme="pulse"] .hero-title,
+html[data-theme="pulse"] #flashTitle,
+html[data-theme="pulse"] .brand-shine { color: #F4F7FF !important; }
+html[data-theme="pulse"] .hero-sub,
+html[data-theme="pulse"] .hero-foot,
+html[data-theme="pulse"] .cc-muted { color: #9AAAC4 !important; }
 html[data-theme="pulse"] .cc-sources-book-panel,
-html[data-theme="pulse"] .cc-sources-toggle {
-  background: rgba(19,29,50,0.9) !important;
-  border-color: rgba(0,229,255,0.15) !important;
+html[data-theme="pulse"] .cc-sources-toggle,
+html[data-theme="pulse"] .cc-im-status,
+html[data-theme="pulse"] .status-chip {
+  background: rgba(19, 29, 50, 0.94) !important;
+  border-color: rgba(0,229,255,0.16) !important;
+  color: #F4F7FF !important;
 }
-html[data-theme="pulse"] .cc-mini-orb {
+html[data-theme="pulse"] a { color: #00E5FF !important; }
+html[data-theme="pulse"] .landing-box,
+html[data-theme="pulse"] .hero-about,
+html[data-theme="pulse"] .hero-feat,
+html[data-theme="pulse"] .update-card {
+  border: 1px solid rgba(0,229,255,0.28) !important;
+  box-shadow: 0 0 28px rgba(22,140,255,0.12) !important;
+}
+html[data-theme="pulse"] .hero-sub { color: #7EB6FF !important; }
+
+
+/* Dark — pure black chat (do not inherit pulse gradients) */
+html[data-theme="dark"] body,
+html[data-theme="dark"] #flashChat {
+  background: #000 !important;
+  background-image: none !important;
+  color: #f2f2f2 !important;
+}
+html[data-theme="dark"] .top-bar,
+html[data-theme="dark"] .input-row,
+html[data-theme="dark"] .input-shell {
+  background: rgba(0,0,0,0.85) !important;
+  color: #f2f2f2 !important;
+}
+
+/* Light */
+html[data-theme="light"] body,
+html[data-theme="light"] #flashChat {
+  background: #f2f2f7 !important;
+  background-image: none !important;
+  color: #1a1a1a !important;
+}
+html[data-theme="light"] .top-bar,
+html[data-theme="light"] .input-row,
+html[data-theme="light"] .input-shell {
+  background: rgba(255,255,255,0.94) !important;
+  color: #1a1a1a !important;
+  border-color: rgba(0,0,0,0.08) !important;
+}
+html[data-theme="light"] .message.bot, html[data-theme="light"] .msg.bot {
+  background: #fff !important; color: #1a1a1a !important;
+}
+html[data-theme="light"] .message.user, html[data-theme="light"] .msg.user {
+  background: rgba(0,0,0,0.07) !important; color: #111 !important;
+}
+html[data-theme="light"] textarea, html[data-theme="light"] input, html[data-theme="light"] .field {
+  background: #fff !important; color: #111 !important;
+}
+</style>
+<style id="cc-orb-think-v2-restored">
+
+/* Detailed think orb — NO pulse scale */
+.cc-mini-orb {
+  width: 22px !important; height: 22px !important;
+  border-radius: 50% !important;
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center; justify-content: center;
+  background:
+    radial-gradient(circle at 35% 30%, #fff 0%, #f0f0f0 25%, #d0d0d4 55%, #a8a8b0 100%) !important;
   box-shadow:
-    inset -3px -4px 8px rgba(10,20,40,0.25),
-    inset 2px 2px 4px rgba(255,255,255,0.85),
-    0 0 16px rgba(0,229,255,0.25) !important;
+    0 0 0 1px rgba(255,255,255,0.25),
+    0 2px 8px rgba(0,0,0,0.35),
+    inset 0 -2px 4px rgba(0,0,0,0.12),
+    inset 0 2px 3px rgba(255,255,255,0.7) !important;
+  animation: ccOrbIdle 6s ease-in-out infinite !important;
+  overflow: hidden !important;
 }
-html[data-theme="pulse"] .status-chip,
-html[data-theme="pulse"] .typing-indicator {
-  border-color: rgba(0,229,255,0.2);
-  background: rgba(16,24,42,0.9);
+@keyframes ccOrbIdle {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.06); }
 }
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.55; }
-  50% { opacity: 1; }
+/* highlight sweep — not pulse */
+.cc-mini-orb::before {
+  content: '' !important;
+  position: absolute !important; inset: -20% !important;
+  background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.55) 50%, transparent 60%) !important;
+  animation: ccOrbSweep 3.8s ease-in-out infinite !important;
+  pointer-events: none !important;
 }
-html[data-theme="pulse"] .send-btn::after {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  pointer-events: none;
-  box-shadow: 0 0 12px rgba(0,229,255,0.35);
-  animation: pulseGlow 2.8s ease-in-out infinite;
+@keyframes ccOrbSweep {
+  0% { transform: translateX(-60%) rotate(0deg); opacity: 0; }
+  30% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translateX(60%) rotate(8deg); opacity: 0; }
 }
-@media (prefers-reduced-motion: reduce) {
-  html[data-theme="pulse"] .send-btn::after { animation: none; }
+.cc-mini-orb-face {
+  position: absolute !important; inset: 0 !important;
+  display: flex !important; align-items: center; justify-content: center; gap: 5px !important;
+  animation: ccLookAround 5.5s ease-in-out infinite !important;
+  z-index: 2 !important;
+}
+.cc-mini-orb-face .e, .cc-mini-orb-face .e1, .cc-mini-orb-face .e2 {
+  width: 4px !important; height: 4.5px !important;
+  border-radius: 50% !important;
+  background: #1a1a1c !important;
+  box-shadow: 0 0 0 0.5px rgba(0,0,0,0.2) !important;
+  animation: ccBlink 4.8s ease-in-out infinite !important;
+}
+.cc-mini-orb-face .e2 { animation-delay: 0.06s !important; }
+@keyframes ccLookAround {
+  0%, 18% { transform: translate(0, 0); }
+  28% { transform: translate(2.5px, -1px); }
+  42% { transform: translate(-2.5px, 0.5px); }
+  58% { transform: translate(1.5px, 1.5px); }
+  72% { transform: translate(-1px, -1.5px); }
+  88%, 100% { transform: translate(0, 0); }
+}
+@keyframes ccBlink {
+  0%, 40%, 46%, 100% { transform: scaleY(1); }
+  43% { transform: scaleY(0.12); }
+}
+/* kill pulse/breathe on think orb */
+.cc-mini-orb[data-kind="think"] {
+  animation: ccOrbIdle 6s ease-in-out infinite !important;
+}
+.cc-mini-orb[data-kind="think"] .cc-mini-orb-globe { display: none !important; }
+
+/* Big Live orb upgrades */
+#voiceOrb.voice-orb, .voice-orb#voiceOrb, div#voiceOrb {
+  width: 120px !important; height: 120px !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(circle at 32% 28%, #ffffff 0%, #f5f5f7 22%, #e4e4e8 48%, #c8c8d0 75%, #a0a0aa 100%) !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.3),
+    0 12px 40px rgba(0,0,0,0.45),
+    inset 0 -6px 16px rgba(0,0,0,0.1),
+    inset 0 4px 10px rgba(255,255,255,0.65) !important;
+  animation: none !important; /* no pulse */
+  position: relative !important;
+  overflow: hidden !important;
+}
+#voiceOrb.voice-orb::before {
+  content: '' !important;
+  position: absolute !important; inset: -30% !important;
+  background: linear-gradient(120deg, transparent 35%, rgba(255,255,255,0.5) 50%, transparent 65%) !important;
+  animation: ccOrbSweep 4s ease-in-out infinite !important;
+}
+#voiceOrb.voice-orb.listen {
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,0.35),
+    0 0 40px rgba(255,255,255,0.15),
+    0 12px 40px rgba(0,0,0,0.45) !important;
+}
+#voiceOrb.voice-orb.speaking {
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,0.4),
+    0 0 50px rgba(255,255,255,0.2),
+    0 12px 40px rgba(0,0,0,0.45) !important;
+}
+/* eyes on big orb if present */
+#voiceOrb .voice-core, #voiceOrb .orb-eyes {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  animation: ccLookAround 5s ease-in-out infinite;
+  z-index: 2;
+}
+#voiceOrb .orb-eye {
+  width: 10px; height: 12px; border-radius: 50%; background: #1a1a1c;
+  animation: ccBlink 5s ease-in-out infinite;
+}
+
+/* Think bar — slow line, not pulse dots */
+.cc-think-bar {
+  height: 2px !important; width: 120px !important; max-width: 40vw !important;
+  margin-top: 8px !important;
+  background: rgba(255,255,255,0.08) !important;
+  border-radius: 2px !important; overflow: hidden !important;
+}
+.cc-think-bar i {
+  display: block !important; height: 100% !important; width: 40% !important;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent) !important;
+  animation: ccThinkLine 2.2s ease-in-out infinite !important;
+  border-radius: 2px !important;
+}
+@keyframes ccThinkLine {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(320%); }
+}
+.cc-think-dots, .thinking .dot, .flash-think-dots span {
+  animation: none !important;
+  opacity: 0.5 !important;
+}
+.cc-status-pill {
+  display: inline-flex; flex-direction: column; align-items: flex-start;
+  gap: 2px; padding: 0.25rem 0;
+}
+.cc-status-line {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  color: rgba(255,255,255,0.55) !important;
+  font-size: 0.88rem !important;
+}
+.cc-think-label { letter-spacing: 0.02em; }
+
+/* ========== Chat background modes ========== */
+#flashChat .chat-layout {
+  position: relative;
+}
+#flashChat .messages, #flashMessages, .chat-messages {
+  position: relative;
+  z-index: 1;
+}
+body.cc-bg-wave #flashChat,
+html.cc-bg-wave #flashChat,
+#flashChat.cc-bg-wave {
+  background: #000 !important;
+}
+body.cc-bg-wave #flashChat::before,
+#flashChat.cc-bg-wave::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(180,180,200,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(255,255,255,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 35% at 80% 85%, rgba(200,200,220,0.06) 0%, transparent 50%),
+    #000;
+}
+/* animated wave lines (screenshot style) */
+#ccChatWaveBg {
+  display: none;
+  position: absolute; left: 0; right: 0; bottom: 0; height: 55%;
+  z-index: 0; pointer-events: none; overflow: hidden;
+}
+body.cc-bg-wave #ccChatWaveBg, #flashChat.cc-bg-wave #ccChatWaveBg {
+  display: block;
+}
+#ccChatWaveBg svg {
+  width: 140%; height: 100%; margin-left: -20%;
+  opacity: 0.55;
+}
+#ccChatWaveBg path {
+  fill: none;
+  stroke: rgba(220,220,230,0.35);
+  stroke-width: 1.2;
+  animation: ccWaveDrift 14s ease-in-out infinite;
+}
+#ccChatWaveBg path:nth-child(2) { stroke: rgba(200,200,215,0.28); animation-duration: 18s; animation-delay: -3s; }
+#ccChatWaveBg path:nth-child(3) { stroke: rgba(255,255,255,0.18); animation-duration: 22s; animation-delay: -6s; }
+#ccChatWaveBg path:nth-child(4) { stroke: rgba(180,180,200,0.22); animation-duration: 16s; animation-delay: -2s; }
+#ccChatWaveBg path:nth-child(5) { stroke: rgba(230,230,240,0.15); animation-duration: 20s; animation-delay: -8s; }
+@keyframes ccWaveDrift {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  50% { transform: translateX(-4%) translateY(-2%); }
+}
+
+/* ========== Landing upgrade ========== */
+#landingScreen {
+  background: #000 !important;
+  overflow: hidden;
+}
+#landingScreen::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,255,255,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 80% 100%, rgba(167,139,250,0.06) 0%, transparent 50%),
+    #000;
+  animation: ccLandingGlow 8s ease-in-out infinite;
+}
+@keyframes ccLandingGlow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+#landingScreen .landing-box {
+  position: relative; z-index: 1;
+  background: rgba(18,18,22,0.72) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  backdrop-filter: blur(28px) saturate(1.3) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.3) !important;
+  border-radius: 1.75rem !important;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.5) !important;
+  padding: 2rem 1.5rem !important;
+  animation: formIn 0.7s cubic-bezier(0.16,1,0.3,1) both;
+}
+#landingScreen .landing-box h1 {
+  font-size: 1.85rem !important;
+  letter-spacing: -0.03em !important;
+  background: linear-gradient(180deg, #fff 0%, #b0b0b8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+#landingScreen .landing-logo-spin {
+  width: 64px; height: 64px; margin: 0 auto 1rem;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.4);
+  animation: ccLogoFloat 4s ease-in-out infinite;
+}
+#landingScreen .landing-logo-spin img {
+  width: 100%; height: 100%; object-fit: cover;
+  animation: welcomeSpin 12s linear infinite;
+}
+@keyframes ccLogoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes welcomeSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+#landingScreen .landing-tag {
+  text-align: center; color: rgba(255,255,255,0.45);
+  font-size: 0.85rem; margin: -0.5rem 0 1.25rem;
+  letter-spacing: 0.04em;
+}
+#welcomeScreen .welcome-logo {
+  animation: ccLogoFloat 3.5s ease-in-out infinite;
+}
+#welcomeScreen .welcome-logo img {
+  animation: welcomeSpin 10s linear infinite;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+}
+
+/* Settings bg picker */
+.cc-bg-picker {
+  display: flex; gap: 0.6rem; margin: 0.75rem 0 0.25rem;
+}
+.cc-bg-opt {
+  flex: 1; padding: 0.75rem 0.5rem; border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  color: #ccc; font-size: 0.78rem; cursor: pointer;
+  text-align: center; transition: 0.2s;
+}
+.cc-bg-opt:hover { border-color: rgba(255,255,255,0.25); color: #fff; }
+.cc-bg-opt.active {
+  border-color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+.cc-bg-opt .cc-bg-preview {
+  height: 36px; border-radius: 8px; margin-bottom: 0.4rem;
+  background: #0a0a0a;
+}
+.cc-bg-opt[data-bg="wave"] .cc-bg-preview {
+  background:
+    radial-gradient(ellipse 100% 80% at 50% 100%, rgba(200,200,220,0.25) 0%, transparent 60%),
+    #000;
+}
+
+
+/* Hard lock size so later themes cannot inflate orb */
+.cc-mini-orb {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  max-width: 22px !important;
+  max-height: 22px !important;
 }
 </style>
 
-<script id="cc-pulse-boot">
+<script id="cc-theme-controller">
 (function(){
-  try {
-    var saved = localStorage.getItem("theme") || localStorage.getItem("cc_theme");
-    if (saved === "pulse") document.documentElement.setAttribute("data-theme", "pulse");
-  } catch(e){}
-  // Expose theme helper
-  window.CC = window.CC || {};
-  window.CC.setTheme = window.CC.setTheme || function(name){
-    var n = String(name||"dark").toLowerCase();
-    if (n === "aurora") n = "pulse"; // aurora removed → map to pulse
-    document.documentElement.setAttribute("data-theme", n);
-    try { localStorage.setItem("theme", n); localStorage.setItem("cc_theme", n); } catch(e){}
-  };
-  // Add Pulse to any theme select if present
-  function injectPulseOption(){
-    document.querySelectorAll("select, [data-theme-select]").forEach(function(sel){
-      if (sel.tagName === "SELECT" && !sel.querySelector('option[value="pulse"]')) {
-        var opt = document.createElement("option");
-        opt.value = "pulse"; opt.textContent = "Pulse";
-        sel.appendChild(opt);
-      }
-    });
-    // buttons
-    document.querySelectorAll("[data-set-theme]").forEach(function(btn){
-      if (btn.getAttribute("data-set-theme") === "aurora") btn.setAttribute("data-set-theme", "pulse");
-    });
+  function resolve(mode){
+    mode = String(mode||'pulse').toLowerCase();
+    if(mode==='aurora'||mode==='system') mode = mode==='system'?'auto':'pulse';
+    if(mode==='auto'){
+      return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    if(mode!=='pulse' && mode!=='dark' && mode!=='light') return 'pulse';
+    return mode;
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", injectPulseOption);
-  else injectPulseOption();
-  setTimeout(injectPulseOption, 800);
+  function apply(mode){
+    var raw = String(mode||'pulse').toLowerCase();
+    if(raw==='aurora') raw='pulse';
+    var resolved = resolve(raw);
+    document.documentElement.setAttribute('data-theme', resolved);
+    document.body.classList.remove('theme-pulse','theme-dark','theme-light');
+    document.body.classList.add('theme-'+resolved);
+    try{
+      localStorage.setItem('themeMode', raw==='auto'?'auto':resolved);
+      localStorage.setItem('theme', resolved);
+      localStorage.setItem('cc_theme', resolved);
+    }catch(e){}
+    var sel=document.getElementById('themeModeSelect');
+    if(sel){
+      var v = raw==='auto'?'auto':resolved;
+      if([].some.call(sel.options,function(o){return o.value===v;})) sel.value=v;
+    }
+  }
+  window.CC = window.CC||{};
+  window.CC.setTheme = apply;
+  window.applyThemeMode = apply;
+  var saved='pulse';
+  try{ saved = localStorage.getItem('themeMode')||localStorage.getItem('theme')||localStorage.getItem('cc_theme')||'pulse'; }catch(e){}
+  apply(saved);
+  document.addEventListener('DOMContentLoaded', function(){
+    apply(localStorage.getItem('themeMode')||localStorage.getItem('theme')||'pulse');
+    var sel=document.getElementById('themeModeSelect');
+    if(sel && !sel.__ccBound){
+      sel.__ccBound=true;
+      sel.addEventListener('change', function(){ apply(sel.value); });
+    }
+  });
+  setTimeout(function(){ apply(localStorage.getItem('themeMode')||'pulse'); }, 500);
 })();
 </script>
 
-<style id="cc-orb-v454">
-.cc-mini-orb {
-  width: 18px !important;
-  height: 18px !important;
-  min-width: 18px !important;
-  min-height: 18px !important;
+
+
+
+
+
+<style id="cc-chal-think-live">
+/* ===== ChatClaud 4.57.2 — inline thinking (ChatGPT-style row) ===== */
+
+/* Kill Agent Trace chrome + old floating status that breaks layout */
+.cc-agent-trace,
+.cc-agent-trace-panel,
+#agentTrace,
+.cc-agent-orb,
+.cc-agent-tool,
+.cc-top-agent-status,
+.cc-im-status,
+.gen-dots,
+#typingIndicator,
+.cc-status-pill:not(.cc-chal-inline),
+#ccThinkFixed {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  left: -9999px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+/* Inline thinking row — sits in message list, left side, does NOT fly */
+#ccChalInline {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 4px 14px 6px;
+  margin: 4px 0 8px;
+  max-width: 92%;
   border: none !important;
   outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  top: auto !important;
+  transform: none !important;
+  animation: none !important;
+  pointer-events: none;
+}
+#ccChalInline.cc-on {
+  display: flex !important;
+}
+
+/* 2.5D white orb with eyes */
+.cc-chal-orb {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+  background:
+    radial-gradient(circle at 32% 28%, #ffffff 0%, #f4f4f6 38%, #d4d4d8 72%, #b8b8be 100%);
   box-shadow:
-    inset -3px -4px 7px rgba(90,95,110,0.14),
-    inset 2px 2px 4px rgba(255,255,255,0.92),
-    0 2px 8px rgba(0,0,0,0.12) !important;
+    0 2px 6px rgba(0,0,0,0.35),
+    0 0 0 0.5px rgba(255,255,255,0.15),
+    inset 0 2px 3px rgba(255,255,255,0.85),
+    inset 0 -3px 4px rgba(0,0,0,0.14);
+  border: none !important;
+  outline: none !important;
+  transition: filter 0.3s ease, box-shadow 0.3s ease;
 }
-.cc-mini-orb .cc-eye,
-.cc-mini-orb .eye {
-  width: 3px !important;
-  height: 3px !important;
+.cc-chal-orb-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4.5px;
 }
-/* status labels stay English in UI code paths */
-.cc-status-label, .status-text, .cc-agent-status {
+.cc-chal-orb-face i {
+  width: 3.4px;
+  height: 3.8px;
+  border-radius: 50%;
+  background: #1a1a1c;
+  display: block;
+  box-shadow: 0 0 0 0.4px rgba(0,0,0,0.2);
+}
+/* subtle living motion — only when active */
+#ccChalInline.cc-on .cc-chal-orb {
+  animation: ccOrbBreathe 2.4s ease-in-out infinite;
+}
+#ccChalInline.cc-on .cc-chal-orb-face {
+  animation: ccOrbLook 4.5s ease-in-out infinite;
+}
+@keyframes ccOrbBreathe {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.06); filter: brightness(1.08); }
+}
+@keyframes ccOrbLook {
+  0%, 100% { transform: translate(0,0); }
+  30% { transform: translate(1.2px,-0.5px); }
+  60% { transform: translate(-1px,0.6px); }
+}
+
+/* tool badge (search / code) over orb */
+.cc-chal-tool {
+  position: absolute;
+  right: -5px;
+  bottom: -4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 5px;
+  background: rgba(30,30,34,0.95);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  border: none !important;
+}
+#ccChalInline[data-state="searching"] .cc-chal-tool,
+#ccChalInline[data-state="reading"] .cc-chal-tool,
+#ccChalInline[data-state="coding"] .cc-chal-tool,
+#ccChalInline[data-state="calculating"] .cc-chal-tool {
+  display: flex !important;
+}
+.cc-chal-tool svg { width: 9px; height: 9px; stroke: #eee; fill: none; stroke-width: 2; }
+
+/* Label: shimmer ON TEXT (not a flying underline bar) */
+.cc-chal-label {
+  font-size: 14px;
+  font-weight: 450;
   letter-spacing: 0.01em;
+  line-height: 1.3;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  position: relative !important;
+  max-width: 75vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* theme-aware base */
+  color: rgba(180,180,190,0.95);
+  background: linear-gradient(90deg,
+    rgba(160,160,170,0.75) 0%,
+    rgba(255,255,255,0.95) 45%,
+    rgba(160,160,170,0.75) 90%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: ccLabelShimmer 2s ease-in-out infinite;
+}
+@keyframes ccLabelShimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+html[data-theme="light"] .cc-chal-label {
+  background: linear-gradient(90deg, #888 0%, #111 45%, #888 90%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Stronger all-around shadows (visible) */
+.top-bar {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.45) !important;
+  border: none !important;
+}
+.sidebar, aside.sidebar {
+  box-shadow: 8px 0 32px rgba(0,0,0,0.4) !important;
+  border: none !important;
+}
+.message.user, .msg.user, .user-msg {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35) !important;
+  border: none !important;
+  outline: none !important;
+}
+.message.bot, .msg.bot, .bot-msg {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.22) !important;
+  border: none !important;
+  outline: none !important;
+}
+.input-shell, #flashInputShell {
+  box-shadow:
+    0 10px 36px rgba(0,0,0,0.45),
+    0 2px 10px rgba(0,0,0,0.25) !important;
+  border: none !important;
+  outline: none !important;
+  border-radius: 22px !important;
+  background: rgba(36,36,38,0.97) !important;
+}
+html[data-theme="light"] .input-shell,
+html[data-theme="light"] #flashInputShell {
+  background: rgba(255,255,255,0.96) !important;
+  box-shadow: 0 10px 32px rgba(0,0,0,0.12) !important;
+}
+
+/* Composer: stable, no clip, no contour under keyboard */
+.input-row {
+  position: relative !important;
+  bottom: auto !important;
+  flex: 0 0 auto !important;
+  padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  background: transparent !important;
+  z-index: 20 !important;
+  transform: none !important;
+}
+.input-row::before, .input-row::after,
+.input-shell::before, .input-shell::after { display:none!important; content:none!important; }
+
+#flashChat, .chat-layout {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  max-height: 100dvh !important;
+  overflow: hidden !important;
+  padding-bottom: 0 !important;
+}
+#flashMessages, .messages, .chat-messages {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.attach-icon, #flashAttachBtn, .mode-infield, #flashModeBtn,
+.live-open-btn, #liveOpenBtn, .mic-btn, #flashMicBtn, .send-icon, #flashSend {
+  border: none !important;
+  outline: none !important;
+  box-shadow: 0 5px 16px rgba(0,0,0,0.38) !important;
+  border-radius: 999px !important;
+}
+.send-icon, #flashSend {
+  background: #fff !important;
+  color: #111 !important;
+  width: 36px !important;
+  height: 36px !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.42) !important;
+}
+
+/* Burger slightly higher; new chat untouched */
+#flashMenuBtn, .menu-btn, .sidebar-toggle {
+  transform: translateY(-4px) !important;
+}
+#flashNewChat { transform: none !important; }
+
+*:focus, *:focus-visible { outline: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-chal-label, #ccChalInline.cc-on .cc-chal-orb, #ccChalInline.cc-on .cc-chal-orb-face {
+    animation: none !important;
+  }
+  .cc-chal-label {
+    -webkit-text-fill-color: rgba(180,180,190,0.9) !important;
+    color: rgba(180,180,190,0.9) !important;
+    background: none !important;
+  }
 }
 </style>
+
+<script id="cc-think-state-manager">
+(function(){
+  'use strict';
+  if (window.__ccThinkSM2) return;
+  window.__ccThinkSM2 = true;
+
+  var LABELS = {
+    receiving: 'Thinking…',
+    understanding: 'Understanding request…',
+    analyzing: 'Analyzing…',
+    planning: 'Building a plan…',
+    reasoning: 'Thinking…',
+    searching: 'Searching the web…',
+    reading: 'Reading sources…',
+    calculating: 'Calculating…',
+    coding: 'Writing code…',
+    verifying: 'Verifying…',
+    correcting: 'Refining…',
+    generating: 'Thinking…',
+    completed: '',
+    error: '',
+    cancelled: ''
+  };
+
+  var state = 'idle';
+  var reqId = 0, activeReq = 0, hideT = null;
+
+  var TOOL_SVG = {
+    searching: '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M16 16l5 5"/></svg>',
+    reading: '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M16 16l5 5"/></svg>',
+    coding: '<svg viewBox="0 0 24 24"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/></svg>',
+    calculating: '<svg viewBox="0 0 24 24"><path d="M5 5h14v14H5zM5 10h14M10 5v14"/></svg>'
+  };
+
+  function messagesRoot(){
+    return document.getElementById('flashMessages')
+      || document.querySelector('#flashChat .messages')
+      || document.querySelector('.chat-messages')
+      || document.querySelector('#flashChat');
+  }
+
+  function ensureInline(){
+    var el = document.getElementById('ccChalInline');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'ccChalInline';
+      el.innerHTML =
+        '<div class="cc-chal-orb" aria-hidden="true">' +
+          '<div class="cc-chal-orb-face"><i></i><i></i></div>' +
+          '<div class="cc-chal-tool" id="ccChalTool"></div>' +
+        '</div>' +
+        '<div class="cc-chal-label" id="ccChalLabel">Thinking…</div>';
+    }
+    var root = messagesRoot();
+    if (root && el.parentNode !== root) root.appendChild(el);
+    return el;
+  }
+
+  function setVisual(next){
+    state = next;
+    var el = ensureInline();
+    el.setAttribute('data-state', next);
+    var lab = document.getElementById('ccChalLabel');
+    var tool = document.getElementById('ccChalTool');
+    var text = LABELS[next] || 'Thinking…';
+    if (lab) lab.textContent = text;
+    if (tool) {
+      if (TOOL_SVG[next]) { tool.innerHTML = TOOL_SVG[next]; }
+      else { tool.innerHTML = ''; }
+    }
+    clearTimeout(hideT);
+    if (!text || next === 'completed' || next === 'idle' || next === 'error' || next === 'cancelled') {
+      el.classList.remove('cc-on');
+      if (next === 'completed' || next === 'error' || next === 'cancelled') {
+        /* brief then hide */
+        el.classList.remove('cc-on');
+      }
+      return;
+    }
+    el.classList.add('cc-on');
+    try { el.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {}
+  }
+
+  function emit(name, detail){
+    detail = detail || {};
+    if (detail.reqId != null && activeReq && detail.reqId !== activeReq && name !== 'request:received') return;
+    switch (name) {
+      case 'request:received':
+        activeReq = detail.reqId || (++reqId);
+        setVisual('receiving');
+        setTimeout(function(){ if (state === 'receiving') setVisual('understanding'); }, 160);
+        break;
+      case 'search:started': setVisual('searching'); break;
+      case 'source:reading_started': setVisual('reading'); break;
+      case 'math:started': setVisual('calculating'); break;
+      case 'code:analysis_started': setVisual('coding'); break;
+      case 'planning:started': setVisual('planning'); break;
+      case 'reasoning:started': setVisual('reasoning'); break;
+      case 'verification:started': setVisual('verifying'); break;
+      case 'correction:started': setVisual('correcting'); break;
+      case 'analysis:started': setVisual('analyzing'); break;
+      case 'model:streaming': setVisual('generating'); break;
+      case 'model:streaming_completed':
+      case 'request:completed':
+        setVisual('completed'); activeReq = 0; break;
+      case 'request:error': setVisual('error'); activeReq = 0; break;
+      case 'request:cancelled': setVisual('cancelled'); activeReq = 0; break;
+      default: break;
+    }
+  }
+
+  window.CC = window.CC || {};
+  window.CC.Think = { emit: emit, getState: function(){ return state; }, LABELS: LABELS };
+
+  // fetch hook for chat endpoints
+  if (!window.__ccThinkFetch2) {
+    window.__ccThinkFetch2 = true;
+    var ofetch = window.fetch;
+    if (typeof ofetch === 'function') {
+      window.fetch = function(input, init){
+        try {
+          var url = typeof input === 'string' ? input : (input && input.url) || '';
+          var method = (init && init.method) || 'GET';
+          if (/\/api\/(chat|agent|chal|message)/i.test(url) && String(method).toUpperCase() === 'POST') {
+            var id = ++reqId;
+            emit('request:received', { reqId: id });
+            return ofetch.apply(this, arguments).then(function(res){
+              if (!res.ok) { emit('request:error', { reqId: id }); return res; }
+              emit('model:streaming', { reqId: id });
+              var c2 = res.clone();
+              c2.text().then(function(){ emit('request:completed', { reqId: id }); })
+                .catch(function(){ emit('request:completed', { reqId: id }); });
+              return res;
+            }).catch(function(err){
+              emit('request:error', { reqId: id });
+              throw err;
+            });
+          }
+        } catch (e) {}
+        return ofetch.apply(this, arguments);
+      };
+    }
+  }
+
+  window.addEventListener('cc-status', function(ev){
+    try {
+      var d = (ev && ev.detail) || {};
+      var s = String(d.state || d.status || '').toLowerCase();
+      var map = {
+        searching:'search:started', reading:'source:reading_started', verifying:'verification:started',
+        analyzing:'analysis:started', coding:'code:analysis_started', thinking:'reasoning:started',
+        planning:'planning:started', done:'request:completed', completed:'request:completed', error:'request:error'
+      };
+      if (map[s]) emit(map[s], { reqId: activeReq });
+    } catch (e) {}
+  });
+
+  // Also show on send click / Enter as receiving
+  document.addEventListener('click', function(e){
+    var t = e.target && e.target.closest && e.target.closest('#flashSend, .send-icon');
+    if (t) emit('request:received', { reqId: ++reqId });
+  }, true);
+
+  // Hide any residual floating host
+  function scrub(){
+    var fixed = document.getElementById('ccThinkFixed');
+    if (fixed) { fixed.style.display = 'none'; fixed.innerHTML = ''; }
+    var tip = document.getElementById('typingIndicator');
+    if (tip) { tip.style.display = 'none'; tip.innerHTML = ''; }
+  }
+  setInterval(scrub, 800);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scrub);
+  else scrub();
+})();
+</script>
+
 </body>
 </html>

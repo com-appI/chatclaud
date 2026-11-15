@@ -1,6 +1,6 @@
 {
   "name": "chatclaud",
-  "version": "4.54.7",
+  "version": "4.57.2",
   "private": true,
   "main": "server.js",
   "scripts": {
@@ -12,5 +12,5 @@
   "engines": {
     "node": ">=18"
   },
-  "description": "ChatClaud 4.54.7 \u2014 CHAL Advanced Reasoning, PULSE theme, safer errors, broader auto-search"
+  "description": "ChatClaud 4.57.1 \u2014 event-driven thinking orb + UI polish"
 }
