@@ -1,8 +1,8 @@
-# ChatClaud 3.18.9
+# ChatClaud 3.19.0
 
 ChatClaud is a Node.js web application with a Groq-backed chat model, a bounded tool-using agent, a source-aware web-search pipeline, and a static browser interface.
 
-## What's changed in 3.18.9
+## What's changed in 3.19.0
 
 - Removed the Nova Browser integration and the obsolete `/nova` and `/veo` commands.
 - Added direct, server-side Serper + Tavily search. Configured providers run in parallel for each query; query expansion is staged (4 → 10 → 20) only when earlier results remain weak.
@@ -57,6 +57,6 @@ A full search can expand to 20 query variants. With both providers enabled, this
 
 ## Validation
 
-See `RELEASE-v3.18.9.md`, `DEPLOY-v3.18.9.md`, `SEARCH-UPGRADE-v3.18.9.md`, and `UPSTREAM-AUDIT-v3.18.9.md` for change details, setup, and the upstream repository/license review.
+See `RELEASE-v3.19.0.md`, `DEPLOY-v3.19.0.md`, `SEARCH-UPGRADE-v3.19.0.md`, and `UPSTREAM-AUDIT-v3.19.0.md` for change details, setup, and the upstream repository/license review.
 
 The test/evaluation suites use controlled fixtures. They do not prove live Serper, Tavily, or Groq account credentials, live provider latency, citation quality, or end-to-end answer correctness. No production deployment is included in this ZIP.

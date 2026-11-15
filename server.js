@@ -2170,9 +2170,10 @@ function extractPlainUserText(text) {
 function isVideoQuery(text) {
   const t = extractPlainUserText(text).toLowerCase();
   if (!t || t.length < 3) return false;
-  return /(найди|поищи|покажи|хочу|нужно|дай|скинь).{0,40}(видео|ролик|клип|youtube|ютуб)/i.test(t)
-    || /(видео|ролик|клип|youtube|ютуб).{0,40}(найди|поищи|покажи|про)/i.test(t)
-    || /^(видео|ролик)\s+/i.test(t);
+  return /(найди|поищи|покажи|хочу|нужно|дай|скинь|search|find|show|look).{0,50}(видео|ролик|клип|youtube|ютуб|video|videos)/i.test(t)
+    || /(видео|ролик|клип|youtube|ютуб|video|videos).{0,50}(найди|поищи|покажи|про|about|of|on)/i.test(t)
+    || /^(видео|ролик|video)\s+/i.test(t)
+    || /\b(search videos?|find videos?|show videos?|видео про|видео о)\b/i.test(t);
 }
 function cleanVideoQuery(text) {
   let t = extractPlainUserText(text);
@@ -4544,11 +4545,19 @@ const server = http.createServer(async (req, res) => {
         const hasUrlAlready = /https?:\/\/[^\s<>"']+/i.test(lastUser3);
         const greetingRe = /^(привет|здравствуй|хай|hello|hi|ку|йо|как дела|спасибо|пока|ок|окей|да|нет)\W*$/i;
         let q3 = lastUser3.trim();
-        // Always search when user asks to find / look up (any message count)
+        // Automatic search intent: explicit commands + natural language that needs live data
         const intentSearch = /(?:^|\s)(\/search|\/find|найди|поищи|загугли|погугли|search\b|find\b|look\s*up|google\b|новост)/i.test(q3)
           || /^(найди|поищи|загугли|погугли|search|find)\b/i.test(q3)
           || (/\b(tiktok|тикток|youtube|ютуб)\b/i.test(q3) && /(найди|поищи|видео|ролик)/i.test(q3));
+        // Broader auto-search triggers (news, current events, fact-check, "what is new", product/info lookups)
+        const autoLiveSearch = /\b(сегодня|сейчас|на этой неделе|на этой неделе|свеж|последн|актуальн|текущ|latest|today|this week|current|recent|breaking|новост|что нового|что произошло|что случилось|happened today|what.?s new)\b/i.test(q3)
+          || /\b(проверь|правда ли|это правда|is it true|fact.?check|verify|подтверди)\b/i.test(q3)
+          || /\b(найди информацию|информация о|расскажи про|что такое|who is|what is|tell me about)\b/i.test(q3)
+          || /\b(Pinterest|TikTok|Instagram|Twitter|X\.com|YouTube|GitHub|OpenAI|Anthropic|xAI)\b/i.test(q3) && q3.length < 120
+          || /\b(цены|курс|стоимость|price of|stock|акции)\b/i.test(q3)
+          || /\b(источник|sources?|ссылк|ссылки|where can i|где можно|покажи сайт|find sites|find websites)\b/i.test(q3);
         const forceSearch = intentSearch
+          || autoLiveSearch
           || /^\/search\b/i.test(q3)
           || /^\/find\b/i.test(q3)
           || /^(найди|поищи|загугли|погугли)\b/i.test(q3)

@@ -6966,7 +6966,7 @@ body {
                 <div class="hero-feat"><div class="hero-feat-icon">◉</div><div class="hero-feat-text"><strong>Personal workspace</strong><span>Чаты, профиль и сохранённые настройки</span></div></div>
             </div>
             <div class="update-card">
-                <h3>ChatClaud 3.18.9</h3>
+                <h3>ChatClaud 3.19.0</h3>
                 <div class="upd-item"><span class="upd-num">1</span><div><b>Live Agent Status</b>Понятные этапы реальной работы помощника</div></div>
                 <div class="upd-item"><span class="upd-num">2</span><div><b>Adaptive Search</b>Расширение поиска, когда первых результатов недостаточно</div></div>
                 <div class="upd-item"><span class="upd-num">3</span><div><b>Personal Profile</b>Имя пользователя и возрастная группа в настройках</div></div>
@@ -6979,7 +6979,7 @@ body {
                 <button class="hero-try" id="heroTryBtn">Проверить без регистрации (3 сообщения)</button>
                 <button type="button" class="pwa-install-btn" id="pwaInstallBtn">DOWNLOAD CHATCLAUD</button>
             </div>
-            <div class="hero-foot">ChatClaud 3.18.9 · Personal AI workspace</div>
+            <div class="hero-foot">ChatClaud 3.19.0 · Personal AI workspace</div>
         </div>
     </div>
 
@@ -7068,16 +7068,16 @@ body {
                 <label style="font-size:0.75rem;color:#888;">Chat theme</label>
                 <div class="cc-bg-picker">
                   <button type="button" class="cc-bg-opt active" data-bg="classic"><div class="cc-bg-preview cc-prev-dark"></div>Dark</button>
-                  <button type="button" class="cc-bg-opt" data-bg="light"><div class="cc-bg-preview cc-prev-light"></div>Light</button>
                   <button type="button" class="cc-bg-opt" data-bg="wave"><div class="cc-bg-preview cc-prev-wave"></div>Waves</button>
                   <button type="button" class="cc-bg-opt" data-bg="blue"><div class="cc-bg-preview cc-prev-blue"></div>Blue</button>
+                  <button type="button" class="cc-bg-opt" data-bg="aurora"><div class="cc-bg-preview cc-prev-aurora"></div>Aurora</button>
                 </div>
             </div>
             <div class="settings-section">
                 <label style="font-size:0.75rem;color:#888;">Theme</label>
                 <select id="themeModeSelect" class="field">
                     <option value="dark">Dark</option>
-                    <option value="light">Light</option>
+                    <option value="aurora">Aurora</option>
                     <option value="auto">System</option>
                 </select>
             </div>
@@ -8701,10 +8701,7 @@ if (typeof window.ccApiUrl !== 'function') {
                 const l = (lang || '').toLowerCase();
                 if (l === 'css') {
                     src = '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>' + codeText + '</style></head><body></body></html>';
-                } else if (l === 'javascript' || l === 'js') {
-                    src = '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="font-family:system-ui;padding:1rem;background:#111;color:#eee"><h3>JS</h3><pre id="out"></pre><script>try{\n' + codeText + '\n}catch(e){document.getElementById("out").textContent=String(e);}\n<\/script></body></html>';
-                } else if (!/<!DOCTYPE/i.test(src) && !/<html[\s>]/i.test(src)) {
-                    src = '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{font-family:-apple-system,system-ui,sans-serif;margin:0;padding:1rem;background:#fff;color:#111}</style></head><body>' + codeText + '</body></html>';
+                src = '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{font-family:-apple-system,system-ui,sans-serif;margin:0;padding:1rem;background:#fff;color:#111}</style></head><body>' + codeText + '</body></html>';
                 }
                 window._previewSrc = src;
                 if (window._previewBlobUrl) {
@@ -13230,12 +13227,27 @@ body.cc-bg-wave #ccChatWaveBg, #flashChat.cc-bg-wave #ccChatWaveBg {
     layout.insertBefore(wrap, layout.firstChild);
   }
   function applyBg(mode){
-    mode = mode === 'wave' ? 'wave' : 'classic';
+    mode = String(mode || 'classic').toLowerCase();
+    if (mode === 'waves' || mode === 'wave') mode = 'wave';
+    if (mode === 'light') mode = 'classic'; // Light removed in 3.19.0
+    if (!['classic','wave','blue','aurora'].includes(mode)) mode = 'classic';
     try { localStorage.setItem('cc_chat_bg', mode); } catch(e){}
-    document.body.classList.toggle('cc-bg-wave', mode === 'wave');
+    document.body.classList.remove('cc-bg-wave','cc-bg-blue','cc-bg-aurora','cc-bg-light');
     var chat = document.getElementById('flashChat');
-    if(chat) chat.classList.toggle('cc-bg-wave', mode === 'wave');
-    if(mode === 'wave') ensureWave();
+    if(chat) {
+      chat.classList.remove('cc-bg-wave','cc-bg-blue','cc-bg-aurora','cc-bg-light');
+    }
+    if (mode === 'wave') {
+      document.body.classList.add('cc-bg-wave');
+      if(chat) chat.classList.add('cc-bg-wave');
+      if (typeof ensureWave === 'function') ensureWave();
+    } else if (mode === 'blue') {
+      document.body.classList.add('cc-bg-blue');
+      if(chat) chat.classList.add('cc-bg-blue');
+    } else if (mode === 'aurora') {
+      document.body.classList.add('cc-bg-aurora');
+      if(chat) chat.classList.add('cc-bg-aurora');
+    }
     document.querySelectorAll('.cc-bg-opt').forEach(function(b){
       b.classList.toggle('active', b.getAttribute('data-bg') === mode);
     });
@@ -14052,7 +14064,7 @@ body.cc-bg-light .input-shell:focus-within {
   window.CC.UI = {
     applyTheme: function(name){
       name = String(name||'').toLowerCase();
-      var map = { dark:'classic', black:'classic', classic:'classic', light:'light', white:'light', waves:'wave', wave:'wave', blue:'blue', night:'blue' };
+      var map = { dark:'classic', black:'classic', classic:'classic', light:'classic', white:'classic', waves:'wave', wave:'wave', blue:'blue', night:'blue', aurora:'aurora' };
       var mode = map[name] || name;
       if (window.CC.Theme && window.CC.Theme.apply) window.CC.Theme.apply(mode);
       else if (window.ccApplyChatBg) window.ccApplyChatBg(mode);
@@ -14420,14 +14432,16 @@ body.cc-bg-blue #flashChat .chat-layout {
   // Local instant UI commands before send
   window.CC.UI.tryLocalCommand = function(text) {
     var t = String(text || '').trim();
-    var m = t.match(/^(?:change|set|switch)\s+theme\s+(?:to\s+)?(dark|light|waves?|blue|black|white|classic)/i)
-      || t.match(/^(?:смени|поставь|включи)\s+тем[уы]\s+(?:на\s+)?(т[её]мн|светл|волн|син|dark|light|wave|blue)/i);
+    var m = t.match(/^(?:change|set|switch)\s+theme\s+(?:to\s+)?(dark|light|waves?|blue|black|white|classic|aurora)/i)
+      || t.match(/^(?:смени|поставь|включи)\s+тем[уы]\s+(?:на\s+)?(т[её]мн|светл|волн|син|аврор|dark|light|wave|blue|aurora)/i)
+      || t.match(/^(?:поменяй|смени|поставь|измени|change|set)\s+(?:аватарк[уа]|аватар|avatar|фон|background|theme)?\s*(?:на\s+|to\s+)?(waves?|волн[ыа]?|dark|т[её]мн|blue|син|aurora|аврор|classic)/i);
     if (m) {
       var name = m[1];
       if (/т[её]мн|black|dark|classic/i.test(name)) name = 'dark';
-      else if (/светл|white|light/i.test(name)) name = 'light';
+      else if (/светл|white|light/i.test(name)) name = 'dark'; // Light removed in 3.19.0 — map to dark
       else if (/волн|wave/i.test(name)) name = 'waves';
       else if (/син|blue/i.test(name)) name = 'blue';
+      else if (/аврор|aurora/i.test(name)) name = 'aurora';
       window.CC.UI.applyTheme(name);
       return true;
     }

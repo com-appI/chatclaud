@@ -1,6 +1,6 @@
 {
   "name": "chatclaud",
-  "version": "3.18.9",
+  "version": "3.19.0",
   "private": true,
   "main": "server.js",
   "scripts": {
@@ -12,5 +12,5 @@
   "engines": {
     "node": ">=18"
   },
-  "description": "ChatClaud 3.18.9 — hybrid Serper/Tavily search, bounded agent workflows, live trace and persona layer"
+  "description": "ChatClaud 3.19.0 \u2014 auto web search, Aurora theme, expressive mascot, improved sources & video search"
 }
