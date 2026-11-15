@@ -1,17 +1,46 @@
+'use strict';
+
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const root = path.join(__dirname, '..');
-const server = fs.readFileSync(path.join(root, 'server.js'), 'utf8');
+const serverText = fs.readFileSync(path.join(root, 'server.js'), 'utf8');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const chatclaud = require('../server.js');
 
-test('server provides a Nova-backed search adapter used by /api/search', () => {
-  assert.match(server, /async function runSearchPipeline\(query, options\)/);
-  assert.match(server, /async function webSearch\(query, type\)/);
-  assert.match(server, /await webSearch\(query,/);
-  assert.match(server, /const rate = checkRate\(req, isPlusUser\)/);
-  assert.match(server, /novaRequest\('\/api\/search'/);
+function jsonResponse(data, status = 200) {
+  return {
+    ok: status >= 200 && status < 300,
+    status,
+    json: async () => data,
+  };
+}
+
+function withEnv(changes, fn) {
+  const previous = {};
+  for (const [key, value] of Object.entries(changes)) {
+    previous[key] = process.env[key];
+    if (value === null) delete process.env[key];
+    else process.env[key] = value;
+  }
+  return Promise.resolve().then(fn).finally(() => {
+    for (const [key, value] of Object.entries(previous)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  });
+}
+
+test('server provides the direct Serper/Tavily hybrid adapter used by /api/search', () => {
+  assert.match(serverText, /async function searchProvidersQuery\(query, type, options\)/);
+  assert.match(serverText, /async function runSearchPipeline\(query, options\)/);
+  assert.match(serverText, /async function webSearch\(query, type\)/);
+  assert.match(serverText, /await webSearch\(query,/);
+  assert.match(serverText, /const rate = checkRate\(req, isPlusUser\)/);
+  assert.match(serverText, /https:\/\/google\.serper\.dev\//);
+  assert.match(serverText, /https:\/\/api\.tavily\.com\/search/);
+  assert.doesNotMatch(serverText, /novaRequest|api\.firecrawl\.dev|api\.serper\.live/i);
 });
 
 test('browser does not create duplicate thinking rows for one request', () => {
@@ -27,9 +56,7 @@ test('public error mapping has no undeclared response-data reference', () => {
   assert.doesNotMatch(mapper, /\bdata\s*&&/);
 });
 
-const chatclaud = require('../server.js');
-
-test('adaptive Nova search expands in stages from 4 to 10 to 20 when evidence stays weak', async () => {
+test('adaptive hybrid search expands in stages from 4 to 10 to 20 only while evidence stays weak', async () => {
   const calls = [];
   const statusStages = [];
   const seeds = Array.from({ length: 20 }, (_, i) => 'focused search angle ' + (i + 1));
@@ -86,6 +113,110 @@ test('search pipeline runs focused queries in parallel, deduplicates, ranks and 
   assert.match(result.context, /Fetched page text/);
 });
 
+test('Serper and Tavily execute in parallel with backend-only authentication', async () => {
+  const previousFetch = global.fetch;
+  const calls = [];
+  await withEnv({ SERPER_KEY: 'serper-test-secret', TAVILY_KEY: 'tavily-test-secret' }, async () => {
+    global.fetch = async (url, options) => {
+      calls.push({ url: String(url), options });
+      if (String(url).includes('google.serper.dev')) return jsonResponse({ organic: [
+        { title: 'Serper result', link: 'https://serper.example/docs', snippet: 'Serper test evidence.' },
+      ] });
+      if (String(url).includes('api.tavily.com/search')) return jsonResponse({ results: [
+        { title: 'Tavily result', url: 'https://tavily.example/docs', content: 'Tavily test evidence.', score: 0.91 },
+      ] });
+      throw new Error('unexpected provider URL');
+    };
+    const result = await chatclaud.runSearchPipeline('ChatClaud', {
+      queries: ['ChatClaud'], maxSearchCalls: 1, maxResults: 6, maxFetch: 0, expand: false,
+    });
+    assert.equal(calls.length, 2);
+    const serper = calls.find((call) => call.url.includes('google.serper.dev'));
+    const tavily = calls.find((call) => call.url.includes('api.tavily.com/search'));
+    assert.ok(serper);
+    assert.ok(tavily);
+    assert.equal(serper.options.headers['X-API-KEY'], 'serper-test-secret');
+    assert.equal(JSON.parse(serper.options.body).q, 'ChatClaud');
+    assert.equal(tavily.options.headers.Authorization, 'Bearer tavily-test-secret');
+    const tavilyBody = JSON.parse(tavily.options.body);
+    assert.equal(tavilyBody.query, 'ChatClaud');
+    assert.equal(Object.hasOwn(tavilyBody, 'api_key'), false);
+    assert.equal(result.stats.providerRequests, 2);
+    assert.equal(result.stats.providerResults.SERPER, 1);
+    assert.equal(result.stats.providerResults.TAVILY, 1);
+    assert.ok(result.sources.some((source) => source.url === 'https://serper.example/docs'));
+    assert.ok(result.sources.some((source) => source.url === 'https://tavily.example/docs'));
+  }).finally(() => { global.fetch = previousFetch; });
+});
+
+test('Tavily Extract reads a public URL as Markdown using server-side bearer auth', async () => {
+  const previousFetch = global.fetch;
+  const calls = [];
+  await withEnv({ TAVILY_KEY: 'tavily-extract-test-secret' }, async () => {
+    global.fetch = async (url, options) => {
+      calls.push({ url: String(url), options });
+      return jsonResponse({ results: [{
+        url: 'https://docs.example.org/guide', title: 'Guide', raw_content: '# Guide\nPublic page text.',
+      }], failed_results: [] });
+    };
+    const result = await chatclaud.tavilyExtract(['https://docs.example.org/guide'], { timeoutMs: 5000 });
+    assert.equal(calls.length, 1);
+    assert.equal(calls[0].url, 'https://api.tavily.com/extract');
+    assert.equal(calls[0].options.headers.Authorization, 'Bearer tavily-extract-test-secret');
+    assert.deepEqual(JSON.parse(calls[0].options.body), {
+      urls: ['https://docs.example.org/guide'], format: 'markdown',
+    });
+    assert.match(result.results[0].raw_content, /Public page text/);
+  }).finally(() => { global.fetch = previousFetch; });
+});
+
+
+test('a failed provider does not discard valid results from the other provider', async () => {
+  const previousFetch = global.fetch;
+  const calls = [];
+  await withEnv({ SERPER_KEY: 'serper-test-secret', TAVILY_KEY: 'tavily-test-secret' }, async () => {
+    global.fetch = async (url, options) => {
+      calls.push(String(url));
+      if (String(url).includes('google.serper.dev')) return jsonResponse({ error: 'temporarily unavailable' }, 503);
+      return jsonResponse({ results: [
+        { title: 'Tavily fallback source', url: 'https://tavily.example/fallback', content: 'A valid source still remains available.', score: 0.82 },
+      ] });
+    };
+    const result = await chatclaud.runSearchPipeline('ChatClaud fallback', {
+      queries: ['ChatClaud fallback'], maxSearchCalls: 1, maxResults: 5, maxFetch: 0, expand: false,
+    });
+    assert.equal(calls.length, 2);
+    assert.ok(result.sources.some((source) => source.url === 'https://tavily.example/fallback'));
+    assert.equal(result.stats.providerResults.TAVILY, 1);
+    assert.equal(result.stats.providerRequests, 1);
+  }).finally(() => { global.fetch = previousFetch; });
+});
+
+test('hybrid retrieval bounds concurrent search groups while providers stay parallel', async () => {
+  const previousFetch = global.fetch;
+  let active = 0;
+  let peak = 0;
+  await withEnv({ SERPER_KEY: 'serper-test-secret', TAVILY_KEY: 'tavily-test-secret' }, async () => {
+    global.fetch = async (url) => {
+      active += 1;
+      peak = Math.max(peak, active);
+      await new Promise((resolve) => setTimeout(resolve, 6));
+      active -= 1;
+      return String(url).includes('google.serper.dev')
+        ? jsonResponse({ organic: [] })
+        : jsonResponse({ results: [] });
+    };
+    const queries = Array.from({ length: 10 }, (_, index) => 'bounded query ' + (index + 1));
+    const result = await chatclaud.runSearchPipeline(queries[0], {
+      queries, maxSearchCalls: 10, maxResults: 6, maxFetch: 0, expand: false,
+    });
+    assert.equal(result.stats.searchCalls, 10);
+    assert.equal(result.stats.providerRequests, 20);
+    assert.ok(peak > 2, 'the two providers should overlap');
+    assert.ok(peak <= 12, 'six query groups times two providers is the concurrency ceiling');
+  }).finally(() => { global.fetch = previousFetch; });
+});
+
 test('search URL canonicalization removes tracking parameters but preserves meaningful query values', () => {
   assert.equal(
     chatclaud.searchNormalizeUrl('https://Example.com/path/?q=chatclaud&utm_source=news#top'),
@@ -108,36 +239,4 @@ test('relevance ranking prefers title and snippet matches and limits same-domain
   assert.equal(results.length, 3);
   assert.equal(results[0].domain, 'one.example');
   assert.ok(results.some((x) => x.domain === 'two.example'));
-});
-
-
-test('optional Firecrawl adapter uses server-side credentials and developer index for repository queries', async () => {
-  const previousKey = process.env.FIRECRAWL_API_KEY;
-  const previousFetch = global.fetch;
-  const calls = [];
-  process.env.FIRECRAWL_API_KEY = 'test-only-secret-not-real';
-  global.fetch = async (url, options) => {
-    calls.push({ url, options });
-    return {
-      ok: true,
-      status: 200,
-      json: async () => ({ success: true, data: { web: [
-        { title: 'Repository guide', url: 'https://github.com/example/project', description: 'Developer docs' },
-      ] } }),
-    };
-  };
-  try {
-    const data = await chatclaud.firecrawlSearch('best open source agent repositories', { maxResults: 6 });
-    assert.equal(calls.length, 1);
-    assert.equal(calls[0].url, 'https://api.firecrawl.dev/v2/search');
-    assert.equal(calls[0].options.headers.Authorization, 'Bearer test-only-secret-not-real');
-    const body = JSON.parse(calls[0].options.body);
-    assert.equal(body.query, 'best open source agent repositories');
-    assert.deepEqual(body.categories, ['developer']);
-    assert.equal(data.success, true);
-  } finally {
-    global.fetch = previousFetch;
-    if (previousKey === undefined) delete process.env.FIRECRAWL_API_KEY;
-    else process.env.FIRECRAWL_API_KEY = previousKey;
-  }
 });

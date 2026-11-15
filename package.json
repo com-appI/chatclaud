@@ -1,6 +1,6 @@
 {
   "name": "chatclaud",
-  "version": "2.14.3",
+  "version": "3.18.9",
   "private": true,
   "main": "server.js",
   "scripts": {
@@ -12,5 +12,5 @@
   "engines": {
     "node": ">=18"
   },
-  "description": "ChatClaud 2.14.3 — adaptive search, live agent streaming, personalized workspace and Agent Trace"
+  "description": "ChatClaud 3.18.9 — hybrid Serper/Tavily search, bounded agent workflows, live trace and persona layer"
 }

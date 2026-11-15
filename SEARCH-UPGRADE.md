@@ -1,3 +1,5 @@
+> Historical note: this document describes the previous Nova-based search implementation and is retained for version history only. It is superseded by [SEARCH-UPGRADE-v3.18.9.md](SEARCH-UPGRADE-v3.18.9.md) and [DEPLOY-v3.18.9.md](DEPLOY-v3.18.9.md).
+
 ## v1.5.1 Search Intelligence
 
 See RELEASE-v1.5.1.txt.

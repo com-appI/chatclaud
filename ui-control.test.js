@@ -57,9 +57,19 @@ test('system prompt accurately describes real tool evidence and interface contro
   assert.ok(start >= 0);
   const end = html.indexOf("\n                if (typeof MODE_BRAINS", start);
   const prompt = html.slice(start, end);
-  assert.match(prompt, /только реально переданные результаты Nova/i);
+  assert.match(prompt, /только реально переданные результаты Serper\/Tavily/i);
   assert.match(prompt, /не выдумывай источники/i);
   assert.match(prompt, /произвольный код/i);
   assert.doesNotMatch(prompt, /у тебя ЕСТЬ интернет/i);
   assert.doesNotMatch(prompt, /Никогда не пиши.*нет доступа/i);
+});
+
+
+test('live backend status events animate the mascot tool and update Agent Trace', () => {
+  const status = html.slice(html.indexOf('<script id="cc-v2143-agent-status">'));
+  assert.match(status, /var toolIcons=/);
+  assert.match(status, /window\.CC\.Trace\.liveStatus\(state,text,meta\)/);
+  assert.match(html, /cc-agent-tool/);
+  assert.match(html, /liveStatus:function\(state,label,meta\)/);
+  assert.match(html, /ccSetAgentStatus\(payload\.state, payload\.label, payload\)/);
 });
