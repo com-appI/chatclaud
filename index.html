@@ -15656,5 +15656,70 @@ textarea#flashInput,
 .cc-agent-tool[data-state=completed]{color:#b8f2d7;border-color:rgba(120,220,170,.3)}
 @media(prefers-reduced-motion:reduce){.cc-agent-tool,.cc-agent-tool svg,.cc-agent-orb:before,.cc-agent-orb:after{animation:none!important;transition:none!important}}
 </style>
+
+<style id="cc-3.36.6-ui">
+.cc-sources-book-panel{margin-top:10px;border-radius:14px;background:rgba(18,20,28,.92);border:1px solid rgba(255,255,255,.08);box-shadow:0 12px 36px rgba(0,0,0,.35);overflow:hidden}
+.cc-sources-book-panel .cc-sb-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06)}
+.cc-sources-book-panel .cc-sb-title{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.cc-sources-book-panel .cc-sb-count{font-size:11px;color:rgba(255,255,255,.4);background:rgba(255,255,255,.06);padding:2px 8px;border-radius:999px}
+.cc-source-card{display:block;padding:10px 14px;border-top:1px solid rgba(255,255,255,.04);text-decoration:none;color:inherit}
+.cc-source-card:hover{background:rgba(255,255,255,.04)}
+.cc-source-card .cc-sc-title{font-size:13px;font-weight:520;color:rgba(255,255,255,.9);margin-bottom:3px}
+.cc-source-card .cc-sc-meta{font-size:11px;color:rgba(255,255,255,.4)}
+.cc-source-card .cc-sc-snippet{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#ccSfgPanel{position:fixed;top:0;left:0;right:0;z-index:9990;display:none;padding:10px 12px 0;pointer-events:none}
+#ccSfgPanel.show{display:block}
+#ccSfgPanel .sfg-card{pointer-events:auto;max-width:520px;margin:0 auto;background:linear-gradient(160deg,rgba(22,26,38,.97),rgba(12,14,22,.98));border:1px solid rgba(140,160,220,.18);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.55);padding:16px 18px 14px}
+.sfg-kicker{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(160,180,255,.55);font-weight:600;margin-bottom:6px}
+.sfg-title{font-size:15px;font-weight:560;color:#f2f4fa;margin-bottom:8px}
+.sfg-body{font-size:13px;color:rgba(220,225,240,.72);line-height:1.5;margin-bottom:14px}
+.sfg-actions{display:flex;gap:8px;flex-wrap:wrap}
+.sfg-btn{appearance:none;border:none;cursor:pointer;font-size:13px;font-weight:560;padding:9px 14px;border-radius:10px}
+.sfg-btn.primary{background:linear-gradient(135deg,#7b8cff,#5a6af0);color:#fff}
+.sfg-btn.ghost{background:rgba(255,255,255,.06);color:rgba(255,255,255,.78);border:1px solid rgba(255,255,255,.1)}
+.cc-mini-orb[data-emotion="searching"]{box-shadow:inset -4px -6px 10px rgba(90,95,110,.12),0 0 22px rgba(120,180,255,.25)!important}
+.cc-mini-orb[data-emotion="learning"]{box-shadow:inset -4px -6px 10px rgba(90,95,110,.12),0 0 24px rgba(120,255,200,.22)!important}
+.cc-mini-orb[data-emotion="error"]{box-shadow:inset -4px -6px 10px rgba(90,95,110,.12),0 0 18px rgba(255,120,120,.28)!important}
+.cc-mini-orb[data-emotion="sleeping"]{opacity:.72;filter:saturate(.7);animation:none!important}
+</style>
+<div id="ccSfgPanel" aria-live="polite"></div>
+<script id="cc-3.36.6-runtime">
+(function(){
+  window.CC = window.CC || {};
+  window.CC.setOrbEmotion = function(em){
+    document.querySelectorAll(".cc-mini-orb").forEach(function(el){ el.setAttribute("data-emotion", em||"idle"); });
+  };
+  window.CC.renderSourcesBook = function(container, sources){
+    if (!container || !Array.isArray(sources) || !sources.length) return;
+    var old = container.querySelector(".cc-sources-book-panel"); if (old) old.remove();
+    var panel = document.createElement("div"); panel.className = "cc-sources-book-panel";
+    panel.setAttribute("role","region"); panel.setAttribute("aria-label","Sources");
+    var head = document.createElement("div"); head.className = "cc-sb-head";
+    head.innerHTML = '<span class="cc-sb-title">Sources</span><span class="cc-sb-count">'+sources.length+"</span>";
+    panel.appendChild(head);
+    sources.slice(0,12).forEach(function(s){
+      if (!s || !s.url) return;
+      var a = document.createElement("a"); a.className="cc-source-card"; a.href=s.url; a.target="_blank"; a.rel="noopener noreferrer";
+      var domain=""; try{ domain=new URL(s.url).hostname.replace(/^www\./,""); }catch(e){}
+      a.innerHTML = '<div class="cc-sc-title"></div><div class="cc-sc-meta"></div>'+(s.snippet?'<div class="cc-sc-snippet"></div>':"");
+      a.querySelector(".cc-sc-title").textContent = s.title || s.url;
+      a.querySelector(".cc-sc-meta").textContent = [domain, s.provider||s.src||""].filter(Boolean).join(" · ");
+      if (s.snippet) a.querySelector(".cc-sc-snippet").textContent = s.snippet;
+      panel.appendChild(a);
+    });
+    container.appendChild(panel);
+  };
+  setInterval(function(){
+    try {
+      var sources = window.__ccLastSources;
+      if (!Array.isArray(sources) || !sources.length) return;
+      var msgs = document.querySelectorAll("#flashMessages .message.bot, #flashMessages .msg.bot");
+      var last = msgs[msgs.length-1]; if (!last || last.querySelector(".cc-sources-book-panel")) return;
+      window.CC.renderSourcesBook(last, sources);
+    } catch(e){}
+  }, 1200);
+})();
+</script>
+
 </body>
 </html>

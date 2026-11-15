@@ -1,7 +1,7 @@
 'use strict';
 
 // Cache only same-origin static app files. API requests are never cached.
-const CACHE = 'chatclaud-static-v22';
+const CACHE = 'chatclaud-static-v36';
 const scopeUrl = new URL(self.registration.scope);
 const CORE_FILES = [
   '',
