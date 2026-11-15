@@ -1,6 +1,6 @@
 {
   "name": "chatclaud",
-  "version": "1.6.0",
+  "version": "2.14.3",
   "private": true,
   "main": "server.js",
   "scripts": {
@@ -12,5 +12,5 @@
   "engines": {
     "node": ">=18"
   },
-  "description": "ChatClaud 1.6.0 single-file Node.js backend with bounded agent runtime, intent routing, permissioned tools and truthful Agent Trace"
+  "description": "ChatClaud 2.14.3 — adaptive search, live agent streaming, personalized workspace and Agent Trace"
 }

@@ -108,8 +108,8 @@ test('Agent Trace is wired to send, response, failure and reduced-motion paths',
 test('package, release metadata and PWA cache are consistently versioned', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
   const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
-  assert.equal(pkg.version, '1.6.0');
-  assert.match(sw, /chatclaud-static-v19/);
-  assert.ok(fs.existsSync(path.join(root, 'RELEASE-v1.6.0.md')));
-  assert.ok(fs.existsSync(path.join(root, 'DEPLOY-v1.6.0.md')));
+  assert.equal(pkg.version, '2.14.3');
+  assert.match(sw, /chatclaud-static-v20/);
+  assert.ok(fs.existsSync(path.join(root, 'RELEASE-v2.14.3.md')));
+  assert.ok(fs.existsSync(path.join(root, 'DEPLOY-v2.14.3.md')));
 });

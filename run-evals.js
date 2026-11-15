@@ -34,7 +34,7 @@ for (const testCase of fixture.cases) {
 }
 
 const metrics = {
-  version: '1.6.0',
+  version: '2.14.3',
   evaluatedAt: new Date().toISOString(),
   dataset: 'evals/core-cases.json',
   total: results.length,

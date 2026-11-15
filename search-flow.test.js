@@ -29,6 +29,27 @@ test('public error mapping has no undeclared response-data reference', () => {
 
 const chatclaud = require('../server.js');
 
+test('adaptive Nova search expands in stages from 4 to 10 to 20 when evidence stays weak', async () => {
+  const calls = [];
+  const statusStages = [];
+  const seeds = Array.from({ length: 20 }, (_, i) => 'focused search angle ' + (i + 1));
+  const result = await chatclaud.runSearchPipeline(seeds[0], {
+    queries: seeds,
+    maxSearchCalls: 20,
+    maxResults: 8,
+    maxFetch: 0,
+    deadlineMs: 5000,
+    request: async (endpoint, body) => {
+      calls.push({ endpoint, q: body.q });
+      return { organic: [] };
+    },
+    onStatus: (state, meta) => { if (state === 'searching') statusStages.push(meta.stage); },
+  });
+  assert.equal(result.stats.searchCalls, 20);
+  assert.equal(calls.filter((x) => x.endpoint === '/api/search').length, 20);
+  assert.deepEqual(statusStages, [4, 10, 20]);
+});
+
 test('search pipeline runs focused queries in parallel, deduplicates, ranks and fetches source pages', async () => {
   const calls = [];
   const request = async (endpoint, body) => {

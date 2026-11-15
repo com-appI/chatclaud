@@ -100,7 +100,7 @@ test('agent registry supports safe multi-query search and bounded delegated rese
     query: 'primary query', queries: ['primary query', 'second focused angle', 'third angle', 'ignored fourth'], maxResults: 6,
   });
   assert.equal(search.ok, true);
-  assert.deepEqual(search.input.queries, ['primary query', 'second focused angle', 'third angle']);
+  assert.deepEqual(search.input.queries, ['primary query', 'second focused angle', 'third angle', 'ignored fourth']);
   const delegated = intel.validateToolInput('delegate_research', {
     tasks: [
       { role: 'official', query: 'official documentation and design' },
