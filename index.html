@@ -10624,8 +10624,8 @@ function buildImageUrl(userPrompt, opts) {
                 this.hideTypingIndicator(true);
                 try { this.setStopVisible(true); } catch(e) {}
                 this._thinkShownAt = Date.now();
-                this._thinkMinMs = 350;
-                var orbHtml = '<span class="cc-agent-orb" data-state="thinking" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 4.5a3.2 3.2 0 0 0-3 3.2 3.1 3.1 0 0 0 .4 6.1A3.3 3.3 0 0 0 9 19.5h6a3.3 3.3 0 0 0 1.6-5.7A3.1 3.1 0 0 0 17 7.7a3.2 3.2 0 0 0-3-3.2 3.4 3.4 0 0 0-5 0Z"/><path d="M12 4v16M8.5 9.2l1.7 1.7M15.5 9.2l-1.7 1.7"/></svg></span>';
+                this._thinkMinMs = 2500;
+                var orbHtml = '<span class="cc-agent-orb" data-state="thinking" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M15 22c0-2 1.3-3.5 3-3.5s3 1.5 3 3.5M27 22c0-2 1.3-3.5 3-3.5s3 1.5 3 3.5" stroke-width="2.8"/><path d="M19 30c3 2.5 7 2.5 10 0" stroke-width="2.5"/></svg></span>';
                 var label = 'Разбираю задачу';
                 var statusMarkup = '<div class="cc-status-line">' + orbHtml + '<span class="cc-think-label cc-status-text">' + label + '</span></div>';
                 var el = document.createElement('div');
@@ -10657,7 +10657,7 @@ function buildImageUrl(userPrompt, opts) {
                 };
                 if (force) { go(); return; }
                 var waited = Date.now() - (this._thinkShownAt || 0);
-                if (waited < 1500) setTimeout(go, 1500 - waited);
+                if (waited < 2500) setTimeout(go, 2500 - waited);
                 else go();
             }
 
@@ -15884,6 +15884,28 @@ textarea#flashInput,
 /* neutralize legacy cyan/turquoise accents in active UI controls */
 :where(.progress,.progress-bar,.cc-progress,.fuel-progress,.search-progress,.cc-think-bar) { --progress-color:#fff!important; accent-color:#fff!important; }
 @media(prefers-reduced-motion:reduce){.workspace-particles i,.cc-agent-orb,.cc-agent-orb svg{animation:none!important;transition:none!important}}
+
+/* v2.14.3 orb polish: expressive face + miniature held props */
+.cc-agent-orb{width:42px!important;height:42px!important;flex:0 0 42px!important;position:relative!important;overflow:visible!important}
+.cc-agent-orb svg{width:34px!important;height:34px!important;overflow:visible!important;stroke:#29292d!important;stroke-width:2.25!important;fill:none!important;stroke-linecap:round!important;stroke-linejoin:round!important;filter:drop-shadow(0 1px 0 rgba(255,255,255,.45))}
+.cc-agent-orb[data-state="thinking"]{border-radius:46% 54% 52% 48%/52% 46% 54% 48%!important}
+.cc-agent-orb[data-state="searching"] svg{animation:ccHeldMagnifier 1.55s ease-in-out infinite!important;transform-origin:29px 20px}
+.cc-agent-orb[data-state="verifying"] svg{animation:ccHeldHammer 1.25s ease-in-out infinite!important;transform-origin:29px 18px}
+.cc-agent-orb[data-state="reading"] svg{animation:ccBookBob 2s ease-in-out infinite!important;transform-origin:center}
+.cc-agent-orb[data-state="coding"] svg{animation:ccCodeBob 1.2s ease-in-out infinite!important}
+.cc-agent-orb[data-state="planning"] svg{animation:ccPlanBob 1.8s ease-in-out infinite!important}
+.cc-agent-orb[data-state="testing"] svg{animation:ccTestBob 1.5s ease-in-out infinite!important;transform-origin:24px 25px}
+.cc-agent-orb[data-state="analyzing"] svg{animation:ccAnalyzeBob 1.6s ease-in-out infinite!important}
+.cc-agent-orb[data-state="completed"] svg{animation:ccHappyPop .55s ease-out both!important}
+@keyframes ccHeldMagnifier{0%,100%{transform:rotate(-5deg) translateY(0)}50%{transform:rotate(7deg) translateY(-1.5px)}}
+@keyframes ccHeldHammer{0%,100%{transform:rotate(0)}35%{transform:rotate(-17deg)}65%{transform:rotate(7deg)}}
+@keyframes ccBookBob{0%,100%{transform:translateY(0) scaleX(1)}50%{transform:translateY(-1px) scaleX(1.05)}}
+@keyframes ccCodeBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1px)}}
+@keyframes ccPlanBob{0%,100%{transform:rotate(0)}50%{transform:rotate(-3deg)}}
+@keyframes ccTestBob{0%,100%{transform:rotate(0)}50%{transform:rotate(5deg)}}
+@keyframes ccAnalyzeBob{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes ccHappyPop{0%{transform:scale(.85)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.cc-agent-orb svg{animation:none!important}}
 </style>
 <script id="cc-v2143-agent-status">
 (function(){
@@ -15891,15 +15913,15 @@ textarea#flashInput,
     return String(value||'').replace(/[\r\n\u2028\u2029]/g,' ').replace(/[^\p{L}\p{M}\p{N} .’'-]/gu,'').replace(/\s+/g,' ').trim().slice(0,48);
   };
   var icons={
-    thinking:'<path d="M9 4.5a3.2 3.2 0 0 0-3 3.2 3.1 3.1 0 0 0 .4 6.1A3.3 3.3 0 0 0 9 19.5h6a3.3 3.3 0 0 0 1.6-5.7A3.1 3.1 0 0 0 17 7.7a3.2 3.2 0 0 0-3-3.2 3.4 3.4 0 0 0-5 0Z"/><path d="M12 4v16M8.5 9.2l1.7 1.7M15.5 9.2l-1.7 1.7"/>',
-    planning:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M8 10h8M8 14h8M8 18h5"/>',
-    searching:'<circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/>',
-    reading:'<path d="M3 5.5c3.1-.9 6.1-.4 9 1.6v13c-2.9-2-5.9-2.5-9-1.6zM21 5.5c-3.1-.9-6.1-.4-9 1.6v13c2.9-2 5.9-2.5 9-1.6z"/>',
-    analyzing:'<path d="M4 19V5M4 19h17"/><path d="m7 15 4-4 3 2 5-6"/><path d="M16 7h3v3"/>',
-    coding:'<path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/>',
-    testing:'<path d="M9 3h6M10 3v6l-5.5 9.2A2 2 0 0 0 6.2 21h11.6a2 2 0 0 0 1.7-2.8L14 9V3M8 15h8"/>',
-    verifying:'<path d="m14 4 6 6M12.5 5.5l6 6M4 20l8.5-8.5M3 21l4-1 10-10-3-3L4 17z"/>',
-    completed:'<circle cx="12" cy="12" r="9"/><path d="m7.5 12.5 3 3 6-7"/>'
+    thinking:'<path d="M12 29c-4 0-7-2.8-7-6.5 0-3.1 2.2-5.7 5.2-6.3.8-4.1 4.2-6.8 8.2-6.8 3.2 0 5.8 1.7 7.1 4.5 4.2-.3 7.5 2.7 7.5 6.7 0 4.6-3.3 8.4-8 8.4Z"/><path d="M15 21c0-1.7 1-2.8 2.3-2.8s2.3 1.1 2.3 2.8M24 21c0-1.7 1-2.8 2.3-2.8s2.3 1.1 2.3 2.8M19 25c2 1.5 4 1.5 6 0" stroke-width="2.5"/>',
+    planning:'<rect x="12" y="8" width="24" height="31" rx="4"/><path d="M19 8V5h10v3M18 17h12M18 23h12M18 29h8"/>',
+    searching:'<path d="M8 25c0-6 4-10 10-10s10 4 10 10-4 10-10 10-10-4-10-10Z"/><path d="M13 24c0-1.5.8-2.5 2-2.5s2 1 2 2.5M20 24c0-1.5.8-2.5 2-2.5s2 1 2 2.5M15 29c2 1.5 4 1.5 6 0"/><path d="M27 28l6-2M27 31l7 1"/><circle cx="33" cy="14" r="6.5"/><path d="m38 19 6 6" stroke-width="3"/><path d="M33 25l3-1 2 2" stroke-width="2.5"/>',
+    reading:'<path d="M6 11c7-2 13 0 18 4v25c-5-4-11-6-18-4zM42 11c-7-2-13-0-18 4v25c5-4 11-6 18-4z"/>',
+    analyzing:'<path d="M9 38V10M9 38h31"/><path d="m14 31 7-8 6 4 10-13"/><path d="M31 14h6v6"/>',
+    coding:'<path d="m17 15-9 9 9 9M31 15l9 9-9 9M27 10l-6 28"/>',
+    testing:'<path d="M18 7h12M20 7v11L10 36a3 3 0 0 0 2.5 5h23a3 3 0 0 0 2.5-5L28 18V7M15 31h18"/>',
+    verifying:'<path d="M28 7l13 13M25 10l13 13M8 39l17-17 6 6-17 17H8z"/><path d="M6 42l5-1"/>',
+    completed:'<circle cx="24" cy="24" r="17"/><path d="m15 24 6 6 12-13" stroke-width="3"/>'
   };
   var labels={thinking:'Разбираю задачу',planning:'Составляю план',searching:'Ищу информацию',reading:'Читаю источники',analyzing:'Анализирую найденное',coding:'Пишу код',testing:'Тестирую результат',verifying:'Проверяю факты',completed:'Готово'};
   window.ccSetAgentStatus=function(state,label,meta){
@@ -15907,7 +15929,7 @@ textarea#flashInput,
     if(!icons[state])state='thinking';
     var text=String(label||labels[state]||'Обрабатываю задачу').slice(0,90);
     ['#ccThinkFixed .cc-agent-orb','#typingIndicator .cc-agent-orb'].forEach(function(selector){
-      document.querySelectorAll(selector).forEach(function(orb){orb.dataset.state=state;orb.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+icons[state]+'</svg>';});
+      document.querySelectorAll(selector).forEach(function(orb){orb.dataset.state=state;orb.innerHTML='<svg viewBox="0 0 48 48" aria-hidden="true">'+icons[state]+'</svg>';});
     });
     document.querySelectorAll('#ccThinkFixed .cc-think-label,#typingIndicator .cc-think-label').forEach(function(node){node.textContent=text;});
     var fixed=document.getElementById('ccThinkFixed');
