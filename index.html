@@ -7070,14 +7070,14 @@ body {
                   <button type="button" class="cc-bg-opt active" data-bg="classic"><div class="cc-bg-preview cc-prev-dark"></div>Dark</button>
                   <button type="button" class="cc-bg-opt" data-bg="wave"><div class="cc-bg-preview cc-prev-wave"></div>Waves</button>
                   <button type="button" class="cc-bg-opt" data-bg="blue"><div class="cc-bg-preview cc-prev-blue"></div>Blue</button>
-                  <button type="button" class="cc-bg-opt" data-bg="aurora"><div class="cc-bg-preview cc-prev-aurora"></div>Aurora</button>
+                  <button type="button" class="cc-bg-opt" data-bg=""><div class="cc-bg-preview cc-prev-"></div></button>
                 </div>
             </div>
             <div class="settings-section">
                 <label style="font-size:0.75rem;color:#888;">Theme</label>
                 <select id="themeModeSelect" class="field">
                     <option value="dark">Dark</option>
-                    <option value="aurora">Aurora</option>
+                    <option value=""></option>
                     <option value="auto">System</option>
                 </select>
             </div>
@@ -13230,12 +13230,12 @@ body.cc-bg-wave #ccChatWaveBg, #flashChat.cc-bg-wave #ccChatWaveBg {
     mode = String(mode || 'classic').toLowerCase();
     if (mode === 'waves' || mode === 'wave') mode = 'wave';
     if (mode === 'light') mode = 'classic'; // Light removed in 3.19.0
-    if (!['classic','wave','blue','aurora'].includes(mode)) mode = 'classic';
+    if (!['classic','wave','blue',''].includes(mode)) mode = 'classic';
     try { localStorage.setItem('cc_chat_bg', mode); } catch(e){}
-    document.body.classList.remove('cc-bg-wave','cc-bg-blue','cc-bg-aurora','cc-bg-light');
+    document.body.classList.remove('cc-bg-wave','cc-bg-blue','cc-bg-','cc-bg-light');
     var chat = document.getElementById('flashChat');
     if(chat) {
-      chat.classList.remove('cc-bg-wave','cc-bg-blue','cc-bg-aurora','cc-bg-light');
+      chat.classList.remove('cc-bg-wave','cc-bg-blue','cc-bg-','cc-bg-light');
     }
     if (mode === 'wave') {
       document.body.classList.add('cc-bg-wave');
@@ -13244,9 +13244,9 @@ body.cc-bg-wave #ccChatWaveBg, #flashChat.cc-bg-wave #ccChatWaveBg {
     } else if (mode === 'blue') {
       document.body.classList.add('cc-bg-blue');
       if(chat) chat.classList.add('cc-bg-blue');
-    } else if (mode === 'aurora') {
-      document.body.classList.add('cc-bg-aurora');
-      if(chat) chat.classList.add('cc-bg-aurora');
+    } else if (mode === '') {
+      document.body.classList.add('cc-bg-');
+      if(chat) chat.classList.add('cc-bg-');
     }
     document.querySelectorAll('.cc-bg-opt').forEach(function(b){
       b.classList.toggle('active', b.getAttribute('data-bg') === mode);
@@ -14064,7 +14064,7 @@ body.cc-bg-light .input-shell:focus-within {
   window.CC.UI = {
     applyTheme: function(name){
       name = String(name||'').toLowerCase();
-      var map = { dark:'classic', black:'classic', classic:'classic', light:'classic', white:'classic', waves:'wave', wave:'wave', blue:'blue', night:'blue', aurora:'aurora' };
+      var map = { dark:'classic', black:'classic', classic:'classic', light:'classic', white:'classic', waves:'wave', wave:'wave', blue:'blue', night:'blue', pulse:'pulse' };
       var mode = map[name] || name;
       if (window.CC.Theme && window.CC.Theme.apply) window.CC.Theme.apply(mode);
       else if (window.ccApplyChatBg) window.ccApplyChatBg(mode);
@@ -14432,16 +14432,16 @@ body.cc-bg-blue #flashChat .chat-layout {
   // Local instant UI commands before send
   window.CC.UI.tryLocalCommand = function(text) {
     var t = String(text || '').trim();
-    var m = t.match(/^(?:change|set|switch)\s+theme\s+(?:to\s+)?(dark|light|waves?|blue|black|white|classic|aurora)/i)
-      || t.match(/^(?:смени|поставь|включи)\s+тем[уы]\s+(?:на\s+)?(т[её]мн|светл|волн|син|аврор|dark|light|wave|blue|aurora)/i)
-      || t.match(/^(?:поменяй|смени|поставь|измени|change|set)\s+(?:аватарк[уа]|аватар|avatar|фон|background|theme)?\s*(?:на\s+|to\s+)?(waves?|волн[ыа]?|dark|т[её]мн|blue|син|aurora|аврор|classic)/i);
+    var m = t.match(/^(?:change|set|switch)\s+theme\s+(?:to\s+)?(dark|light|waves?|blue|black|white|classic|)/i)
+      || t.match(/^(?:смени|поставь|включи)\s+тем[уы]\s+(?:на\s+)?(т[её]мн|светл|волн|син|аврор|dark|light|wave|blue|)/i)
+      || t.match(/^(?:поменяй|смени|поставь|измени|change|set)\s+(?:аватарк[уа]|аватар|avatar|фон|background|theme)?\s*(?:на\s+|to\s+)?(waves?|волн[ыа]?|dark|т[её]мн|blue|син||аврор|classic)/i);
     if (m) {
       var name = m[1];
       if (/т[её]мн|black|dark|classic/i.test(name)) name = 'dark';
       else if (/светл|white|light/i.test(name)) name = 'dark'; // Light removed in 3.19.0 — map to dark
       else if (/волн|wave/i.test(name)) name = 'waves';
       else if (/син|blue/i.test(name)) name = 'blue';
-      else if (/аврор|aurora/i.test(name)) name = 'aurora';
+      else if (/аврор|/i.test(name)) name = '';
       window.CC.UI.applyTheme(name);
       return true;
     }
@@ -15721,5 +15721,152 @@ textarea#flashInput,
 })();
 </script>
 
+
+<style id="cc-pulse-theme">
+html[data-theme="pulse"] {
+  --cc-bg: #070B16;
+  --cc-bg2: #10182A;
+  --cc-panel: #131D32;
+  --cc-accent: #168CFF;
+  --cc-neon: #00E5FF;
+  --cc-accent2: #526BFF;
+  --cc-text: #F4F7FF;
+  --cc-muted: #9AAAC4;
+  color-scheme: dark;
+}
+html[data-theme="pulse"] body,
+html[data-theme="pulse"] #app,
+html[data-theme="pulse"] .app-shell {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(22,140,255,0.12), transparent 55%),
+    radial-gradient(900px 500px at 90% 0%, rgba(0,229,255,0.08), transparent 50%),
+    linear-gradient(180deg, #070B16 0%, #0a1020 100%) !important;
+  color: var(--cc-text) !important;
+}
+html[data-theme="pulse"] .top-bar,
+html[data-theme="pulse"] .input-row,
+html[data-theme="pulse"] .sidebar,
+html[data-theme="pulse"] .panel,
+html[data-theme="pulse"] .settings-panel {
+  background: rgba(19,29,50,0.72) !important;
+  border-color: rgba(0,229,255,0.12) !important;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 0 0 1px rgba(22,140,255,0.08), 0 12px 40px rgba(0,0,0,0.35);
+}
+html[data-theme="pulse"] .message.bot {
+  background: rgba(16,24,42,0.85) !important;
+  border: 1px solid rgba(22,140,255,0.14);
+  color: var(--cc-text);
+}
+html[data-theme="pulse"] .message.user {
+  background: linear-gradient(135deg, rgba(22,140,255,0.28), rgba(82,107,255,0.22)) !important;
+  border: 1px solid rgba(0,229,255,0.2);
+  color: var(--cc-text);
+}
+html[data-theme="pulse"] .send-btn,
+html[data-theme="pulse"] button.primary {
+  background: linear-gradient(135deg, #168CFF, #526BFF) !important;
+  box-shadow: 0 0 18px rgba(22,140,255,0.35);
+}
+html[data-theme="pulse"] .send-btn:hover {
+  box-shadow: 0 0 28px rgba(0,229,255,0.4);
+}
+html[data-theme="pulse"] textarea,
+html[data-theme="pulse"] input {
+  background: rgba(7,11,22,0.55) !important;
+  color: var(--cc-text) !important;
+  border-color: rgba(0,229,255,0.15) !important;
+}
+html[data-theme="pulse"] .cc-sources-book-panel,
+html[data-theme="pulse"] .cc-sources-toggle {
+  background: rgba(19,29,50,0.9) !important;
+  border-color: rgba(0,229,255,0.15) !important;
+}
+html[data-theme="pulse"] .cc-mini-orb {
+  box-shadow:
+    inset -3px -4px 8px rgba(10,20,40,0.25),
+    inset 2px 2px 4px rgba(255,255,255,0.85),
+    0 0 16px rgba(0,229,255,0.25) !important;
+}
+html[data-theme="pulse"] .status-chip,
+html[data-theme="pulse"] .typing-indicator {
+  border-color: rgba(0,229,255,0.2);
+  background: rgba(16,24,42,0.9);
+}
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+html[data-theme="pulse"] .send-btn::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: 0 0 12px rgba(0,229,255,0.35);
+  animation: pulseGlow 2.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme="pulse"] .send-btn::after { animation: none; }
+}
+</style>
+
+<script id="cc-pulse-boot">
+(function(){
+  try {
+    var saved = localStorage.getItem("theme") || localStorage.getItem("cc_theme");
+    if (saved === "pulse") document.documentElement.setAttribute("data-theme", "pulse");
+  } catch(e){}
+  // Expose theme helper
+  window.CC = window.CC || {};
+  window.CC.setTheme = window.CC.setTheme || function(name){
+    var n = String(name||"dark").toLowerCase();
+    if (n === "aurora") n = "pulse"; // aurora removed → map to pulse
+    document.documentElement.setAttribute("data-theme", n);
+    try { localStorage.setItem("theme", n); localStorage.setItem("cc_theme", n); } catch(e){}
+  };
+  // Add Pulse to any theme select if present
+  function injectPulseOption(){
+    document.querySelectorAll("select, [data-theme-select]").forEach(function(sel){
+      if (sel.tagName === "SELECT" && !sel.querySelector('option[value="pulse"]')) {
+        var opt = document.createElement("option");
+        opt.value = "pulse"; opt.textContent = "Pulse";
+        sel.appendChild(opt);
+      }
+    });
+    // buttons
+    document.querySelectorAll("[data-set-theme]").forEach(function(btn){
+      if (btn.getAttribute("data-set-theme") === "aurora") btn.setAttribute("data-set-theme", "pulse");
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", injectPulseOption);
+  else injectPulseOption();
+  setTimeout(injectPulseOption, 800);
+})();
+</script>
+
+<style id="cc-orb-v454">
+.cc-mini-orb {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow:
+    inset -3px -4px 7px rgba(90,95,110,0.14),
+    inset 2px 2px 4px rgba(255,255,255,0.92),
+    0 2px 8px rgba(0,0,0,0.12) !important;
+}
+.cc-mini-orb .cc-eye,
+.cc-mini-orb .eye {
+  width: 3px !important;
+  height: 3px !important;
+}
+/* status labels stay English in UI code paths */
+.cc-status-label, .status-text, .cc-agent-status {
+  letter-spacing: 0.01em;
+}
+</style>
 </body>
 </html>

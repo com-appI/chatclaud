@@ -1301,11 +1301,22 @@ function fetchWithTimeout(url, options = {}, timeoutMs = PROVIDER_TIMEOUT_MS) {
 }
 
 function publicProviderError(error) {
-  return String(error && error.message || error || 'unknown error')
+  let msg = String(error && error.message || error || 'unknown error');
+  // Never expose provider identity or raw model/tool errors to the client UI
+  if (/tool choice|tool_choice|called a tool|function call/i.test(msg)) {
+    return 'ChatClaud is busy right now. Please try again in a moment.';
+  }
+  if (/\bgroq\b|openai\/gpt|rate limit|429|503|overloaded|capacity/i.test(msg)) {
+    return 'ChatClaud is overloaded right now. Please try again later.';
+  }
+  msg = msg
     .replace(/sk-ant-[A-Za-z0-9_-]+|sk-[A-Za-z0-9_-]+|gsk_[A-Za-z0-9_-]+/g, '[hidden]')
     .replace(/Bearer\s+\S+/gi, 'Bearer [hidden]')
+    .replace(/\bgroq\b/gi, 'provider')
+    .replace(/openai\/[\w.-]+/gi, 'model')
     .replace(/\s+/g, ' ')
-    .slice(0, 180);
+    .slice(0, 160);
+  return msg || 'ChatClaud is temporarily unavailable. Please try again.';
 }
 
 /* ========== Fetch URL helpers ========== */
@@ -2676,6 +2687,7 @@ let CCMemoryStore = null;
 let CCPageReader = null;
 let CCAgentCoreV2 = null;
 let CCLearningPipeline = null;
+let CCChal = null;
 let ccMemory = null;
 let ccLearning = null;
 try {
@@ -2683,6 +2695,7 @@ try {
   CCPageReader = require('./lib/page-reader');
   CCAgentCoreV2 = require('./lib/agent-core-v2');
   CCLearningPipeline = require('./lib/learning-pipeline');
+  CCChal = require('./lib/chal-reasoning');
   const memPath = path.join(process.env.ALE_DATA_DIR ? path.resolve(String(process.env.ALE_DATA_DIR)) : path.join(__dirname, 'data'), 'memory-v2.json');
   ccMemory = new CCMemoryStore.MemoryStore(memPath);
   console.log('[cc] memory-v2 loaded', ccMemory.stats());
@@ -4605,10 +4618,52 @@ const server = http.createServer(async (req, res) => {
           || /(поищи|найди).{0,12}(ещ[её]|again|once more)/i.test(q3)
           || /(search|find).{0,12}(again|more)/i.test(q3);
         if (/^\/(search|find)\b/i.test(q3)) q3 = q3.replace(/^\/(search|find)\s*/i, '').trim();
-        const looksLikeQuery = false; // search ONLY when forceSearch
+        const looksLikeQuery = !forceSearch && q3.length >= 12 && (
+          /\b(что|кто|где|когда|почему|how|what|who|when|why|which|latest|current|сегодня|новост|верси[яи]|цена|курс|сравни|compare)\b/i.test(q3)
+          || /\?\s*$/.test(q3)
+        );
+        // Auto web search for factual/current questions even without explicit "найди"
+        const autoSearchNeeded = forceSearch || looksLikeQuery || (body && body.autoSearch === true);
         // Video search is handled by the dedicated Serper video endpoint when configured.
         
         // Agent Core v2 for explicit deep research / agent mode
+        
+        // CHAL for math/logic/analysis when available (bounded)
+        const chalRoute = (CCChal && CCChal.routeTask) ? CCChal.routeTask(q3) : null;
+        const wantChal = !!(body && body.useChal) || (chalRoute && ['math','logic','analysis'].includes(chalRoute.type) && q3.length >= 8);
+        if (wantChal && CCChal && typeof groqChat === 'function') {
+          try {
+            console.log('[chal] start', chalRoute && chalRoute.type, q3.slice(0, 60));
+            const chalResult = await CCChal.runChal(q3, {
+              search: async (q) => (typeof webSearch === 'function' ? webSearch(q, 'search') : { sources: [] }),
+              readPage: async (url) => (CCPageReader ? CCPageReader.fetchPage(url) : { ok: false }),
+              memorySearch: async (q) => (ccMemory ? ccMemory.search(q, 6) : []),
+              memoryUpsert: (fact) => { if (ccMemory) try { ccMemory.upsertFact(fact); } catch (e) {} },
+              llmComplete: async ({ system, user }) => {
+                try {
+                  const out = await groqChat([{ role: 'user', content: user }], system, true, { maxTokens: 1200, temperature: 0.25 });
+                  return typeof out === 'string' ? out : (out && (out.content || out.text) || '');
+                } catch (e) { return ''; }
+              },
+            }, { maxLlmCalls: 2, taskType: chalRoute && chalRoute.type });
+            if (chalResult && chalResult.answer) {
+              res.writeHead(200, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({
+                ok: true,
+                text: chalResult.answer,
+                content: chalResult.answer,
+                sources: chalResult.sources || [],
+                chal: { version: chalResult.version, taskType: chalResult.taskType, verification: chalResult.verification, steps: chalResult.steps },
+                mode: 'chal',
+                provider: 'chatclaud',
+              }));
+              return;
+            }
+          } catch (e) {
+            console.warn('[chal] fallback', publicProviderError(e));
+          }
+        }
+        
         const wantAgentV2 = !!(body && (body.agentV2 || body.useAgentV2))
           || /^\/(agent|research|deep|deepresearch|deep-research)\b/i.test(String(trimmed || ''))
           || /\b(исследуй|исследование|глубокий анализ|подробно разбер|compare|benchmark|аудит|deep research|investigate)\b/i.test(q3)
@@ -4655,7 +4710,7 @@ const server = http.createServer(async (req, res) => {
           }
         }
 
-        if (forceSearch && lastIdx3 >= 0 && q3.length >= 2 && !shouldUseCognitiveAgent(body, trimmed)) {
+        if ((typeof autoSearchNeeded !== 'undefined' ? autoSearchNeeded : forceSearch) && lastIdx3 >= 0 && q3.length >= 2 && !shouldUseCognitiveAgent(body, trimmed)) {
           console.log('[web-search] pipeline:', q3.slice(0, 100));
           try {
             const pipe = await runSearchPipeline(q3, {
@@ -4787,7 +4842,6 @@ const server = http.createServer(async (req, res) => {
         return send(res, 503, {
           error: 'ChatClaud is overloaded right now. Please try again later.',
           code: 'NO_PROVIDER',
-          details: failures.slice(0, 6),
         });
       }
       emitStatus('verifying', 'Проверяю ответ и источники');
@@ -5182,6 +5236,63 @@ const server = http.createServer(async (req, res) => {
       res.end(JSON.stringify(out));
     });
   }
+  
+  if (pathname === '/api/chal/run' && req.method === 'POST') {
+    return readJsonBody(req, 100000).then(async (body) => {
+      if (!CCChal) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: false, error: 'chal_unavailable' }));
+        return;
+      }
+      const task = String(body && (body.task || body.query || body.message) || '').trim();
+      if (!task) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: false, error: 'empty_task' }));
+        return;
+      }
+      const result = await CCChal.runChal(task, {
+        search: async (q) => (typeof webSearch === 'function' ? webSearch(q, 'search') : { sources: [] }),
+        readPage: async (url) => (CCPageReader ? CCPageReader.fetchPage(url, { maxLength: 10000 }) : { ok: false }),
+        memorySearch: async (q) => (ccMemory ? ccMemory.search(q, 6) : []),
+        memoryUpsert: (fact) => { if (ccMemory) try { ccMemory.upsertFact(fact); } catch (e) {} },
+        llmComplete: async ({ system, user }) => {
+          try {
+            const out = await groqChat([{ role: 'user', content: user }], system, true, { maxTokens: 1400, temperature: 0.25 });
+            return typeof out === 'string' ? out : (out && (out.content || out.text) || '');
+          } catch (e) { return ''; }
+        },
+      }, { maxLlmCalls: body && body.deep ? 4 : 2, useHypotheses: body && body.deep !== false });
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        ok: true,
+        answer: result.answer,
+        sources: result.sources,
+        taskType: result.taskType,
+        route: result.route,
+        steps: result.steps,
+        verification: result.verification,
+        status: result.status,
+        durationMs: result.durationMs,
+        version: result.version,
+      }));
+    }).catch((e) => {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: false, error: publicProviderError(e) }));
+    });
+  }
+  if (pathname === '/api/chal/route' && req.method === 'POST') {
+    return readJsonBody(req, 20000).then((body) => {
+      const task = String(body && (body.task || body.query) || '').trim();
+      const route = CCChal ? CCChal.routeTask(task) : { type: 'chat' };
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: true, route }));
+    }).catch((e) => {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: false, error: String(e.message || e) }));
+    });
+  }
+
+
   if (pathname === '/api/agent/v2' && req.method === 'POST') {
     return readJsonBody(req, 100000).then(async (body) => {
       if (!CCAgentCoreV2) {

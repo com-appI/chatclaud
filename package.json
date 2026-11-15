@@ -1,6 +1,6 @@
 {
   "name": "chatclaud",
-  "version": "3.36.6",
+  "version": "4.54.7",
   "private": true,
   "main": "server.js",
   "scripts": {
@@ -12,5 +12,5 @@
   "engines": {
     "node": ">=18"
   },
-  "description": "ChatClaud 3.36.6 \u2014 Agent Core v2, memory store, page reader, learning pipeline"
+  "description": "ChatClaud 4.54.7 \u2014 CHAL Advanced Reasoning, PULSE theme, safer errors, broader auto-search"
 }
