@@ -6,7 +6,7 @@
  */
 const http = require('http');
 const https = require('node:https');
-const CCSearch = require('./lib/search');
+const CCSearch = require('./lib/search/index.js');
 const dns = require('node:dns').promises;
 const net = require('node:net');
 const fs = require('fs');
