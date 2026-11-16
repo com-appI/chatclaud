@@ -16810,5 +16810,54 @@ body::before {
 }
 </style>
 
+
+<style id="cc-orb-459">
+#ccChalInline { display:none; align-items:center; gap:10px; padding:10px 6px 12px; margin:6px 0; max-width:92%;
+  border:none!important; box-shadow:none!important; background:transparent!important;
+  position:relative!important; transform:none!important; left:auto!important; bottom:auto!important; }
+#ccChalInline.cc-on { display:flex!important; }
+.cc-chal-orb {
+  width:24px; height:24px; min-width:24px; border-radius:50%; position:relative; flex-shrink:0;
+  background: radial-gradient(circle at 32% 28%, #fff 0%, #f2f2f4 40%, #cfcfd4 78%, #a8a8b0 100%);
+  box-shadow: 0 3px 10px rgba(0,0,0,.4), inset 0 2px 3px rgba(255,255,255,.9), inset 0 -3px 5px rgba(0,0,0,.16);
+  border:none!important; outline:none!important;
+}
+#ccChalInline.cc-on .cc-chal-orb { animation: ccOrbBreathe459 2.2s ease-in-out infinite; }
+@keyframes ccOrbBreathe459 {
+  0%,100% { transform: scale(1); filter:brightness(1); }
+  50% { transform: scale(1.07); filter:brightness(1.1); }
+}
+.cc-chal-orb-face { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; gap:5px; }
+.cc-chal-orb-face i { width:3.6px; height:4px; border-radius:50%; background:#1a1a1c; display:block; }
+#ccChalInline.cc-on .cc-chal-orb-face { animation: ccOrbLook459 4s ease-in-out infinite; }
+@keyframes ccOrbLook459 {
+  0%,100% { transform:translate(0,0); }
+  35% { transform:translate(1.3px,-.6px); }
+  70% { transform:translate(-1.1px,.5px); }
+}
+.cc-chal-label {
+  font-size:14px; font-weight:450; border:none!important; max-width:75vw; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  background: linear-gradient(90deg, rgba(150,150,160,.7) 0%, rgba(255,255,255,.95) 50%, rgba(150,150,160,.7) 100%);
+  background-size: 200% 100%; -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  animation: ccLabelShimmer459 1.8s ease-in-out infinite;
+}
+@keyframes ccLabelShimmer459 { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
+html[data-theme="light"] .cc-chal-label {
+  background: linear-gradient(90deg,#999 0%,#111 50%,#999 100%); background-size:200% 100%;
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+.cc-chal-tool { position:absolute; right:-6px; bottom:-5px; width:15px; height:15px; border-radius:5px;
+  background:rgba(28,28,32,.95); display:none; align-items:center; justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.45); }
+#ccChalInline[data-state="searching"] .cc-chal-tool,
+#ccChalInline[data-state="reading"] .cc-chal-tool,
+#ccChalInline[data-state="coding"] .cc-chal-tool { display:flex!important; }
+.cc-chal-tool svg { width:9px; height:9px; stroke:#eee; fill:none; stroke-width:2; }
+#ccThinkFixed, #typingIndicator, .cc-agent-trace, #agentTrace { display:none!important; visibility:hidden!important; height:0!important; }
+@media (prefers-reduced-motion: reduce) {
+  #ccChalInline.cc-on .cc-chal-orb, #ccChalInline.cc-on .cc-chal-orb-face, .cc-chal-label { animation:none!important; }
+}
+</style>
+
 </body>
 </html>
