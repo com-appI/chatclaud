@@ -1,0 +1,1963 @@
+{
+  "version": "4.59.1",
+  "evaluatedAt": "2026-11-16T17:10:20.628Z",
+  "dataset": "evals/core-cases.json",
+  "total": 100,
+  "passed": 100,
+  "failed": 0,
+  "routingAccuracy": 1,
+  "toolDecisionAccuracy": 1,
+  "averageRouterLatencyMs": 0.010616299999999655,
+  "categoryMetrics": {
+    "logic_reasoning": {
+      "total": 20,
+      "passed": 20,
+      "accuracy": 1
+    },
+    "programming": {
+      "total": 15,
+      "passed": 15,
+      "accuracy": 1
+    },
+    "research": {
+      "total": 15,
+      "passed": 15,
+      "accuracy": 1
+    },
+    "mathematics": {
+      "total": 10,
+      "passed": 10,
+      "accuracy": 1
+    },
+    "documents": {
+      "total": 10,
+      "passed": 10,
+      "accuracy": 1
+    },
+    "memory_context": {
+      "total": 10,
+      "passed": 10,
+      "accuracy": 1
+    },
+    "multi_step": {
+      "total": 10,
+      "passed": 10,
+      "accuracy": 1
+    },
+    "error_detection": {
+      "total": 10,
+      "passed": 10,
+      "accuracy": 1
+    }
+  },
+  "notMeasured": [
+    "end_to_end_correctness",
+    "task_completion_quality",
+    "citation_accuracy",
+    "hallucination_rate",
+    "Groq_token_cost",
+    "provider_latency"
+  ],
+  "results": [
+    {
+      "id": "logic_reasoning-01",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.1657
+    },
+    {
+      "id": "logic_reasoning-02",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0161
+    },
+    {
+      "id": "logic_reasoning-03",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0225
+    },
+    {
+      "id": "logic_reasoning-04",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0528
+    },
+    {
+      "id": "logic_reasoning-05",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0789
+    },
+    {
+      "id": "logic_reasoning-06",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0326
+    },
+    {
+      "id": "logic_reasoning-07",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0747
+    },
+    {
+      "id": "logic_reasoning-08",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0081
+    },
+    {
+      "id": "logic_reasoning-09",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0082
+    },
+    {
+      "id": "logic_reasoning-10",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0073
+    },
+    {
+      "id": "logic_reasoning-11",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0072
+    },
+    {
+      "id": "logic_reasoning-12",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0083
+    },
+    {
+      "id": "logic_reasoning-13",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0073
+    },
+    {
+      "id": "logic_reasoning-14",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0069
+    },
+    {
+      "id": "logic_reasoning-15",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0082
+    },
+    {
+      "id": "logic_reasoning-16",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0075
+    },
+    {
+      "id": "logic_reasoning-17",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0076
+    },
+    {
+      "id": "logic_reasoning-18",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0081
+    },
+    {
+      "id": "logic_reasoning-19",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0076
+    },
+    {
+      "id": "logic_reasoning-20",
+      "category": "logic_reasoning",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0074
+    },
+    {
+      "id": "programming-01",
+      "category": "programming",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0076
+    },
+    {
+      "id": "programming-02",
+      "category": "programming",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0067
+    },
+    {
+      "id": "programming-03",
+      "category": "programming",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0072
+    },
+    {
+      "id": "programming-04",
+      "category": "programming",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0063
+    },
+    {
+      "id": "programming-05",
+      "category": "programming",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0066
+    },
+    {
+      "id": "programming-06",
+      "category": "programming",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0066
+    },
+    {
+      "id": "programming-07",
+      "category": "programming",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0073
+    },
+    {
+      "id": "programming-08",
+      "category": "programming",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0068
+    },
+    {
+      "id": "programming-09",
+      "category": "programming",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0077
+    },
+    {
+      "id": "programming-10",
+      "category": "programming",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0076
+    },
+    {
+      "id": "programming-11",
+      "category": "programming",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0064
+    },
+    {
+      "id": "programming-12",
+      "category": "programming",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0064
+    },
+    {
+      "id": "programming-13",
+      "category": "programming",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0065
+    },
+    {
+      "id": "programming-14",
+      "category": "programming",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0365
+    },
+    {
+      "id": "programming-15",
+      "category": "programming",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0081
+    },
+    {
+      "id": "research-01",
+      "category": "research",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0049
+    },
+    {
+      "id": "research-02",
+      "category": "research",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0049
+    },
+    {
+      "id": "research-03",
+      "category": "research",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0056
+    },
+    {
+      "id": "research-04",
+      "category": "research",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0048
+    },
+    {
+      "id": "research-05",
+      "category": "research",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0044
+    },
+    {
+      "id": "research-06",
+      "category": "research",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.004
+    },
+    {
+      "id": "research-07",
+      "category": "research",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0034
+    },
+    {
+      "id": "research-08",
+      "category": "research",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0045
+    },
+    {
+      "id": "research-09",
+      "category": "research",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.004
+    },
+    {
+      "id": "research-10",
+      "category": "research",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0034
+    },
+    {
+      "id": "research-11",
+      "category": "research",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0041
+    },
+    {
+      "id": "research-12",
+      "category": "research",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0036
+    },
+    {
+      "id": "research-13",
+      "category": "research",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0035
+    },
+    {
+      "id": "research-14",
+      "category": "research",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0042
+    },
+    {
+      "id": "research-15",
+      "category": "research",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0032
+    },
+    {
+      "id": "mathematics-01",
+      "category": "mathematics",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0073
+    },
+    {
+      "id": "mathematics-02",
+      "category": "mathematics",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0065
+    },
+    {
+      "id": "mathematics-03",
+      "category": "mathematics",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.006
+    },
+    {
+      "id": "mathematics-04",
+      "category": "mathematics",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.008
+    },
+    {
+      "id": "mathematics-05",
+      "category": "mathematics",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0127
+    },
+    {
+      "id": "mathematics-06",
+      "category": "mathematics",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0798
+    },
+    {
+      "id": "mathematics-07",
+      "category": "mathematics",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.009
+    },
+    {
+      "id": "mathematics-08",
+      "category": "mathematics",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0074
+    },
+    {
+      "id": "mathematics-09",
+      "category": "mathematics",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0072
+    },
+    {
+      "id": "mathematics-10",
+      "category": "mathematics",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0063
+    },
+    {
+      "id": "documents-01",
+      "category": "documents",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.009
+    },
+    {
+      "id": "documents-02",
+      "category": "documents",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0082
+    },
+    {
+      "id": "documents-03",
+      "category": "documents",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.009
+    },
+    {
+      "id": "documents-04",
+      "category": "documents",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.008
+    },
+    {
+      "id": "documents-05",
+      "category": "documents",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0086
+    },
+    {
+      "id": "documents-06",
+      "category": "documents",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "fact_check",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "fact_check",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0027
+    },
+    {
+      "id": "documents-07",
+      "category": "documents",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0084
+    },
+    {
+      "id": "documents-08",
+      "category": "documents",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0076
+    },
+    {
+      "id": "documents-09",
+      "category": "documents",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0087
+    },
+    {
+      "id": "documents-10",
+      "category": "documents",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0083
+    },
+    {
+      "id": "memory_context-01",
+      "category": "memory_context",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0022
+    },
+    {
+      "id": "memory_context-02",
+      "category": "memory_context",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0024
+    },
+    {
+      "id": "memory_context-03",
+      "category": "memory_context",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0021
+    },
+    {
+      "id": "memory_context-04",
+      "category": "memory_context",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0023
+    },
+    {
+      "id": "memory_context-05",
+      "category": "memory_context",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0145
+    },
+    {
+      "id": "memory_context-06",
+      "category": "memory_context",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0025
+    },
+    {
+      "id": "memory_context-07",
+      "category": "memory_context",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false,
+        "confidence": 0.78
+      },
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0022
+    },
+    {
+      "id": "memory_context-08",
+      "category": "memory_context",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0019
+    },
+    {
+      "id": "memory_context-09",
+      "category": "memory_context",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0027
+    },
+    {
+      "id": "memory_context-10",
+      "category": "memory_context",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "latencyMs": 0.0027
+    },
+    {
+      "id": "multi_step-01",
+      "category": "multi_step",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0019
+    },
+    {
+      "id": "multi_step-02",
+      "category": "multi_step",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0021
+    },
+    {
+      "id": "multi_step-03",
+      "category": "multi_step",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "latencyMs": 0.003
+    },
+    {
+      "id": "multi_step-04",
+      "category": "multi_step",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "latencyMs": 0.002
+    },
+    {
+      "id": "multi_step-05",
+      "category": "multi_step",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0025
+    },
+    {
+      "id": "multi_step-06",
+      "category": "multi_step",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0023
+    },
+    {
+      "id": "multi_step-07",
+      "category": "multi_step",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "latencyMs": 0.002
+    },
+    {
+      "id": "multi_step-08",
+      "category": "multi_step",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0017
+    },
+    {
+      "id": "multi_step-09",
+      "category": "multi_step",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0026
+    },
+    {
+      "id": "multi_step-10",
+      "category": "multi_step",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0024
+    },
+    {
+      "id": "error_detection-01",
+      "category": "error_detection",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "fact_check",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "fact_check",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0028
+    },
+    {
+      "id": "error_detection-02",
+      "category": "error_detection",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true
+      },
+      "latencyMs": 0.004
+    },
+    {
+      "id": "error_detection-03",
+      "category": "error_detection",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "fact_check",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "fact_check",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0027
+    },
+    {
+      "id": "error_detection-04",
+      "category": "error_detection",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0043
+    },
+    {
+      "id": "error_detection-05",
+      "category": "error_detection",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0038
+    },
+    {
+      "id": "error_detection-06",
+      "category": "error_detection",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "fact_check",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "fact_check",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0025
+    },
+    {
+      "id": "error_detection-07",
+      "category": "error_detection",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0045
+    },
+    {
+      "id": "error_detection-08",
+      "category": "error_detection",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0038
+    },
+    {
+      "id": "error_detection-09",
+      "category": "error_detection",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "fact_check",
+        "complexity": "RESEARCH",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "fact_check",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0023
+    },
+    {
+      "id": "error_detection-10",
+      "category": "error_detection",
+      "passed": true,
+      "routeOk": true,
+      "toolsOk": true,
+      "actual": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true,
+        "confidence": 0.88
+      },
+      "expected": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true
+      },
+      "latencyMs": 0.0049
+    }
+  ]
+}

@@ -1,0 +1,2116 @@
+{
+  "version": "1.6.0",
+  "scope": "Intent-router evaluation fixtures. This suite evaluates routing heuristics, not end-to-end LLM answer quality.",
+  "categoryCounts": {
+    "logic_reasoning": 20,
+    "programming": 15,
+    "research": 15,
+    "mathematics": 10,
+    "documents": 10,
+    "memory_context": 10,
+    "multi_step": 10,
+    "error_detection": 10
+  },
+  "cases": [
+    {
+      "id": "logic_reasoning-01",
+      "category": "logic_reasoning",
+      "input": "Объясни, почему из двух противоречивых посылок нельзя получить надёжный вывод.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-02",
+      "category": "logic_reasoning",
+      "input": "Объясни разницу между необходимым и достаточным условием.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-03",
+      "category": "logic_reasoning",
+      "input": "Объясни, почему корреляция сама по себе не доказывает причинность.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-04",
+      "category": "logic_reasoning",
+      "input": "Объясни, как проверить логическую цепочку из трёх утверждений.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-05",
+      "category": "logic_reasoning",
+      "input": "Объясни, почему контрпример опровергает универсальное утверждение.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-06",
+      "category": "logic_reasoning",
+      "input": "Объясни, как отличить дедукцию от индукции на простом примере.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-07",
+      "category": "logic_reasoning",
+      "input": "Объясни, почему выборка из пяти человек может быть нерепрезентативной.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-08",
+      "category": "logic_reasoning",
+      "input": "Объясни, как выявить скрытое допущение в аргументе.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-09",
+      "category": "logic_reasoning",
+      "input": "Объясни, почему истинность вывода зависит от истинности посылок.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-10",
+      "category": "logic_reasoning",
+      "input": "Объясни разницу между фактом, интерпретацией и предположением.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-11",
+      "category": "logic_reasoning",
+      "input": "Объясни, как работает принцип исключённого третьего.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-12",
+      "category": "logic_reasoning",
+      "input": "Объясни, почему два события после друг друга не обязательно связаны причинно.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-13",
+      "category": "logic_reasoning",
+      "input": "Объясни, как проверять аргумент на внутреннее противоречие.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-14",
+      "category": "logic_reasoning",
+      "input": "Объясни, что такое ложная дилемма и как её распознать.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-15",
+      "category": "logic_reasoning",
+      "input": "Объясни, почему отрицание утверждения не всегда доказывает противоположное.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-16",
+      "category": "logic_reasoning",
+      "input": "Объясни, как применить принцип фальсифицируемости к гипотезе.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-17",
+      "category": "logic_reasoning",
+      "input": "Объясни разницу между вероятностью события и уверенностью человека.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-18",
+      "category": "logic_reasoning",
+      "input": "Объясни, почему отсутствие доказательств не всегда является доказательством отсутствия.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-19",
+      "category": "logic_reasoning",
+      "input": "Объясни, как сравнивать две конкурирующие гипотезы без предвзятости.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "logic_reasoning-20",
+      "category": "logic_reasoning",
+      "input": "Объясни, почему вывод должен быть соразмерен силе имеющихся доказательств.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "explanation",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "programming-01",
+      "category": "programming",
+      "input": "Напиши код на JavaScript для безопасного debounce с тестовым примером.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "programming-02",
+      "category": "programming",
+      "input": "Создай приложение заметок на Python с сохранением в JSON.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "programming-03",
+      "category": "programming",
+      "input": "Реализуй функцию сортировки объектов по нескольким полям на TypeScript.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "programming-04",
+      "category": "programming",
+      "input": "Напиши код Node.js для чтения CSV с обработкой ошибок.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "programming-05",
+      "category": "programming",
+      "input": "Разработай простой REST endpoint с валидацией входных данных.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "programming-06",
+      "category": "programming",
+      "input": "Реализуй очередь задач с ограничением параллельности на JavaScript.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "programming-07",
+      "category": "programming",
+      "input": "Напиши Python-функцию для проверки корректности электронной почты.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "programming-08",
+      "category": "programming",
+      "input": "Создай HTML-форму обратной связи с клиентской валидацией.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "programming-09",
+      "category": "programming",
+      "input": "Реализуй кэш с TTL и ограничением максимального размера.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "programming-10",
+      "category": "programming",
+      "input": "Напиши TypeScript generic helper для безопасного чтения поля объекта.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "programming-11",
+      "category": "programming",
+      "input": "Разработай CLI-скрипт для переименования файлов с dry-run.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "programming-12",
+      "category": "programming",
+      "input": "Напиши код для пагинации API с повтором временных ошибок.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "programming-13",
+      "category": "programming",
+      "input": "Создай компонент React для поиска с debounce.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "programming-14",
+      "category": "programming",
+      "input": "Реализуй парсер конфигурации с проверкой обязательных параметров.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "programming-15",
+      "category": "programming",
+      "input": "Напиши unit-тесты на Node.js для асинхронного обработчика.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "programming",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "research-01",
+      "category": "research",
+      "input": "Проведи исследование актуальных ограничений Node.js LTS и приведи первичные источники.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "research-02",
+      "category": "research",
+      "input": "Сравни официальную документацию двух библиотек и оцени совместимость.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "research-03",
+      "category": "research",
+      "input": "Исследуй текущие тарифы трёх облачных провайдеров с датами источников.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "research-04",
+      "category": "research",
+      "input": "Проведи аудит безопасности по актуальным рекомендациям OWASP.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "research-05",
+      "category": "research",
+      "input": "Проверь актуальные версии SDK и найди официальные release notes.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "research-06",
+      "category": "research",
+      "input": "Сделай сравнительный анализ открытых агентных фреймворков по исходному коду.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "research-07",
+      "category": "research",
+      "input": "Исследуй последние изменения в спецификации MCP и укажи дату.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "research-08",
+      "category": "research",
+      "input": "Проверь текущие требования лицензии проекта по официальному тексту.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "research-09",
+      "category": "research",
+      "input": "Собери источники о поддержке streaming API у провайдера.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "research-10",
+      "category": "research",
+      "input": "Исследуй актуальные правила хранения персональных данных в ЕС.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "research-11",
+      "category": "research",
+      "input": "Сравни свежие бенчмарки моделей и проверь методологию публикаций.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "research-12",
+      "category": "research",
+      "input": "Проведи исследование текущих уязвимостей используемой версии пакета.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "research-13",
+      "category": "research",
+      "input": "Проверь актуальные лимиты API по официальной документации.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "research-14",
+      "category": "research",
+      "input": "Составь обзор современных подходов к оценке качества LLM с источниками.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "research-15",
+      "category": "research",
+      "input": "Исследуй статус поддержки функции в текущей версии продукта.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "research",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "mathematics-01",
+      "category": "mathematics",
+      "input": "Посчитай 17 процентов от 840.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "mathematics-02",
+      "category": "mathematics",
+      "input": "Вычисли площадь круга радиусом 7 см.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "mathematics-03",
+      "category": "mathematics",
+      "input": "Реши уравнение 3x + 11 = 32.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "mathematics-04",
+      "category": "mathematics",
+      "input": "Посчитай вероятность выпадения двух орлов подряд у честной монеты.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "mathematics-05",
+      "category": "mathematics",
+      "input": "Вычисли среднее арифметическое чисел 14, 18, 21 и 27.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "mathematics-06",
+      "category": "mathematics",
+      "input": "Реши систему x + y = 9 и x - y = 3.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "mathematics-07",
+      "category": "mathematics",
+      "input": "Посчитай сложный процент для 1000 евро под 5 процентов годовых за два года.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "mathematics-08",
+      "category": "mathematics",
+      "input": "Вычисли производную функции x в третьей степени.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "mathematics-09",
+      "category": "mathematics",
+      "input": "Посчитай сколько литров составляют 2750 миллилитров.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "mathematics-10",
+      "category": "mathematics",
+      "input": "Реши неравенство 2x - 5 > 9.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "mathematics",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "documents-01",
+      "category": "documents",
+      "input": "Прочитай приложенный PDF и составь краткое резюме.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "documents-02",
+      "category": "documents",
+      "input": "Извлеки основные пункты из этого DOCX документа.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "documents-03",
+      "category": "documents",
+      "input": "Сравни два приложенных договора и перечисли различия.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "documents-04",
+      "category": "documents",
+      "input": "Суммируй данные из таблицы XLSX и выдели аномалии.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "documents-05",
+      "category": "documents",
+      "input": "Проверь структуру презентации PPTX и предложи улучшения.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "documents-06",
+      "category": "documents",
+      "input": "Найди противоречия в приложенном отчёте.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "fact_check",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "documents-07",
+      "category": "documents",
+      "input": "Преобразуй заметки в структурированный документ DOCX.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "documents-08",
+      "category": "documents",
+      "input": "Выдели обязательства и сроки из контракта.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "documents-09",
+      "category": "documents",
+      "input": "Составь executive summary для приложенного документа.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "documents-10",
+      "category": "documents",
+      "input": "Проверь ссылки и нумерацию разделов в документе.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "documents",
+        "complexity": "MEDIUM",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "memory_context-01",
+      "category": "memory_context",
+      "input": "Продолжи предыдущий этап.",
+      "contextAvailable": true,
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "memory_context-02",
+      "category": "memory_context",
+      "input": "Продолжай с последнего пункта нашего плана.",
+      "contextAvailable": true,
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "memory_context-03",
+      "category": "memory_context",
+      "input": "Дальше выполни следующий шаг.",
+      "contextAvailable": true,
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "memory_context-04",
+      "category": "memory_context",
+      "input": "Вернись к этому и закончи начатую задачу.",
+      "contextAvailable": true,
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "memory_context-05",
+      "category": "memory_context",
+      "input": "Continue with the next implementation step.",
+      "contextAvailable": true,
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "memory_context-06",
+      "category": "memory_context",
+      "input": "Go on from the last completed step.",
+      "contextAvailable": true,
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "memory_context-07",
+      "category": "memory_context",
+      "input": "Next step, please.",
+      "contextAvailable": true,
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "memory_context-08",
+      "category": "memory_context",
+      "input": "Carry on with the previous analysis.",
+      "contextAvailable": true,
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "memory_context-09",
+      "category": "memory_context",
+      "input": "Продолжи проверку оставшихся файлов.",
+      "contextAvailable": true,
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "memory_context-10",
+      "category": "memory_context",
+      "input": "Заверши то, что мы начали выше.",
+      "contextAvailable": true,
+      "expected": {
+        "intent": "continuation",
+        "complexity": "MULTI_STEP",
+        "requiresTools": false
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "multi_step-01",
+      "category": "multi_step",
+      "input": "Разбей работу на этапы и затем проверь каждый результат.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "multi_step-02",
+      "category": "multi_step",
+      "input": "Выполни задачу пошагово: сначала аудит, потом реализация и тестирование.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "multi_step-03",
+      "category": "multi_step",
+      "input": "Сначала исследуй варианты, затем спроектируй решение и проверь его.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "multi_step-04",
+      "category": "multi_step",
+      "input": "Создай план реализации, реализуй его и протестируй результат.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "multi_step-05",
+      "category": "multi_step",
+      "input": "Организуй несколько этапов работы и перечисли зависимости между ними.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "multi_step-06",
+      "category": "multi_step",
+      "input": "Выполни end-to-end задачу от анализа до проверки результата.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "multi_step-07",
+      "category": "multi_step",
+      "input": "Спроектируй и реализуй модуль, затем запусти регрессионные тесты.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "multi_step-08",
+      "category": "multi_step",
+      "input": "Разбей сложную задачу на подзадачи и выполни их последовательно.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "multi_step-09",
+      "category": "multi_step",
+      "input": "Сначала проверь исходные данные, потом обработай их и сформируй отчёт.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "multi_step-10",
+      "category": "multi_step",
+      "input": "Составь план, выполни все этапы и проверь критерии завершения.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "multi_step",
+        "complexity": "MULTI_STEP",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "error_detection-01",
+      "category": "error_detection",
+      "input": "Найди ошибку в этом утверждении и объясни, что подтверждают источники.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "fact_check",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "error_detection-02",
+      "category": "error_detection",
+      "input": "Проверь код и найди потенциальные ошибки.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "error_detection-03",
+      "category": "error_detection",
+      "input": "Проверь утверждение на логические противоречия и неподтверждённые выводы.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "fact_check",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "error_detection-04",
+      "category": "error_detection",
+      "input": "Найди ошибку компиляции в этом фрагменте TypeScript.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "error_detection-05",
+      "category": "error_detection",
+      "input": "Отладь функцию и укажи первопричину сбоя.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "error_detection-06",
+      "category": "error_detection",
+      "input": "Проверь факты в тексте и пометь утверждения без доказательств.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "fact_check",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "error_detection-07",
+      "category": "error_detection",
+      "input": "Сделай code review и перечисли ошибки безопасности.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "error_detection-08",
+      "category": "error_detection",
+      "input": "Найди ошибку в расчёте и пересчитай результат.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "error_detection-09",
+      "category": "error_detection",
+      "input": "Проверь цитаты и найди те, которых нет в исходном документе.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "fact_check",
+        "complexity": "RESEARCH",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    },
+    {
+      "id": "error_detection-10",
+      "category": "error_detection",
+      "input": "Найди баг в обработчике HTTP и проверь риск двойного ответа.",
+      "contextAvailable": false,
+      "expected": {
+        "intent": "code_analysis",
+        "complexity": "COMPLEX",
+        "requiresTools": true
+      },
+      "capabilities": [
+        "intent_routing",
+        "complexity_routing"
+      ],
+      "criteria": [
+        "Correct intent is selected",
+        "Complexity class matches explicit request signals"
+      ],
+      "weight": 1,
+      "checks": []
+    }
+  ]
+}
