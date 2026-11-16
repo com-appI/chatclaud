@@ -16782,5 +16782,33 @@ html[data-theme="light"] #flashInputShell {
 })();
 </script>
 
+
+<style id="cc-side-shadow-458">
+/* Stronger ambient side shadows for screen depth */
+html, body {
+  background-attachment: fixed !important;
+}
+body::before {
+  content: "" !important;
+  pointer-events: none !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,0.55) 0%, transparent 12%, transparent 88%, rgba(0,0,0,0.55) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0.35) 0%, transparent 10%, transparent 90%, rgba(0,0,0,0.4) 100%) !important;
+}
+#flashChat, #app, .app-shell, .chat-layout {
+  position: relative !important;
+  z-index: 1 !important;
+}
+.top-bar {
+  box-shadow: 0 8px 28px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3) !important;
+}
+.sidebar, aside {
+  box-shadow: 12px 0 40px rgba(0,0,0,0.45) !important;
+}
+</style>
+
 </body>
 </html>

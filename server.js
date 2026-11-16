@@ -2231,7 +2231,10 @@ async function handleVideoSearch(message) {
 }
 
 const MAX_BODY_BYTES = 14 * 1024 * 1024;
-function readBody(req) {
+function readBody(req, maxBytes) {
+  const bodyLimit = Number.isFinite(Number(maxBytes)) && Number(maxBytes) > 0
+    ? Math.min(MAX_BODY_BYTES, Number(maxBytes))
+    : MAX_BODY_BYTES;
   return new Promise((resolve, reject) => {
     const chunks = [];
     let size = 0;
@@ -2239,7 +2242,7 @@ function readBody(req) {
     req.on('data', (c) => {
       if (done) return;
       size += c.length;
-      if (size > MAX_BODY_BYTES) {
+      if (size > bodyLimit) {
         done = true;
         reject(Object.assign(new Error('Request too large'), { statusCode: 413 }));
         try { req.destroy(); } catch (_) {}
@@ -5429,8 +5432,21 @@ const server = http.createServer(async (req, res) => {
   }
 
 
+  
+  if (pathname === '/api/math/intelligence' && req.method === 'POST') {
+    return readBody(req, 80000).then((body) => {
+      const solver = require('./lib/math/math-solver');
+      const out = solver.solve(String(body.problem || body.text || body.q || ''), { useSympy: body.sympy !== false });
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: true, ...out, formatted: solver.formatResponse(out, body.lang || 'en') }));
+    }).catch((e) => {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: false, error: publicProviderError(e) }));
+    });
+  }
+
   if (pathname === '/api/math/solve' && req.method === 'POST') {
-    return readJsonBody(req, 50000).then((body) => {
+    return readBody(req, 50000).then((body) => {
       const eng = CCMathEngine || require('./lib/math-engine');
       const out = eng.solveMath(String(body.problem || body.text || body.q || ''), { useSympy: body.sympy !== false });
       res.writeHead(200, { 'Content-Type': 'application/json' });

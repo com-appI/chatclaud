@@ -69,6 +69,27 @@ test('HTTP server serves the app and public assets while keeping source files pr
   assert.equal(health.status, 200);
   assert.equal((await health.json()).ok, true);
 
+  const quadraticResponse = await fetch(`${baseUrl}/api/math/intelligence`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ problem: '3x^2 - 14x + 8 = 0', sympy: false, lang: 'en' }),
+  });
+  assert.equal(quadraticResponse.status, 200);
+  const quadraticPayload = await quadraticResponse.json();
+  assert.equal(quadraticPayload.verified, true);
+  assert.equal(quadraticPayload.solved.verified, true);
+  assert.deepEqual(quadraticPayload.answer, [2 / 3, 4]);
+
+  const largeIntegerResponse = await fetch(`${baseUrl}/api/math/intelligence`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ problem: '30939392939929292983838 * 102', sympy: false, lang: 'en' }),
+  });
+  assert.equal(largeIntegerResponse.status, 200);
+  const largeIntegerPayload = await largeIntegerResponse.json();
+  assert.equal(largeIntegerPayload.verified, true);
+  assert.equal(largeIntegerPayload.answer, '3155818079872787884351476');
+
   for (const file of [
     'icon-192.png',
     'icon-512.png',
