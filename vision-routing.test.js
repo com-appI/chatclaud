@@ -73,6 +73,25 @@ test('CORS resolver accepts configured and same-origin values, rejects arbitrary
   }
 });
 
+test('CORS default allows the deployed GitHub Pages frontend origin', () => {
+  const oldOrigins = process.env.CORS_ORIGINS;
+  delete process.env.CORS_ORIGINS;
+  const req = {
+    headers: {
+      origin: 'https://com-appi.github.io',
+      host: 'servierte.onrender.com',
+      'x-forwarded-proto': 'https',
+    },
+    socket: {},
+  };
+  try {
+    assert.equal(runtime.resolveCorsOrigin(req), 'https://com-appi.github.io');
+  } finally {
+    if (oldOrigins == null) delete process.env.CORS_ORIGINS;
+    else process.env.CORS_ORIGINS = oldOrigins;
+  }
+});
+
 test('chat UI allows selecting multiple images and routes the selected array through Vision', () => {
   const html = fs.readFileSync(require('node:path').join(__dirname, '..', 'index.html'), 'utf8');
   assert.ok(html.includes('id="flashFileInput" multiple accept="image/*'));

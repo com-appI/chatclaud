@@ -1320,7 +1320,7 @@ function resolveCorsOrigin(req) {
   if (!origin || origin === 'null') return null;
   let normalized;
   try { normalized = new URL(origin).origin; } catch (e) { return null; }
-  const configured = String(process.env.CORS_ORIGINS || 'https://servierte.onrender.com')
+  const configured = String(process.env.CORS_ORIGINS || 'https://com-appi.github.io')
     .split(',').map((v) => v.trim()).filter(Boolean);
   const proto = String((req.headers && req.headers['x-forwarded-proto']) || (req.socket && req.socket.encrypted ? 'https' : 'http'))
     .split(',')[0].trim().toLowerCase();
