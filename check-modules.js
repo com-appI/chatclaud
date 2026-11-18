@@ -93,3 +93,4 @@ if (failures.length) {
 } else {
   console.log(`Module/asset resolution: ${definitions.size} bundled modules and local script assets verified.`);
 }
+// deploy check
