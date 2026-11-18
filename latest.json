@@ -1,13 +1,13 @@
 {
-  "version": "4.59.1",
-  "evaluatedAt": "2026-11-16T17:10:20.628Z",
+  "version": "5.4.1",
+  "evaluatedAt": "2026-11-18T12:20:01.873Z",
   "dataset": "evals/core-cases.json",
   "total": 100,
   "passed": 100,
   "failed": 0,
   "routingAccuracy": 1,
   "toolDecisionAccuracy": 1,
-  "averageRouterLatencyMs": 0.010616299999999655,
+  "averageRouterLatencyMs": 0.010758009999999487,
   "categoryMetrics": {
     "logic_reasoning": {
       "total": 20,
@@ -76,7 +76,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.1657
+      "latencyMs": 0.1606
     },
     {
       "id": "logic_reasoning-02",
@@ -114,7 +114,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0225
+      "latencyMs": 0.0122
     },
     {
       "id": "logic_reasoning-04",
@@ -133,7 +133,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0528
+      "latencyMs": 0.0107
     },
     {
       "id": "logic_reasoning-05",
@@ -152,7 +152,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0789
+      "latencyMs": 0.0753
     },
     {
       "id": "logic_reasoning-06",
@@ -171,7 +171,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0326
+      "latencyMs": 0.0233
     },
     {
       "id": "logic_reasoning-07",
@@ -190,7 +190,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0747
+      "latencyMs": 0.0119
     },
     {
       "id": "logic_reasoning-08",
@@ -209,7 +209,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0081
+      "latencyMs": 0.0073
     },
     {
       "id": "logic_reasoning-09",
@@ -228,7 +228,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0082
+      "latencyMs": 0.0081
     },
     {
       "id": "logic_reasoning-10",
@@ -266,7 +266,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0072
+      "latencyMs": 0.0073
     },
     {
       "id": "logic_reasoning-12",
@@ -285,7 +285,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0083
+      "latencyMs": 0.0082
     },
     {
       "id": "logic_reasoning-13",
@@ -323,7 +323,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0069
+      "latencyMs": 0.007
     },
     {
       "id": "logic_reasoning-15",
@@ -342,7 +342,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0082
+      "latencyMs": 0.008
     },
     {
       "id": "logic_reasoning-16",
@@ -361,7 +361,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0075
+      "latencyMs": 0.0076
     },
     {
       "id": "logic_reasoning-17",
@@ -380,7 +380,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0076
+      "latencyMs": 0.0075
     },
     {
       "id": "logic_reasoning-18",
@@ -399,7 +399,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0081
+      "latencyMs": 0.0085
     },
     {
       "id": "logic_reasoning-19",
@@ -437,7 +437,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0074
+      "latencyMs": 0.0073
     },
     {
       "id": "programming-01",
@@ -456,7 +456,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0076
+      "latencyMs": 0.0074
     },
     {
       "id": "programming-02",
@@ -475,7 +475,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0067
+      "latencyMs": 0.0066
     },
     {
       "id": "programming-03",
@@ -513,7 +513,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0063
+      "latencyMs": 0.0062
     },
     {
       "id": "programming-05",
@@ -551,7 +551,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0066
+      "latencyMs": 0.0068
     },
     {
       "id": "programming-07",
@@ -570,7 +570,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0073
+      "latencyMs": 0.0075
     },
     {
       "id": "programming-08",
@@ -589,7 +589,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0068
+      "latencyMs": 0.0069
     },
     {
       "id": "programming-09",
@@ -608,7 +608,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0077
+      "latencyMs": 0.0072
     },
     {
       "id": "programming-10",
@@ -627,7 +627,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0076
+      "latencyMs": 0.0077
     },
     {
       "id": "programming-11",
@@ -646,7 +646,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0064
+      "latencyMs": 0.0063
     },
     {
       "id": "programming-12",
@@ -665,7 +665,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0064
+      "latencyMs": 0.0065
     },
     {
       "id": "programming-13",
@@ -684,7 +684,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0065
+      "latencyMs": 0.0067
     },
     {
       "id": "programming-14",
@@ -703,7 +703,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0365
+      "latencyMs": 0.1276
     },
     {
       "id": "programming-15",
@@ -722,7 +722,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0081
+      "latencyMs": 0.0155
     },
     {
       "id": "research-01",
@@ -741,7 +741,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0049
+      "latencyMs": 0.0074
     },
     {
       "id": "research-02",
@@ -760,7 +760,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0049
+      "latencyMs": 0.0397
     },
     {
       "id": "research-03",
@@ -779,7 +779,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0056
+      "latencyMs": 0.0082
     },
     {
       "id": "research-04",
@@ -798,7 +798,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0048
+      "latencyMs": 0.007
     },
     {
       "id": "research-05",
@@ -817,7 +817,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0044
+      "latencyMs": 0.006
     },
     {
       "id": "research-06",
@@ -836,7 +836,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.004
+      "latencyMs": 0.0058
     },
     {
       "id": "research-07",
@@ -855,7 +855,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0034
+      "latencyMs": 0.0049
     },
     {
       "id": "research-08",
@@ -874,7 +874,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0045
+      "latencyMs": 0.0065
     },
     {
       "id": "research-09",
@@ -893,7 +893,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.004
+      "latencyMs": 0.0058
     },
     {
       "id": "research-10",
@@ -912,7 +912,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0034
+      "latencyMs": 0.0052
     },
     {
       "id": "research-11",
@@ -931,7 +931,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0041
+      "latencyMs": 0.006
     },
     {
       "id": "research-12",
@@ -950,7 +950,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0036
+      "latencyMs": 0.005
     },
     {
       "id": "research-13",
@@ -969,7 +969,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0035
+      "latencyMs": 0.0052
     },
     {
       "id": "research-14",
@@ -988,7 +988,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0042
+      "latencyMs": 0.0058
     },
     {
       "id": "research-15",
@@ -1007,7 +1007,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0032
+      "latencyMs": 0.0048
     },
     {
       "id": "mathematics-01",
@@ -1026,7 +1026,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0073
+      "latencyMs": 0.0114
     },
     {
       "id": "mathematics-02",
@@ -1045,7 +1045,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0065
+      "latencyMs": 0.0097
     },
     {
       "id": "mathematics-03",
@@ -1064,7 +1064,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.006
+      "latencyMs": 0.0094
     },
     {
       "id": "mathematics-04",
@@ -1083,7 +1083,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.008
+      "latencyMs": 0.0118
     },
     {
       "id": "mathematics-05",
@@ -1102,7 +1102,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0127
+      "latencyMs": 0.0102
     },
     {
       "id": "mathematics-06",
@@ -1121,7 +1121,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0798
+      "latencyMs": 0.0094
     },
     {
       "id": "mathematics-07",
@@ -1140,7 +1140,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.009
+      "latencyMs": 0.0126
     },
     {
       "id": "mathematics-08",
@@ -1159,7 +1159,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0074
+      "latencyMs": 0.0108
     },
     {
       "id": "mathematics-09",
@@ -1178,7 +1178,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0072
+      "latencyMs": 0.0107
     },
     {
       "id": "mathematics-10",
@@ -1197,7 +1197,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0063
+      "latencyMs": 0.0098
     },
     {
       "id": "documents-01",
@@ -1216,7 +1216,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.009
+      "latencyMs": 0.0135
     },
     {
       "id": "documents-02",
@@ -1235,7 +1235,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0082
+      "latencyMs": 0.0118
     },
     {
       "id": "documents-03",
@@ -1254,7 +1254,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.009
+      "latencyMs": 0.0347
     },
     {
       "id": "documents-04",
@@ -1273,7 +1273,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.008
+      "latencyMs": 0.0101
     },
     {
       "id": "documents-05",
@@ -1292,7 +1292,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0086
+      "latencyMs": 0.0109
     },
     {
       "id": "documents-06",
@@ -1311,7 +1311,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0027
+      "latencyMs": 0.0025
     },
     {
       "id": "documents-07",
@@ -1330,7 +1330,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0084
+      "latencyMs": 0.0071
     },
     {
       "id": "documents-08",
@@ -1349,7 +1349,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0076
+      "latencyMs": 0.0064
     },
     {
       "id": "documents-09",
@@ -1368,7 +1368,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0087
+      "latencyMs": 0.0072
     },
     {
       "id": "documents-10",
@@ -1387,7 +1387,7 @@
         "complexity": "MEDIUM",
         "requiresTools": false
       },
-      "latencyMs": 0.0083
+      "latencyMs": 0.0069
     },
     {
       "id": "memory_context-01",
@@ -1406,7 +1406,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": false
       },
-      "latencyMs": 0.0022
+      "latencyMs": 0.0021
     },
     {
       "id": "memory_context-02",
@@ -1425,7 +1425,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": false
       },
-      "latencyMs": 0.0024
+      "latencyMs": 0.0021
     },
     {
       "id": "memory_context-03",
@@ -1444,7 +1444,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": false
       },
-      "latencyMs": 0.0021
+      "latencyMs": 0.0019
     },
     {
       "id": "memory_context-04",
@@ -1463,7 +1463,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": false
       },
-      "latencyMs": 0.0023
+      "latencyMs": 0.0021
     },
     {
       "id": "memory_context-05",
@@ -1482,7 +1482,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": false
       },
-      "latencyMs": 0.0145
+      "latencyMs": 0.0113
     },
     {
       "id": "memory_context-06",
@@ -1501,7 +1501,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": false
       },
-      "latencyMs": 0.0025
+      "latencyMs": 0.0019
     },
     {
       "id": "memory_context-07",
@@ -1520,7 +1520,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": false
       },
-      "latencyMs": 0.0022
+      "latencyMs": 0.0018
     },
     {
       "id": "memory_context-08",
@@ -1539,7 +1539,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": false
       },
-      "latencyMs": 0.0019
+      "latencyMs": 0.0016
     },
     {
       "id": "memory_context-09",
@@ -1558,7 +1558,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": false
       },
-      "latencyMs": 0.0027
+      "latencyMs": 0.0024
     },
     {
       "id": "memory_context-10",
@@ -1577,7 +1577,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": false
       },
-      "latencyMs": 0.0027
+      "latencyMs": 0.0021
     },
     {
       "id": "multi_step-01",
@@ -1596,7 +1596,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": true
       },
-      "latencyMs": 0.0019
+      "latencyMs": 0.0018
     },
     {
       "id": "multi_step-02",
@@ -1615,7 +1615,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": true
       },
-      "latencyMs": 0.0021
+      "latencyMs": 0.0019
     },
     {
       "id": "multi_step-03",
@@ -1634,7 +1634,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": true
       },
-      "latencyMs": 0.003
+      "latencyMs": 0.0026
     },
     {
       "id": "multi_step-04",
@@ -1653,7 +1653,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": true
       },
-      "latencyMs": 0.002
+      "latencyMs": 0.0017
     },
     {
       "id": "multi_step-05",
@@ -1672,7 +1672,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": true
       },
-      "latencyMs": 0.0025
+      "latencyMs": 0.0018
     },
     {
       "id": "multi_step-06",
@@ -1691,7 +1691,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": true
       },
-      "latencyMs": 0.0023
+      "latencyMs": 0.0019
     },
     {
       "id": "multi_step-07",
@@ -1710,7 +1710,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": true
       },
-      "latencyMs": 0.002
+      "latencyMs": 0.0018
     },
     {
       "id": "multi_step-08",
@@ -1729,7 +1729,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": true
       },
-      "latencyMs": 0.0017
+      "latencyMs": 0.0016
     },
     {
       "id": "multi_step-09",
@@ -1748,7 +1748,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": true
       },
-      "latencyMs": 0.0026
+      "latencyMs": 0.0025
     },
     {
       "id": "multi_step-10",
@@ -1767,7 +1767,7 @@
         "complexity": "MULTI_STEP",
         "requiresTools": true
       },
-      "latencyMs": 0.0024
+      "latencyMs": 0.0019
     },
     {
       "id": "error_detection-01",
@@ -1786,7 +1786,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0028
+      "latencyMs": 0.0073
     },
     {
       "id": "error_detection-02",
@@ -1805,7 +1805,7 @@
         "complexity": "COMPLEX",
         "requiresTools": true
       },
-      "latencyMs": 0.004
+      "latencyMs": 0.0059
     },
     {
       "id": "error_detection-03",
@@ -1824,7 +1824,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0027
+      "latencyMs": 0.0042
     },
     {
       "id": "error_detection-04",
@@ -1843,7 +1843,7 @@
         "complexity": "COMPLEX",
         "requiresTools": true
       },
-      "latencyMs": 0.0043
+      "latencyMs": 0.0058
     },
     {
       "id": "error_detection-05",
@@ -1862,7 +1862,7 @@
         "complexity": "COMPLEX",
         "requiresTools": true
       },
-      "latencyMs": 0.0038
+      "latencyMs": 0.0041
     },
     {
       "id": "error_detection-06",
@@ -1900,7 +1900,7 @@
         "complexity": "COMPLEX",
         "requiresTools": true
       },
-      "latencyMs": 0.0045
+      "latencyMs": 0.0046
     },
     {
       "id": "error_detection-08",
@@ -1919,7 +1919,7 @@
         "complexity": "COMPLEX",
         "requiresTools": true
       },
-      "latencyMs": 0.0038
+      "latencyMs": 0.0039
     },
     {
       "id": "error_detection-09",
@@ -1938,7 +1938,7 @@
         "complexity": "RESEARCH",
         "requiresTools": true
       },
-      "latencyMs": 0.0023
+      "latencyMs": 0.0025
     },
     {
       "id": "error_detection-10",
@@ -1957,7 +1957,7 @@
         "complexity": "COMPLEX",
         "requiresTools": true
       },
-      "latencyMs": 0.0049
+      "latencyMs": 0.0047
     }
   ]
 }

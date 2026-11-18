@@ -109,8 +109,8 @@ test('package version, PWA cache and eval metadata are consistently versioned', 
   const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
   const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
   const evalResults = JSON.parse(fs.readFileSync(path.join(root, 'evals', 'results', 'latest.json'), 'utf8'));
-  assert.equal(pkg.version, '4.59.1');
-  assert.match(sw, /chatclaud-static-v54/);
+  assert.equal(pkg.version, '5.4.1');
+  assert.match(sw, /chatclaud-static-c541/);
   assert.equal(evalResults.version, pkg.version);
   assert.equal(fs.existsSync(path.join(root, 'README.md')), false);
   assert.equal(fs.existsSync(path.join(root, 'docs')), false);

@@ -1,7 +1,7 @@
 'use strict';
 
 // Cache only same-origin static app files. API requests are never cached.
-const CACHE = 'chatclaud-static-v54';
+const CACHE = 'chatclaud-static-c541';
 const scopeUrl = new URL(self.registration.scope);
 const CORE_FILES = [
   '',
@@ -11,6 +11,7 @@ const CORE_FILES = [
   'icon-512.png',
   'apple-touch-icon.png',
   'chatclaud-avatar-transparent.png',
+  'project-workspace.js?v=c500',
 ].map((file) => new URL(file, scopeUrl).toString());
 
 function isInScope(url) {

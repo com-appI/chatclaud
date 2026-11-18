@@ -3735,7 +3735,8 @@ setTimeout(function() {
   }
 }, 15000);
 </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js';document.head.appendChild(s);"></script>
+    <script src="./project-workspace.js?v=c500"></script>
 
 <script>
 /* MUST load first — GitHub Pages → backend URL */
@@ -6966,7 +6967,7 @@ body {
                 <div class="hero-feat"><div class="hero-feat-icon">◉</div><div class="hero-feat-text"><strong>Personal workspace</strong><span>Чаты, профиль и сохранённые настройки</span></div></div>
             </div>
             <div class="update-card">
-                <h3>ChatClaud 4.57.0</h3>
+                <h3>ChatClaud C5.4.1</h3>
                 <div class="upd-item"><span class="upd-num">1</span><div><b>Live Agent Status</b>Понятные этапы реальной работы помощника</div></div>
                 <div class="upd-item"><span class="upd-num">2</span><div><b>Adaptive Search</b>Расширение поиска, когда первых результатов недостаточно</div></div>
                 <div class="upd-item"><span class="upd-num">3</span><div><b>Personal Profile</b>Имя пользователя и возрастная группа в настройках</div></div>
@@ -6979,7 +6980,7 @@ body {
                 <button class="hero-try" id="heroTryBtn">Проверить без регистрации (3 сообщения)</button>
                 <button type="button" class="pwa-install-btn" id="pwaInstallBtn">DOWNLOAD CHATCLAUD</button>
             </div>
-            <div class="hero-foot">ChatClaud 4.57.0 · Personal AI workspace</div>
+            <div class="hero-foot">ChatClaud C5.4.1 · Personal AI workspace</div>
         </div>
     </div>
 
@@ -7225,7 +7226,7 @@ body {
                     <textarea id="flashInput" placeholder="Ask anything..." rows="1" maxlength="4000"></textarea>
                     <div class="input-shell-bottom">
                         <label class="attach-icon" id="flashAttachBtn" for="flashFileInput" title="Добавить"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></label>
-                        <input type="file" id="flashFileInput" accept="image/*,.txt,.js,.html,.css,.json,.md,.py,.zip,.ts,.tsx,.jsx,.csv" hidden>
+                        <input type="file" id="flashFileInput" multiple accept="image/*,.txt,.js,.html,.css,.json,.md,.py,.zip,.ts,.tsx,.jsx,.csv" hidden>
                         <input type="file" id="flashPhotoInput" accept="image/*" hidden>
                         <input type="file" id="flashCameraInput" accept="image/*" capture="environment" hidden>
                         <button type="button" class="mode-infield" id="flashModeBtn">
@@ -7277,7 +7278,7 @@ body {
 
                 <button class="btn-black" id="themeToggleBtn2" style="margin-bottom:0.8rem;">Light тема</button>
                 <label style="font-size:0.8rem;color:#888;">Провайдер</label>
-                <select id="expertProviderSelect" class="field"><option value="groq" selected>ChatClaud GPT-OSS 120B</option></select>
+                <select id="expertProviderSelect" class="field"><option value="nvidia" selected>NVIDIA Nemotron 3 Ultra</option></select>
                 <select id="expertModelSelect" class="field"></select>
                 <select id="expertPromptVersion" class="field"><option value="v1">Строгий</option><option value="v2">Креативный</option></select>
                 <label style="font-size:0.8rem;color:#888;">Язык интерфейса</label>
@@ -7305,7 +7306,7 @@ body {
             <div class="messages" id="expertMessages"></div>
             <div class="input-row">
                 <label class="attach-icon" for="expertFileInput"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></label>
-                <input type="file" id="expertFileInput" accept="image/*,.txt,.js,.html,.css,.json,.md,.py,.zip,.ts,.tsx,.jsx,.csv" hidden>
+                <input type="file" id="expertFileInput" multiple accept="image/*,.txt,.js,.html,.css,.json,.md,.py,.zip,.ts,.tsx,.jsx,.csv" hidden>
                 <textarea id="expertInput" placeholder="Describe the task..." rows="1" maxlength="10000"></textarea>
                 <button class="auto-btn" id="expertAutoBtn" title="Улучшить текст"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
                 <button class="mic-btn" id="expertMicBtn" title="Voiceовой ввод"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
@@ -7809,8 +7810,8 @@ if (typeof window.ccApiUrl !== 'function') {
         }
         const NETLIFY_TOKEN = '';
         // Provider keys are stored only on the server (Render Environment).
-        const GROQ_MODELS = ['openai/gpt-oss-120b', 'qwen/qwen3.8-27b', 'openai/gpt-oss-20b'];
-        window.GROQ_MODELS = GROQ_MODELS;
+        const NVIDIA_CHAT_MODELS = ['nvidia/nemotron-3-ultra-550b-a55b'];
+        window.NVIDIA_CHAT_MODELS = NVIDIA_CHAT_MODELS;
         const ADMIN_SECRET = ''; // секрет хранится только на сервере в Render Environment
         // также срабатывает, если вставить ASCII-баннер (WELCOME BACK SUPERUSER)
         async function ccIsAdminUnlock(text) {
@@ -7897,10 +7898,10 @@ if (typeof window.ccApiUrl !== 'function') {
 
 
         let globalSettings = JSON.parse(localStorage.getItem('chatclaud_settings') || '{}');
-        globalSettings.flashProvider = 'groq';
-        globalSettings.expertProvider = 'groq';
+        globalSettings.flashProvider = 'nvidia';
+        globalSettings.expertProvider = 'nvidia';
         if (!globalSettings.promptVersion) globalSettings.promptVersion = 'v1';
-        if (!GROQ_MODELS.includes(globalSettings.expertModel)) globalSettings.expertModel = 'openai/gpt-oss-120b';
+        if (!NVIDIA_CHAT_MODELS.includes(globalSettings.expertModel)) globalSettings.expertModel = 'nvidia/nemotron-3-ultra-550b-a55b';
         if (!globalSettings.flashPersona) globalSettings.flashPersona = 'default';
         if (!globalSettings.flashCustomPersona) globalSettings.flashCustomPersona = '';
         if (!globalSettings.lang) globalSettings.lang = 'ru';
@@ -9108,13 +9109,11 @@ function setAppLang(lang) {
         document.documentElement.setAttribute('data-theme', savedTheme);
 
         const providerModels = {
-            groq: [
-                { value: 'openai/gpt-oss-120b', label: 'GPT-OSS 120B · основной' },
-                { value: 'qwen/qwen3.8-27b', label: 'Qwen 3.8 27B · изображения' },
-                { value: 'openai/gpt-oss-20b', label: 'GPT-OSS 20B · быстрый резерв' }
+            nvidia: [
+                { value: 'nvidia/nemotron-3-ultra-550b-a55b', label: 'Nemotron 3 Ultra · основной' }
             ]
         };
-        function populateModelSelect(selectEl, provider) { const models = providerModels[provider] || providerModels['groq']; selectEl.innerHTML = ''; models.forEach(m => { const opt = document.createElement('option'); opt.value = m.value; opt.textContent = m.label; selectEl.appendChild(opt); }); }
+        function populateModelSelect(selectEl, provider) { const models = providerModels[provider] || providerModels['nvidia']; selectEl.innerHTML = ''; models.forEach(m => { const opt = document.createElement('option'); opt.value = m.value; opt.textContent = m.label; selectEl.appendChild(opt); }); }
 
 
         // ==================== IMAGE PROMPT ENHANCER ====================
@@ -9309,6 +9308,7 @@ function buildImageUrl(userPrompt, opts) {
                 this.searchInput = searchInput; this.chatListEl = chatListEl; this.exportBtn = exportBtn; this.importBtn = importBtn;
                 this.importInput = importInput; this.autoBtn = autoBtn; this.modelSelect = modelSelect; this.clearContextBtn = clearContextBtn;
                 this.deployBtn = deployBtn; this.personaSelect = personaSelect; this.customPersonaInput = customPersonaInput; this.langSelect = langSelect; this.charCounterEl = charCounterEl;
+                this.currentImagesB64 = []; this.currentImageB64 = null; this.currentFileText = null; this.currentFileType = null;
                 this.history = []; this.abortController = null; this.isGenerating = false; try { document.body.classList.remove('is-generating'); } catch(e) {}; this.userScrolledUp = false;
                 this.draftText = '';
                 this.imageGenAttempt = 0; this.videoGenAttempt = 0; this.imgTimers = []; this.videoTimers = [];
@@ -9389,7 +9389,7 @@ function buildImageUrl(userPrompt, opts) {
                 }).catch(() => {});
             }
             createNewSession() { this.saveActiveSession(); this.clearFileState(); this.input.value = ''; this.imageGenAttempt = 0; this.videoGenAttempt = 0; const id = Date.now().toString(); this.sessions.unshift({ id, name: `Чат ${this.sessions.length + 1}`, messages: [] }); this.activeSessionId = id; this.history = []; this.container.innerHTML = ''; const welcomeMsg = this.providerKey === 'flash' ? 'Привет! Я ChatClaud. Чем могу помочь?' : 'Привет! Я ChatClaud. Что будем создавать?'; this.addMsg(welcomeMsg, 'bot'); this.history.push({ role: 'assistant', content: welcomeMsg }); this.saveSessions(); this.renderSessionList(); }
-            clearFileState() { this.currentFileText = null; this.currentImageB64 = null; this.currentFileType = null; const oldPreview = this.fileInput?.parentNode.querySelector('.image-preview-box'); if (oldPreview) oldPreview.remove(); if (this.fileInput) this.fileInput.value = ''; }
+            clearFileState() { this.currentFileText = null; this.currentImageB64 = null; this.currentImagesB64 = []; this.currentFileType = null; const oldPreview = this.fileInput?.parentNode.querySelector('.image-preview-box'); if (oldPreview) oldPreview.remove(); if (this.fileInput) this.fileInput.value = ''; }
             deleteSession(id) { showDeleteModal(id, (chatId) => { this.sessions = this.sessions.filter(s => s.id !== chatId); if (this.activeSessionId === chatId) { this.activeSessionId = this.sessions.length > 0 ? this.sessions[0].id : null; this.loadActiveSession(); } this.saveSessions(); this.renderSessionList(); }); }
             switchSession(id) { this.saveActiveSession(); this.clearFileState(); this.input.value = ''; this.activeSessionId = id; this.loadActiveSession(); this.renderSessionList(); this.closeSidebar(); }
             saveSessions() {
@@ -9564,44 +9564,105 @@ function buildImageUrl(userPrompt, opts) {
                 return text || '';
             }
             async handleFile(e) {
-                const file = e.target.files && e.target.files[0];
-                if (!file) return;
-                const maxBytes = 12 * 1024 * 1024;
-                if (file.size > maxBytes) { showToast('File too large (макс. 12 МБ)'); return; }
+                const files = Array.from((e.target && e.target.files) || []);
+                if (!files.length) return;
+                const isImage = (file) => !!(file && file.type && file.type.startsWith('image/'));
+                const allImages = files.every(isImage);
+                if (files.length > 1 && !allImages) {
+                    showToast('Выбирай либо до 3 изображений, либо один документ');
+                    if (this.fileInput) this.fileInput.value = '';
+                    return;
+                }
+                const isProjectZip = files.length === 1 && (/\.zip$/i.test(files[0].name) || files[0].type === 'application/zip' || files[0].type === 'application/x-zip-compressed');
                 const parent = this.fileInput && this.fileInput.parentNode;
                 if (parent) {
                     const oldPreview = parent.querySelector('.image-preview-box');
                     if (oldPreview) oldPreview.remove();
                 }
-                if (/\.zip$/i.test(file.name) || file.type === 'application/zip') {
-                    if (typeof JSZip === 'undefined') { showToast('JSZip не загрузился'); return; }
+                if (allImages) {
+                    if (files.length > 3) {
+                        showToast('Можно прикрепить не более 3 изображений');
+                        if (this.fileInput) this.fileInput.value = '';
+                        return;
+                    }
+                    const totalBytes = files.reduce((sum, file) => sum + Number(file.size || 0), 0);
+                    if (totalBytes > 14 * 1024 * 1024) {
+                        showToast('Общий размер изображений не должен превышать 14 МиБ');
+                        if (this.fileInput) this.fileInput.value = '';
+                        return;
+                    }
                     try {
-                        showToast('Читаю ZIP…');
-                        const zip = await JSZip.loadAsync(file);
-                        const parts = [];
-                        const names = Object.keys(zip.files).slice(0, 50);
-                        for (const name of names) {
-                            const f = zip.files[name];
-                            if (f.dir) continue;
-                            if (/\.(png|jpg|jpeg|gif|webp|woff2?|mp4|bin|exe)$/i.test(name)) continue;
-                            try {
-                                const text = await f.async('string');
-                                if (text) parts.push('--- ' + name + ' ---\n' + text.slice(0, 25000));
-                            } catch (err) {}
+                        const dataUrls = await Promise.all(files.map((file) => new Promise((resolve, reject) => {
+                            const reader = new FileReader();
+                            reader.onerror = () => reject(new Error('Не удалось прочитать изображение'));
+                            reader.onload = (event) => resolve(String(event.target && event.target.result || ''));
+                            reader.readAsDataURL(file);
+                        })));
+                        this.currentImagesB64 = dataUrls;
+                        this.currentImageB64 = dataUrls[0] || null;
+                        this.currentFileText = '[Изображения: ' + files.map((file) => String(file.name || 'image').slice(0, 100)).join(', ') + ']';
+                        this.currentFileType = 'image';
+                        if (parent) {
+                            const box = document.createElement('div');
+                            box.className = 'image-preview-box';
+                            box.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;align-items:center;';
+                            dataUrls.forEach((dataUrl) => {
+                                const im = document.createElement('img');
+                                im.alt = 'image preview';
+                                im.src = dataUrl;
+                                im.style.cssText = 'width:64px;height:64px;object-fit:cover;border-radius:9px;';
+                                box.appendChild(im);
+                            });
+                            const remove = document.createElement('button');
+                            remove.type = 'button';
+                            remove.className = 'img-prev-x';
+                            remove.title = 'Убрать изображения';
+                            remove.textContent = '×';
+                            remove.onclick = () => this.clearFileState();
+                            box.appendChild(remove);
+                            parent.insertBefore(box, parent.firstChild);
                         }
-                        this.currentFileText = parts.join('\n\n').slice(0, 60000);
+                        showToast(files.length === 1 ? 'Фото прикреплено' : 'Прикреплено изображений: ' + files.length);
+                    } catch (err) {
+                        this.clearFileState();
+                        showToast(String(err && err.message || 'Не удалось прочитать изображения'));
+                    }
+                    return;
+                }
+                const file = files[0];
+                this.currentImagesB64 = [];
+                if (file.size > (isProjectZip ? 64 * 1024 * 1024 : 12 * 1024 * 1024)) {
+                    showToast(isProjectZip ? 'ZIP слишком большой (макс. 64 МБ)' : 'File too large (макс. 12 МБ)');
+                    if (this.fileInput) this.fileInput.value = '';
+                    return;
+                }
+                if (isProjectZip) {
+                    if (!window.CCProjectWorkspace || typeof window.CCProjectWorkspace.importZip !== 'function') {
+                        showToast('Project Workspace не загрузился. Обнови страницу.');
+                        return;
+                    }
+                    try {
+                        showToast('Индексирую проект и сохраняю локальную карту файлов…');
+                        const project = await window.CCProjectWorkspace.importZip(file);
+                        this.currentFileText = '[Импортирован проект: ' + project.name + '. В индексе ' + project.fileCount + ' текстовых файлов. Контекст проекта будет автоматически подбираться по каждому следующему вопросу.]';
                         this.currentImageB64 = null;
-                        this.currentFileType = 'zip';
-                        showToast('ZIP loaded: ' + names.length + ' файлов');
-                    } catch (err) { showToast('ZIP error'); }
+                        this.currentImagesB64 = [];
+                        this.currentFileType = 'project';
+                        showToast('Проект сохранён: ' + project.fileCount + ' файлов · ' + Math.round(project.textBytes / 1024) + ' КБ текста');
+                    } catch (err) {
+                        console.error('[Project Workspace] import failed', err);
+                        showToast('Не удалось импортировать ZIP: ' + String(err && err.message || err).slice(0, 120));
+                    }
                     return;
                 }
                 const reader = new FileReader();
                 reader.onerror = () => showToast('Could not read file');
                 reader.onload = (event) => {
                     const result = event.target.result;
-                    if (file.type.startsWith('image/')) {
+                    this.currentImagesB64 = [];
+                    if (isImage(file)) {
                         this.currentImageB64 = result;
+                        this.currentImagesB64 = [result];
                         this.currentFileText = '[Изображение: ' + file.name + ']';
                         this.currentFileType = file.type;
                         if (parent) {
@@ -9615,13 +9676,13 @@ function buildImageUrl(userPrompt, opts) {
                         }
                         showToast('Фото прикреплено');
                     } else {
-                        this.currentFileText = typeof result === 'string' ? result : '';
                         this.currentImageB64 = null;
+                        this.currentFileText = typeof result === 'string' ? result : '';
                         this.currentFileType = file.type || 'text';
                         showToast('Файл: ' + file.name);
                     }
                 };
-                if (file.type.startsWith('image/')) reader.readAsDataURL(file);
+                if (isImage(file)) reader.readAsDataURL(file);
                 else reader.readAsText(file, 'UTF-8');
             }
 
@@ -9637,6 +9698,28 @@ function buildImageUrl(userPrompt, opts) {
                 try { window.__ccLastSendText = text || ''; } catch (e) {}
                 try { if (text && window.CC && window.CC.UI && window.CC.UI.tryLocalCommand && window.CC.UI.tryLocalCommand(text)) { /* theme etc applied */ } } catch (e) {}
                 if (!text && !this.currentFileText && !this.currentImageB64) return;
+
+                // Persistent local project index controls: explicit status and delete commands.
+                const projectCommand = text.match(/^\/project(?:\s+(status|clear))?$/i);
+                if (projectCommand) {
+                    const action = String(projectCommand[1] || 'status').toLowerCase();
+                    this.input.value = '';
+                    try {
+                        if (!window.CCProjectWorkspace) throw new Error('Project Workspace не загружен. Обнови страницу.');
+                        if (action === 'clear') {
+                            const removed = await window.CCProjectWorkspace.clearActive();
+                            this.addMsg(removed ? 'Локальный индекс активного проекта удалён с этого устройства.' : 'Активного индекса проекта нет.', 'bot');
+                        } else {
+                            const status = await window.CCProjectWorkspace.getStatus();
+                            this.addMsg(status
+                                ? `Активный проект: ${status.name}\nФайлов: ${status.fileCount}\nТекстовый объём: ${Math.round(status.textBytes / 1024)} КБ\nИндекс хранится локально в браузере на этом устройстве. Команда удаления: /project clear.`
+                                : 'Активный проект не индексирован. Прикрепи ZIP-архив проекта.', 'bot');
+                        }
+                    } catch (projectCommandError) {
+                        this.addMsg('Ошибка Project Workspace: ' + String(projectCommandError && projectCommandError.message || projectCommandError), 'bot');
+                    }
+                    return;
+                }
 
                 if (typeof trialMode !== 'undefined' && trialMode) {
                     const t = (this.input.value || '').trim();
@@ -9808,30 +9891,49 @@ function buildImageUrl(userPrompt, opts) {
                 if (this.currentImageB64) {
                     try {
                         showToast('Смотрю фото…');
-                        const desc = await describeImageForChat(this.currentImageB64);
+                        const imagesForVision = (Array.isArray(this.currentImagesB64) && this.currentImagesB64.length) ? this.currentImagesB64 : [this.currentImageB64];
+                        const desc = await describeImageForChat(imagesForVision);
                         if (desc && desc.length > 10) {
                             fullPrompt = (fullPrompt || text || '') + '\n\n[фото]\n' + desc + '\nОтвечай строго по этому описанию, как будто видишь снимок. ЗАПРЕЩЕНО говорить что не можешь анализировать изображения.';
                         } else {
-                            fullPrompt = (fullPrompt || text || '') + '\n\n[К сообщению прикреплено изображение, но авто-разбор не успел. Ответь по вопросу пользователя. ЗАПРЕЩЕНО писать про OCR, «систему распознавания текста», техработы, службу поддержки. Коротко: «Не разобрал фото — опиши что на нём» и помоги дальше.]';
-                            try { showToast('Фото: разбор не прошёл, отвечаю по тексту'); } catch(e) {}
+                            throw new Error('Groq Vision returned an empty image description.');
                         }
                     } catch (e) {
-                        fullPrompt = (fullPrompt || text || '') + '\n\n[Изображение приложено. Разбор не удался. ЗАПРЕЩЕНО: OCR, система распознавания, техработы, поддержка. Скажи коротко что фото не разобралось и попроси описание.]';
+                        try { showToast('Не удалось проанализировать фото. Сообщение не отправлено.'); } catch (toastError) {}
+                        throw e;
                     }
                 }
                 if (this.currentFileText) {
                     fullPrompt = (fullPrompt || text || '') + '\n\n' + await describeFileForChat(this.currentFileText, this.currentFileType || '');
                 }
+                // Pull relevant files from the persistent local project index on every turn.
+                // This survives chat changes and page reloads on this browser/device.
+                try {
+                    if (window.CCProjectWorkspace && typeof window.CCProjectWorkspace.retrieve === 'function') {
+                        const projectContext = await window.CCProjectWorkspace.retrieve(text || 'project overview', 36000);
+                        if (projectContext && projectContext.text) {
+                            fullPrompt = (fullPrompt || text || '') + '\n\n' + projectContext.text;
+                            window.__ccLastProjectContext = {
+                                projectId: projectContext.projectId,
+                                projectName: projectContext.projectName,
+                                selectedFiles: projectContext.selected || []
+                            };
+                        }
+                    }
+                } catch (projectContextError) {
+                    console.warn('[Project Workspace] context retrieval failed', projectContextError);
+                }
                 this.addMsg(text || (this.currentImageB64 ? '[Изображение]' : (this.currentFileText ? '[Файл]' : '')), 'user');
                 if (this.currentImageB64 && this.container) {
                     try {
                         const last = this.container.querySelector('.message.user:last-child');
-                        if (last && !last.querySelector('img')) {
+                        const imageSources = (Array.isArray(this.currentImagesB64) && this.currentImagesB64.length) ? this.currentImagesB64 : [this.currentImageB64];
+                        if (last) imageSources.forEach((source) => {
                             const im = document.createElement('img');
-                            im.src = this.currentImageB64; im.alt = 'attach';
-                            im.style.cssText = 'max-width:min(100%,240px);border-radius:0.75rem;margin-top:0.4rem;display:block;';
+                            im.src = source; im.alt = 'attach';
+                            im.style.cssText = 'max-width:min(100%,240px);max-height:180px;object-fit:contain;border-radius:0.75rem;margin:0.4rem 0.25rem 0 0;display:inline-block;';
                             last.appendChild(im);
-                        }
+                        });
                     } catch(e) {}
                 }
                 this.history.push({ role: 'user', content: text || '' }); // never store internal search prompt
@@ -9944,7 +10046,7 @@ function buildImageUrl(userPrompt, opts) {
                     this.hideTypingIndicator();
                     this.isGenerating = false; try { document.body.classList.remove('is-generating'); } catch(e) {};
                     this.setStopVisible(false);
-                    this.currentFileText = null; this.currentImageB64 = null;
+                    this.currentFileText = null; this.currentImageB64 = null; this.currentImagesB64 = [];
                     if (this.providerKey === 'expert' || this.providerKey === 'flash') bumpExpertMsg(); try { if (typeof updateUsageUI === 'function') updateUsageUI(); else if (typeof refreshUsageUI === 'function') refreshUsageUI(); } catch(e) {}
                     this.saveActiveSession();
                     globalSettings.tokenStats.tokens += accumulatedText.length;
@@ -10068,15 +10170,15 @@ function buildImageUrl(userPrompt, opts) {
                 cleanUser = cleanUser.split(/\[Данные поиска\]/i)[0];
                 var uqParts = cleanUser.split(/User question:\s*/i);
                 if (uqParts.length > 1) cleanUser = uqParts[uqParts.length - 1];
-                cleanUser = cleanUser.replace(/^User question:\s*/i, '').trim().slice(0, 2000);
-                if (!cleanUser) cleanUser = rawPrompt.slice(0, 1500);
+                cleanUser = cleanUser.replace(/^User question:\s*/i, '').trim().slice(0, 52000);
+                if (!cleanUser) cleanUser = rawPrompt.slice(0, 52000);
                 var searchBlob = '';
                 var sm = rawPrompt.match(/\[Данные поиска\][\s\S]*/i) || rawPrompt.match(/Live web results[\s\S]*/i);
                 if (sm) searchBlob = String(sm[0]).slice(0, 3500);
                 let userContent = cleanUser;
                 if (searchBlob) userContent += '\n\n' + searchBlob;
                 if (this.currentFileText) userContent += '\n\n[ФАЙЛ]\n' + String(this.currentFileText).slice(0, 100000);
-                messages.push({ role: 'user', content: userContent.slice(0, 120000) });
+                messages.push({ role: 'user', content: userContent.slice(0, 56000) });
 
                 // Серверный bridge — единственный путь, когда ключи не хранятся в браузере.
                 // Не запускаем после него пустые browser-fallbacks: они дублировали запрос
@@ -14337,15 +14439,18 @@ body.cc-bg-blue #flashChat .chat-layout {
   window.CC = window.CC || {};
   window.CC.Vision = window.CC.Vision || {};
   window.CC.Vision.describe = async function(dataUrl) {
-    if (!dataUrl || dataUrl.length < 40) throw new Error('No image');
-    var small = await compressDataUrl(dataUrl, 1280, 0.8);
+    var inputs = Array.isArray(dataUrl) ? dataUrl : [dataUrl];
+    if (!inputs.length || inputs.length > 3 || inputs.some(function(item){ return !item || String(item).length < 40; })) {
+      throw new Error('Provide 1 to 3 valid images.');
+    }
+    var smallImages = await Promise.all(inputs.map(function(item){ return compressDataUrl(item, 1280, 0.8); }));
     var url = (window.ccApiUrl && window.ccApiUrl('/api/vision')) || 'https://servierte.onrender.com/api/vision';
     var res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        image: small,
-        prompt: 'Describe this image in clear English. Be specific about objects, text, people, and setting. Do not mention APIs.'
+        images: smallImages,
+        prompt: 'Analyze all attached images in clear English. Be specific about objects, text, people, charts, tables and setting. Do not mention APIs.'
       })
     });
     var raw = await res.text();
@@ -16858,6 +16963,315 @@ html[data-theme="light"] .cc-chal-label {
   #ccChalInline.cc-on .cc-chal-orb, #ccChalInline.cc-on .cc-chal-orb-face, .cc-chal-label { animation:none!important; }
 }
 </style>
+
+
+<style id="cc-layout-fix-c501">
+/* Fix broken letter-vertical layout in bot messages */
+#flashMessages .message,
+#flashMessages .message.bot,
+#flashMessages .msg.bot,
+#flashMessages .bot-msg,
+.message.bot, .msg.bot {
+  max-width: min(92%, 720px) !important;
+  width: auto !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  white-space: normal !important;
+  writing-mode: horizontal-tb !important;
+  direction: ltr !important;
+}
+#flashMessages .message.bot *,
+#flashMessages .msg.bot *,
+.message.bot * {
+  writing-mode: horizontal-tb !important;
+  word-break: normal !important;
+  overflow-wrap: anywhere !important;
+}
+/* Markdown tables: scrollable, never collapse to 1-char columns */
+#flashMessages table,
+.message table,
+.msg table {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  border-collapse: collapse !important;
+  table-layout: auto !important;
+  margin: 0.6rem 0 !important;
+}
+#flashMessages thead, #flashMessages tbody,
+#flashMessages tr {
+  display: table !important;
+  width: 100% !important;
+  table-layout: auto !important;
+}
+#flashMessages th, #flashMessages td,
+.message th, .message td {
+  display: table-cell !important;
+  padding: 0.35rem 0.55rem !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  vertical-align: top !important;
+  min-width: 4.5rem !important;
+  max-width: none !important;
+  writing-mode: horizontal-tb !important;
+}
+/* Prefer preformatted blocks over broken tables if needed */
+#flashMessages pre {
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+  overflow-x: auto !important;
+  max-width: 100% !important;
+}
+/* Single scroll-to-bottom control — no double chevrons over text */
+.scroll-bottom-btn {
+  position: fixed !important;
+  right: 14px !important;
+  left: auto !important;
+  bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+  width: 36px !important;
+  height: 36px !important;
+  z-index: 45 !important;
+  display: none !important;
+  place-items: center !important;
+  border: none !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4) !important;
+  background: rgba(40,40,44,0.92) !important;
+  border-radius: 50% !important;
+  pointer-events: auto !important;
+}
+.scroll-bottom-btn.show { display: grid !important; }
+/* hide duplicate chevron clones if any */
+.scroll-bottom-btn + .scroll-bottom-btn,
+#flashChat .scroll-bottom-btn:nth-of-type(n+2) {
+  display: none !important;
+}
+.scroll-bottom-btn svg { width: 16px !important; height: 16px !important; }
+</style>
+
+
+<script id="cc-table-sanitize-c501">
+(function(){
+  function sanitizeTables(root){
+    try {
+      (root || document).querySelectorAll('#flashMessages table, .message table').forEach(function(tbl){
+        var cells = tbl.querySelectorAll('td, th');
+        if (!cells.length) return;
+        var narrow = 0;
+        cells.forEach(function(c){
+          var t = (c.textContent || '').trim();
+          if (t.length <= 1) narrow++;
+        });
+        // if majority of cells are 1 char, table is likely broken — flatten to pre text
+        if (narrow > cells.length * 0.55 && cells.length > 8) {
+          var pre = document.createElement('pre');
+          pre.textContent = tbl.innerText || tbl.textContent || '';
+          pre.style.whiteSpace = 'pre-wrap';
+          pre.style.margin = '0.5rem 0';
+          tbl.parentNode.replaceChild(pre, tbl);
+        }
+      });
+    } catch(e) {}
+  }
+  var obs = new MutationObserver(function(){ sanitizeTables(document.getElementById('flashMessages')); });
+  if (document.body) obs.observe(document.body, { childList: true, subtree: true });
+  document.addEventListener('DOMContentLoaded', function(){ sanitizeTables(); });
+})();
+</script>
+
+
+
+
+<style id="cc-ui-c541">
+/* Hide modes */
+#flashModeBtn, #flashModeLabel, .mode-infield, #flashModePop, .mode-pop,
+#liveOpenBtn, .live-open-btn, #liveOverlay, #livePanel { display:none!important; visibility:hidden!important; pointer-events:none!important; width:0!important; height:0!important; opacity:0!important; }
+/* Agent trace hidden UI, logic lives */
+.cc-trace-v160, .cc-agent-trace, #ccAgentTrace, .cc-trace-title { display:none!important; visibility:hidden!important; height:0!important; overflow:hidden!important; margin:0!important; padding:0!important; }
+
+/* Darker chat */
+html, body, #app, #flashChat, .chat-layout { background:#030306!important; }
+#flashMessages, .messages { background:transparent!important; }
+
+/* Burger higher */
+.top-bar, #flashChat .top-bar {
+  padding-top: calc(10px + env(safe-area-inset-top, 0px))!important;
+  min-height: 56px!important;
+  box-shadow: 0 12px 36px rgba(0,0,0,.55)!important;
+  border:none!important;
+  background: rgba(8,8,12,.92)!important;
+}
+.burger-btn { margin-top: 2px!important; }
+
+/* Composer lower + wider + no square plate under keyboard */
+.input-row {
+  padding: 6px 10px calc(6px + env(safe-area-inset-bottom, 0px))!important;
+  margin: 0!important;
+  background: transparent!important;
+  border: none!important;
+  box-shadow: none!important;
+}
+.input-row::before, .input-row::after,
+.composer::before, .composer::after,
+#flashChat .composer-plate, .composer-plate, .input-plate {
+  display:none!important; content:none!important;
+}
+.input-shell, #flashInputShell {
+  width: 100%!important;
+  max-width: 100%!important;
+  margin: 0!important;
+  border: none!important;
+  outline: none!important;
+  border-radius: 26px!important;
+  background: #0c0c10!important;
+  box-shadow: 0 10px 32px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.05)!important;
+}
+.input-shell textarea, #flashInput {
+  color: #f2f2f4!important;
+  background: transparent!important;
+}
+.attach-icon, #flashAttachBtn, .mic-btn, #flashMicBtn, .send-icon, #flashSend {
+  border:none!important; outline:none!important;
+  box-shadow: 0 6px 16px rgba(0,0,0,.45)!important;
+  background: #16161c!important;
+}
+#flashSend, .send-icon { background:#f4f4f6!important; color:#111!important; }
+
+/* Orb alive */
+#ccThinkFixed { display:none!important; }
+#ccChalInline {
+  display:none!important;
+  position:relative!important;
+  left:auto!important; right:auto!important; top:auto!important; bottom:auto!important;
+  transform:none!important;
+  margin: 10px 0 14px 4px!important;
+  align-items:center; gap:10px;
+  border:none!important; background:transparent!important; box-shadow:none!important;
+}
+#ccChalInline.cc-on { display:flex!important; }
+#ccChalInline .cc-chal-orb {
+  width:26px; height:26px; border-radius:50%; position:relative; flex-shrink:0;
+  background: radial-gradient(circle at 32% 28%, #fff 0%, #eee 42%, #bbb 100%);
+  box-shadow: 0 4px 14px rgba(0,0,0,.45), inset 0 2px 3px rgba(255,255,255,.9);
+  animation: ccOrbFloat541 2s ease-in-out infinite;
+}
+#ccChalInline.cc-on .cc-chal-orb { animation: ccOrbBreathe541 1.6s ease-in-out infinite; }
+#ccChalInline[data-state="searching"] .cc-chal-orb {
+  animation: ccOrbSearch541 1.1s ease-in-out infinite;
+}
+#ccChalInline[data-state="searching"] .cc-chal-tool { display:flex!important; }
+.cc-chal-tool {
+  position:absolute; right:-7px; bottom:-6px; width:16px; height:16px; border-radius:50%;
+  background:rgba(20,20,24,.95); display:none; align-items:center; justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.5);
+}
+.cc-chal-tool svg { width:10px; height:10px; stroke:#eee; fill:none; stroke-width:2; }
+.cc-chal-label {
+  font-size:14px; font-weight:450;
+  background: linear-gradient(90deg, rgba(140,140,150,.7), rgba(255,255,255,.95), rgba(140,140,150,.7));
+  background-size:200% 100%; -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  animation: ccShimmer541 1.7s linear infinite;
+}
+@keyframes ccOrbFloat541 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
+@keyframes ccOrbBreathe541 { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+@keyframes ccOrbSearch541 { 0%,100%{transform:translate(0,0) scale(1)} 40%{transform:translate(2px,-2px) scale(1.06)} 70%{transform:translate(-2px,1px) scale(1.03)} }
+@keyframes ccShimmer541 { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
+
+/* Registration / hero cleaner */
+#heroScreen .hero-features,
+#heroScreen .update-card,
+#heroScreen .hero-company,
+#heroScreen .hero-foot,
+#heroScreen .hero-list,
+#heroScreen ul { display:none!important; }
+#heroScreen .hero-inner { max-width: 420px!important; padding: 28px 20px!important; }
+#heroScreen h1, #heroScreen .hero-title { font-size: 1.6rem!important; margin-bottom: 8px!important; }
+#heroScreen p { opacity:.75; font-size:.95rem!important; }
+#welcomeScreen .workspace-particles { display:none!important; }
+#welcomeScreen .welcome-inner {
+  background: radial-gradient(ellipse at 50% 0%, rgba(40,40,55,.35), transparent 55%), #060608!important;
+}
+#welcomeScreen .field, #welcomeScreen input.field {
+  background:#121218!important; border:none!important; box-shadow:0 0 0 1px rgba(255,255,255,.06)!important;
+  border-radius:14px!important; color:#f2f2f4!important;
+}
+#welcomeScreen .auth-card, #welcomeScreen .welcome-card {
+  background:rgba(14,14,18,.92)!important; border:none!important;
+  box-shadow:0 20px 50px rgba(0,0,0,.55)!important; border-radius:22px!important;
+}
+</style>
+
+
+<script id="cc-ui-c541-js">
+(function(){
+  try { localStorage.setItem('flashMode','fast'); } catch(e) {}
+  function hideModes(){
+    ['flashModeBtn','liveOpenBtn','flashModePop'].forEach(function(id){
+      var el=document.getElementById(id); if(el){ el.style.display='none'; el.setAttribute('hidden',''); }
+    });
+  }
+  function hideTrace(){
+    document.querySelectorAll('.cc-trace-v160,.cc-agent-trace,#ccAgentTrace').forEach(function(n){
+      n.style.display='none'; n.style.visibility='hidden'; n.style.height='0'; n.style.overflow='hidden';
+    });
+  }
+  function ensureOrb(){
+    var root=document.getElementById('flashMessages'); if(!root) return null;
+    var el=document.getElementById('ccChalInline');
+    if(!el){
+      el=document.createElement('div'); el.id='ccChalInline';
+      el.innerHTML='<div class="cc-chal-orb"><span class="cc-chal-orb-face"><i></i><i></i></span><span class="cc-chal-tool" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"></circle><path d="M16 16l5 5"></path></svg></span></div><span class="cc-chal-label">Thinking…</span>';
+    }
+    if(el.parentNode!==root) root.appendChild(el); else if(root.lastElementChild!==el) root.appendChild(el);
+    document.querySelectorAll('#ccChalInline').forEach(function(n,i){ if(i>0) n.remove(); });
+    var fixed=document.getElementById('ccThinkFixed'); if(fixed){ fixed.style.display='none'; fixed.innerHTML=''; }
+    return el;
+  }
+  function showThink(state){
+    hideModes(); hideTrace();
+    var el=ensureOrb(); if(!el) return;
+    el.classList.add('cc-on');
+    el.setAttribute('data-state', state||'generating');
+    var lab=el.querySelector('.cc-chal-label');
+    if(lab) lab.textContent = state==='searching' ? 'Searching…' : 'Thinking…';
+  }
+  function hideThink(){
+    var el=document.getElementById('ccChalInline');
+    if(el){ el.classList.remove('cc-on'); el.removeAttribute('data-state'); }
+    hideTrace();
+  }
+  window.CC=window.CC||{}; window.CC.Think=window.CC.Think||{};
+  var _emit=window.CC.Think.emit;
+  window.CC.Think.emit=function(ev){
+    try{
+      if(ev==='search:started'||ev==='searching') showThink('searching');
+      else if(ev==='request:received'||ev==='model:started'||ev==='generating') showThink('generating');
+      else if(ev==='completed'||ev==='model:done'||ev==='error'||ev==='failed') hideThink();
+    }catch(e){}
+    if(typeof _emit==='function') try{ return _emit.apply(this,arguments);}catch(e){}
+  };
+  document.addEventListener('click',function(e){
+    var t=e.target&&e.target.closest&&e.target.closest('#flashSend,.send-icon');
+    if(t) showThink('generating');
+  },true);
+  var hideTimer=null;
+  var obs=new MutationObserver(function(){
+    hideModes(); hideTrace();
+    var root=document.getElementById('flashMessages'); if(!root) return;
+    var bots=root.querySelectorAll('.message.bot,.msg.bot,.bot-msg');
+    if(bots.length){
+      var last=bots[bots.length-1]; var txt=(last.textContent||'').trim();
+      if(txt && txt!=='Thinking…' && txt!=='Searching…' && txt.length>2){
+        clearTimeout(hideTimer); hideTimer=setTimeout(hideThink,100);
+      }
+    }
+  });
+  if(document.body) obs.observe(document.body,{childList:true,subtree:true,characterData:true});
+  document.addEventListener('DOMContentLoaded',function(){ hideModes(); hideTrace(); hideThink(); });
+  hideModes(); hideTrace();
+})();
+</script>
 
 </body>
 </html>
